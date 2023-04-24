@@ -1,0 +1,38 @@
+on:
+  push:
+    branches:
+      - main
+
+name: release-please
+
+jobs:
+  release-please:
+    if: github.repository_owner == 'bihealth'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v3
+        id: release
+        with:
+          release-type: rust
+          package-name: mehari-data
+
+      - uses: actions/checkout@v2
+        if: ${{ steps.release.outputs.release_created }}
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        if: ${{ steps.release.outputs.release_created }}
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install mehari
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          cargo install mehari
+
+      - name: Build sequence
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          echo TODO
+          exit 1
