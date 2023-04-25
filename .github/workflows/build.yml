@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# cf. https://github.com/mamba-org/provision-with-micromamba#important
+defaults:
+  run:
+    shell: bash -l {0}
+
+jobs:
+  Build:
+    strategy:
+      matrix:
+        genome_release:
+          - grch37
+          - grch38
+        mehari_version:
+          - "0.2.0"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Cache data directory
+        id: cache-primes
+        uses: actions/cache@v3
+        with:
+          path: mehari-data-tx
+          key: ${{ steps.date.outputs.date }}-${{ matrix.mehari_version }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
+
+      - name: Install Conda environment
+        uses: mamba-org/provision-with-micromamba@main
+        with:
+          environment-file: false
+          environment-name: mehari-data-tx
+          channels: conda-forge,bioconda,defaults
+          extra-specs: |
+            python =3.8
+            entrez-direct =16.2
+            biocommons.seqrepo =0.6.5
+            mehari =${{ matrix.mehari_version }}
+            htslib =1.17
+
+      - name: Run the data build
+        run: |
+          export GENOME_RELEASE=${{ matrix.genome_release }}
+          bash src/run.sh
