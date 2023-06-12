@@ -28,3 +28,6 @@ mehari db create txs \
     --path-seqrepo-instance $DATA_DIR/seqrepo/master \
     --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
     --genome-release $GENOME_RELEASE
+
+# Ensure that the output can be decompressed.
+zstd -c -d $DATA_DIR/pass-1/txs.bin.zst > /dev/null

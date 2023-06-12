@@ -8,7 +8,7 @@ set -x
 
 mkdir -p $DATA_DIR/for-fix
 
-grep "because it has no sequence" $DATA_DIR/pass-1/txs.bin.zst.report \
+{ grep "because it has no sequence" $DATA_DIR/pass-1/txs.bin.zst.report || true; } \
 | cut -f 2 \
 > $DATA_DIR/for-fix/missing.txt
 
