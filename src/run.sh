@@ -22,6 +22,11 @@ export ENSEMBL_TOKEN=$(jq -r ".$GENOME_RELEASE.ensembl_token" config.json)
 set -euo pipefail
 IFS=$'\n\t'
 
+# Cleanup $DATA_DIR if asked to do so.
+if [ "${CLEANUP_DATA_DIR-false}" == true ]; then
+    rm -rf $DATA_DIR
+fi
+
 # Run the individual steps.
 bash -x $SCRIPT_DIR/download.sh
 bash -x $SCRIPT_DIR/seqrepo.sh
