@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/bihealth/mehari-data-tx/compare/v0.2.0...v0.2.1) (2023-06-12)
+
+
+### Miscellaneous Chores
+
+* bump mehari to v0.4.1 for proper zstd stream writing ([#7](https://github.com/bihealth/mehari-data-tx/issues/7)) ([f53dbb9](https://github.com/bihealth/mehari-data-tx/commit/f53dbb903fb4591854745229d12db50869796b14))
+
 ## [0.2.0](https://github.com/bihealth/mehari-data-tx/compare/v0.1.0...v0.2.0) (2023-05-02)
 
 
