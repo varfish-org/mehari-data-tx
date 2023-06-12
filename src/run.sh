@@ -18,11 +18,6 @@ export CDOT_FILENAME=$(jq -r ".$GENOME_RELEASE.cdot_filename" config.json)
 export ENSEMBL_RELEASE=$(jq -r ".$GENOME_RELEASE.ensembl_release" config.json)
 export ENSEMBL_TOKEN=$(jq -r ".$GENOME_RELEASE.ensembl_token" config.json)
 
-# Unless on CI, initialize environment.
-if [[ $CI != "true" ]]; then
-    bash $SCRIPT_DIR/init-env.sh
-fi
-
 # cf. http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 IFS=$'\n\t'

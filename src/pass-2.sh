@@ -17,5 +17,8 @@ mehari db create txs \
     --genome-release $GENOME_RELEASE
 cd $DATA_DIR/pass-2
 
+# Ensure that the output can be decompressed.
+zstd -c -d txs.bin.zst > /dev/null
+
 sha256sum txs.bin.zst > txs.bin.zst.sha256
 sha256sum txs.bin.zst.report > txs.bin.zst.report.sha256
