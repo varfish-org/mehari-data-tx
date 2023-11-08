@@ -26,7 +26,12 @@ mkdir -p $DATA_DIR/pass-1
 mehari db create txs \
     --path-out $DATA_DIR/pass-1/txs.bin.zst \
     --path-seqrepo-instance $DATA_DIR/seqrepo/master \
-    --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
+    $(if [[ "$GENOME_RELEASE" == "grch37" ]]; then
+        echo --path-label-tsv $DATA_DIR/tmp/$GENOME_RELEASE/tx_mane.tsv; \
+    fi) \
+    $(for cdot_filename in $CDOT_FILENAMES; do \
+        echo --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$cdot_filename; \
+    done) \
     --genome-release $GENOME_RELEASE
 
 # Ensure that the output can be decompressed.

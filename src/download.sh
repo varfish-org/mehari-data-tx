@@ -20,5 +20,19 @@ wget -q \
 wget -q \
     https://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.{1..12}.rna.fna.gz \
     https://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.files.installed
-wget -q\
-    https://github.com/SACGF/cdot/releases/download/v$CDOT_RELEASE/$CDOT_FILENAME
+for cdot_filename in $CDOT_FILENAMES; do
+    wget -q \
+        https://github.com/SACGF/cdot/releases/download/v$CDOT_RELEASE/$cdot_filename
+done
+
+# When buidling GRCh37, we will need the GRCh38 files for projecting MANE
+# annotation to the latest corresponding GRCh37 transcript.
+if [[ ! -z "$CDOT_FILENAMES_FOR_MANE" ]]; then
+    for cdot_filename in $CDOT_FILENAMES_FOR_MANE; do
+        wget -q \
+            https://github.com/SACGF/cdot/releases/download/v$CDOT_RELEASE/$cdot_filename
+    done
+
+    python $SCRIPT_DIR/cdot_json_to_tags.py $CDOT_FILENAMES_FOR_MANE \
+    > tx_mane.tsv
+fi

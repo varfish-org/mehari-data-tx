@@ -13,7 +13,9 @@ mkdir -p $DATA_DIR/pass-2
 mehari db create txs \
     --path-out $DATA_DIR/pass-2/txs.bin.zst \
     --path-seqrepo-instance $DATA_DIR/seqrepo/master \
-    --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
+    $(for cdot_filename in $CDOT_FILENAMES; do \
+        echo --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$cdot_filename; \
+    done) \
     --genome-release $GENOME_RELEASE
 cd $DATA_DIR/pass-2
 

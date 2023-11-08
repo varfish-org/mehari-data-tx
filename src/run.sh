@@ -14,7 +14,12 @@ export SEQREPO_ROOT_DIR=$DATA_DIR/seqrepo
 
 # Parse configuration into environment variables.
 export CDOT_RELEASE=$(jq -r ".$GENOME_RELEASE.cdot_release" config.json)
-export CDOT_FILENAME=$(jq -r ".$GENOME_RELEASE.cdot_filename" config.json)
+export CDOT_FILENAMES=$(jq -r ".$GENOME_RELEASE.cdot_filenames | @tsv" config.json)
+if [[ "$GENOME_RELEASE" == "grch37" ]]; then
+    export CDOT_FILENAMES_FOR_MANE=$(jq -r ".grch38.cdot_filenames | @tsv" config.json)
+else
+    export CDOT_FILENAMES_FOR_MANE=
+fi
 export ENSEMBL_RELEASE=$(jq -r ".$GENOME_RELEASE.ensembl_release" config.json)
 export ENSEMBL_TOKEN=$(jq -r ".$GENOME_RELEASE.ensembl_token" config.json)
 
@@ -28,8 +33,8 @@ if [ "${CLEANUP_DATA_DIR-false}" == true ]; then
 fi
 
 # Run the individual steps.
-bash -x $SCRIPT_DIR/download.sh
-bash -x $SCRIPT_DIR/seqrepo.sh
+# bash -x $SCRIPT_DIR/download.sh
+# bash -x $SCRIPT_DIR/seqrepo.sh
 bash -x $SCRIPT_DIR/pass-1.sh
-bash -x $SCRIPT_DIR/fix-ncbi.sh
-bash -x $SCRIPT_DIR/pass-2.sh
+# bash -x $SCRIPT_DIR/fix-ncbi.sh
+# bash -x $SCRIPT_DIR/pass-2.sh
