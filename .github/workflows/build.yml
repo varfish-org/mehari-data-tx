@@ -13,13 +13,18 @@ defaults:
   run:
     shell: bash -l {0}
 
+env:
+  # repository for cdot code
+  CDOT_REPO: https://github.com/holtgrewe/cdot.git
+  # version / branch for cdot code
+  CDOT_TREEISH: fix-60-genbank-change
+  # directory where the cdot checkout resides
+  CDOT_DIR: /tmp/cdot
+
 jobs:
   Build:
     strategy:
       matrix:
-        genome_release:
-          - grch37
-          - grch38
         mehari_version:
           - "0.16.0"
     runs-on: ubuntu-latest
@@ -35,7 +40,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ matrix.mehari_version }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
+          key: ${{ steps.date.outputs.date }}-${{ matrix.mehari_version }}-${{ hashFiles('src/download.sh') }}
 
       - name: Install Conda environment
         uses: mamba-org/provision-with-micromamba@main
@@ -50,7 +55,31 @@ jobs:
             mehari =${{ matrix.mehari_version }}
             htslib =1.17
 
+      - name: Clone cdot
+        run: |
+          git clone --depth 1 --branch ${{ env.CDOT_TREEISH }} ${{ env.CDOT_REPO }} ${{ env.CDOT_DIR }}
+          cd ${{ env.CDOT_DIR }}
+          pip install -e .
+
       - name: Run the data build
         run: |
-          export GENOME_RELEASE=${{ matrix.genome_release }}
-          bash src/run.sh
+          export PYTHONPATH=${{ env.CDOT_DIR }}
+
+          # create gene information JSON file
+          EMAIL=manuel.holtgrewe@bih-charite.de \
+            bash ${{ env.CDOT_DIR }}/generate_transcript_data/gene_info.sh
+
+          # downlooad data, prepare cdot JSON files, and create seqrepos
+          bash src/prepare.sh grch38
+          bash src/prepare.sh grch37
+
+          # merge GRCh37 and GRCh38 files for refseq and ensembl
+          bash src/merge-cdot.sh ensembl
+          bash src/merge-cdot.sh refseq
+
+          # produce MANE transcript TSV file
+          bash src/mane-tx.sh
+
+          # build mehari data files
+          bash src/mehari-db-create.sh grch37
+          bash src/mehari-db-create.sh grch38
