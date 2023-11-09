@@ -20,6 +20,9 @@ if [[ ! -e $ensembl_out ]]; then
         --gene-info-json=$SCRIPT_DIR/../Homo_sapiens.gene-info-$CDOT_VERSION.json.gz \
         --output=$ensembl_out \
         $DOWNLOAD_DIR/$ensembl_file
+    pushd $DATA_DIR
+    sha256sum $(basename $ensembl_out) >$(basename $ensembl_out).sha256
+    popd
 fi
 
 if [[ ! -e $refseq_out ]]; then
@@ -31,4 +34,7 @@ if [[ ! -e $refseq_out ]]; then
         --gene-info-json=$SCRIPT_DIR/../Homo_sapiens.gene-info-$CDOT_VERSION.json.gz \
         --output=$refseq_out \
         $DOWNLOAD_DIR/$refseq_file
+    pushd $DATA_DIR
+    sha256sum $(basename $refseq_out) >$(basename $refseq_out).sha256
+    popd
 fi

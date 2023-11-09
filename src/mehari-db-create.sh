@@ -10,7 +10,7 @@ fi
 
 RELEASE=$1
 
-# Make the script directory available to all called scribes.
+# Make the script directory available to all called scripts.
 export SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Get cdot version
@@ -28,10 +28,13 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # Create Mehari database.
-mehari db create txs \
+mehari db create \
     --genome-release $RELEASE \
-    --path-out mehari_txs-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zstd \
+    --path-out mehari-data-tx-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst \
     --path-cdot-json $DATA_DIR/cdot-refseq-$VERSION_LABEL-$CDOT_VERSION.json.gz \
     --path-cdot-json $DATA_DIR/cdot-ensembl-$VERSION_LABEL-$CDOT_VERSION.json.gz \
     $(if [[ "$RELEASE" == "grch37" ]]; then echo --path-mane-txs-tsv; echo $DATA_DIR/mane-txs.tsv; fi) \
     --path-seqrepo-instance $DATA_DIR/seqrepo/main
+
+sha256sum mehari-data-tx-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst \
+> mehari-data-tx-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst.sha256

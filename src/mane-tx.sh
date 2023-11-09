@@ -2,7 +2,7 @@ set -x
 
 # Create MANE transcript TSV files.
 
-# Make the script directory available to all called scribes.
+# Make the script directory available to all called scripts.
 export SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Get cdot version
@@ -24,3 +24,5 @@ python src/cdot_json_to_tags.py \
 
 pushd $DATA_DIR
 sha256sum mane-txs.tsv >mane-txs.tsv.sha256
+popd
+

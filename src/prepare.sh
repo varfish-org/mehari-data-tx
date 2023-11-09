@@ -5,7 +5,7 @@ set -x
 # Prepare the build by downloading the GFF and FASTA files, building the
 # seqrepo, and converting the GFF files to cdot JSON files.
 
-# Make the script directory available to all called scribes.
+# Make the script directory available to all called scripts.
 export SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Check proper usage.

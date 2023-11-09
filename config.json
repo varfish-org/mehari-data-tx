@@ -1,10 +1,10 @@
 {
-  "version_label": "vep110",
+  "version_label": "vep110~0",
   "grch37": {
     "ensembl_version": "110",
     "ensembl_url_gff": "https://ftp.ensembl.org/pub/grch37/release-110/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz",
     "ensembl_url_fasta": "https://ftp.ensembl.org/pub/grch37/release-110/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.cdna.all.fa.gz",
-    "refseq_version": "2020-10-26",
+    "refseq_version": "105.20201022",
     "refseq_url_gff": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/105.20201022/GCF_000001405.25_GRCh37.p13/GCF_000001405.25_GRCh37.p13_genomic.gff.gz",
     "refseq_url_fasta": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/105.20201022/GCF_000001405.25_GRCh37.p13/GCF_000001405.25_GRCh37.p13_rna.fna.gz"
   },

@@ -32,11 +32,8 @@ jobs:
     needs: release-please
     strategy:
       matrix:
-        genome_release:
-          - grch37
-          - grch38
         mehari_version:
-          - "0.5.0"
+          - "0.16.0"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -46,14 +43,6 @@ jobs:
         if: ${{ needs.release-please.outputs.release_created }}
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-
-      - name: Cache data directory
-        if: ${{ needs.release-please.outputs.release_created }}
-        id: cache-primes
-        uses: actions/cache@v3
-        with:
-          path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ matrix.mehari_version }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
 
       - name: Install Conda environment
         if: ${{ needs.release-please.outputs.release_created }}
@@ -72,26 +61,14 @@ jobs:
       - name: Run the data build
         if: ${{ needs.release-please.outputs.release_created }}
         run: |
-          export GENOME_RELEASE=${{ matrix.genome_release }}
           bash src/run.sh
 
       - name: upload release assets
         if: ${{ needs.release-please.outputs.release_created }}
         id: upload-release-assets
         run: |
-          set -x
-          dir=/home/runner/mehari-data-tx/pass-2
-          src_prefix=$dir/txs.bin
-          dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
-          for ext in .zst .zst.sha256 .zst.report .zst.report.sha256; do
-            mv $src_prefix$ext $dst_prefix$ext
-          done
-          gh release upload \
-            ${{ needs.release-please.outputs.tag_name }} \
-            $dst_prefix.zst \
-            $dst_prefix.zst.sha256 \
-            $dst_prefix.zst.report \
-            $dst_prefix.zst.report.sha256
+          export RELEASE_NAME=${{ needs.release-please.outputs.tag_name }}
+          bash src/upload.sh
         env:
           # GitHub provides this variable in the CI env. You don't
           # need to add anything to the secrets vault.

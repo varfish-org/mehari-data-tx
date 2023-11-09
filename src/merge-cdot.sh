@@ -2,7 +2,7 @@ set -x
 
 # Merge the cdot files for the given source.
 
-# Make the script directory available to all called scribes.
+# Make the script directory available to all called scripts.
 export SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Check proper usage.
