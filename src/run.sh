@@ -14,6 +14,7 @@ export SEQREPO_ROOT_DIR=$DATA_DIR/seqrepo
 
 # Parse configuration into environment variables.
 export CDOT_RELEASE=$(jq -r ".$GENOME_RELEASE.cdot_release" config.json)
+export CDOT_RELEASE_38=$(jq -r ".grch38.cdot_release" config.json)
 export CDOT_FILENAME=$(jq -r ".$GENOME_RELEASE.cdot_filename" config.json)
 export ENSEMBL_RELEASE=$(jq -r ".$GENOME_RELEASE.ensembl_release" config.json)
 export ENSEMBL_TOKEN=$(jq -r ".$GENOME_RELEASE.ensembl_token" config.json)

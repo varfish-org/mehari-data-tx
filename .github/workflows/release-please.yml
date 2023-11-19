@@ -36,10 +36,10 @@ jobs:
           - grch37
           - grch38
         mehari_version:
-          - "0.5.0"
+          - "0.18.0"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         if: ${{ needs.release-please.outputs.release_created }}
 
       - name: Get current date
