@@ -21,7 +21,7 @@ wget -q \
     https://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.{1..13}.rna.fna.gz \
     https://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.files.installed
 wget -q \
-    https://github.com/SACGF/cdot/releases/download/v$CDOT_RELEASE/$CDOT_FILENAME
+    https://github.com/SACGF/cdot/releases/download/data_v$CDOT_RELEASE/$CDOT_FILENAME
 
 # For the GRCh37 build, we will need the GRCh38 JSON file to extract the
 # MANE transcript ids.
