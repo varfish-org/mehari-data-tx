@@ -29,7 +29,7 @@ if [[ "$GENOME_RELEASE" == grch37 ]]; then
     > $DATA_DIR/tmp/mane-txs.tsv
 fi
 
-mehari db create txs \
+mehari db create \
     $(if [[ "$RELEASE" == grch37 ]]; then \
         echo --path-mane-txs-tsv $DATA_DIR/tmp/mane-txs.tsv; \
     fi) \
