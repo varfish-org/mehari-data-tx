@@ -27,5 +27,6 @@ wget -q \
 # MANE transcript ids.
 if [[ "$GENOME_RELEASE" == grch37 ]]; then
     wget -q \
-        https://github.com/SACGF/cdot/releases/download/v$CDOT_RELEASE/$CDOT_FILENAME_38
+        https://github.com/SACGF/cdot/releases/download/data_v$CDOT_RELEASE/$CDOT_FILENAME_38
+        
 fi
