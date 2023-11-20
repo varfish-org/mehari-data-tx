@@ -11,7 +11,7 @@
   "grch38": {
     "ensembl_version": "110",
     "ensembl_url_gff": "https://ftp.ensembl.org/pub/release-110/gff3/homo_sapiens/Homo_sapiens.GRCh38.110.gff3.gz",
-    "ensembl_url_fasta": "https://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/human.{1..13}.rna.fna.gz",
+    "ensembl_url_fasta": "https://ftp.ensembl.org/pub/release-110/fasta/homo_sapiens/{cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz,ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz}",
     "refseq_version": "110",
     "refseq_url_gff": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/110/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.gff.gz",
     "refseq_url_fasta": "https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/110/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_rna.fna.gz"

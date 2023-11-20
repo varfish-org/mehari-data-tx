@@ -10,13 +10,17 @@ bash $CDOT_DIR/generate_transcript_data/gene_info.sh
 bash src/prepare.sh grch38
 bash src/prepare.sh grch37
 
+# produce MANE transcript TSV file
+bash src/mane-tx.sh
+
 # merge GRCh37 and GRCh38 files for refseq and ensembl
 bash src/merge-cdot.sh ensembl
 bash src/merge-cdot.sh refseq
 
-# produce MANE transcript TSV file
-bash src/mane-tx.sh
-
 # build mehari data files
-bash src/mehari-db-create.sh grch37
-bash src/mehari-db-create.sh grch38
+for source in ensembl refseq all; do
+    for release in grch37 grch38; do
+        bash src/mehari-db-create.sh $source
+        bash src/mehari-db-create.sh $release
+    done
+done

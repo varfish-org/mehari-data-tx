@@ -18,8 +18,8 @@ set -euo pipefail
 IFS=$'\n\t'
 
 python src/cdot_json_to_tags.py \
-    $DATA_DIR/cdot-ensembl-grch38-$VERSION_LABEL-$CDOT_VERSION.json.gz \
-    $DATA_DIR/cdot-refseq-grch38-$VERSION_LABEL-$CDOT_VERSION.json.gz \
+    $DATA_DIR/cdot-ensembl-grch38-$VERSION_LABEL+$CDOT_VERSION.json.gz \
+    $DATA_DIR/cdot-refseq-grch38-$VERSION_LABEL+$CDOT_VERSION.json.gz \
 > $DATA_DIR/mane-txs.tsv
 
 pushd $DATA_DIR

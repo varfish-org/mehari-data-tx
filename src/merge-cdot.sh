@@ -27,6 +27,11 @@ set -euo pipefail
 IFS=$'\n\t'
 
 python $CDOT_DIR/generate_transcript_data/cdot_json.py combine_builds \
-    --grch37 $DATA_DIR/cdot-$DATA_SOURCE-grch37-$VERSION_LABEL-$CDOT_VERSION.json.gz \
-    --grch38 $DATA_DIR/cdot-$DATA_SOURCE-grch38-$VERSION_LABEL-$CDOT_VERSION.json.gz \
-    --output $DATA_DIR/cdot-$DATA_SOURCE-$VERSION_LABEL-$CDOT_VERSION.json.gz
+    --grch37 $DATA_DIR/cdot-$DATA_SOURCE-grch37-$VERSION_LABEL+$CDOT_VERSION.json.gz \
+    --grch38 $DATA_DIR/cdot-$DATA_SOURCE-grch38-$VERSION_LABEL+$CDOT_VERSION.json.gz \
+    --output $DATA_DIR/cdot-$DATA_SOURCE-$VERSION_LABEL+$CDOT_VERSION.json.gz
+
+pushd $DATA_DIR
+sha256sum cdot-$DATA_SOURCE-$VERSION_LABEL+$CDOT_VERSION.json.gz \
+> cdot-$DATA_SOURCE-$VERSION_LABEL+$CDOT_VERSION.json.gz.sha256
+popd

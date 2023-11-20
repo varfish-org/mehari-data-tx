@@ -17,7 +17,7 @@ env:
   # repository for cdot code
   CDOT_REPO: https://github.com/holtgrewe/cdot.git
   # version / branch for cdot code
-  CDOT_TREEISH: fix-60-genbank-change
+  CDOT_TREEISH: holtgrewe:patch-1
   # directory where the cdot checkout resides
   CDOT_DIR: /tmp/cdot
 
@@ -53,6 +53,7 @@ jobs:
           git clone --depth 1 --branch ${{ env.CDOT_TREEISH }} ${{ env.CDOT_REPO }} ${{ env.CDOT_DIR }}
           cd ${{ env.CDOT_DIR }}
           pip install -e .
+          pip install biopython ijson pyhgvs
 
       - name: Run the data build
         run: |

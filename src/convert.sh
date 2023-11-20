@@ -8,8 +8,8 @@ set -x
 set -euo pipefail
 IFS=$'\n\t'
 
-ensembl_out=$DATA_DIR/cdot-ensembl-$GENOME_RELEASE-$VERSION_LABEL-$CDOT_VERSION.json.gz
-refseq_out=$DATA_DIR/cdot-refseq-$GENOME_RELEASE-$VERSION_LABEL-$CDOT_VERSION.json.gz
+ensembl_out=$DATA_DIR/cdot-ensembl-$GENOME_RELEASE-$VERSION_LABEL+$CDOT_VERSION.json.gz
+refseq_out=$DATA_DIR/cdot-refseq-$GENOME_RELEASE-$VERSION_LABEL+$CDOT_VERSION.json.gz
 
 if [[ ! -e $ensembl_out ]]; then
     ensembl_url=$(jq -r ".$GENOME_RELEASE.ensembl_url_gff" $SCRIPT_DIR/../config.json)

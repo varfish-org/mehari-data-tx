@@ -10,6 +10,14 @@ defaults:
   run:
     shell: bash -l {0}
 
+env:
+  # repository for cdot code
+  CDOT_REPO: https://github.com/holtgrewe/cdot.git
+  # version / branch for cdot code
+  CDOT_TREEISH: fix-60-genbank-change
+  # directory where the cdot checkout resides
+  CDOT_DIR: /tmp/cdot
+
 jobs:
   release-please:
     if: github.repository_owner == 'bihealth'
@@ -34,6 +42,7 @@ jobs:
       matrix:
         mehari_version:
           - "0.16.0"
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -57,6 +66,13 @@ jobs:
             biocommons.seqrepo =0.6.5
             mehari =${{ matrix.mehari_version }}
             htslib =1.17
+
+      - name: Clone cdot
+        run: |
+          git clone --depth 1 --branch ${{ env.CDOT_TREEISH }} ${{ env.CDOT_REPO }} ${{ env.CDOT_DIR }}
+          cd ${{ env.CDOT_DIR }}
+          pip install -e .
+          pip install biopython ijson pyhgvs htseq
 
       - name: Run the data build
         if: ${{ needs.release-please.outputs.release_created }}

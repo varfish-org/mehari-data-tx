@@ -3,12 +3,13 @@ set -x
 # Build Mehari database
 
 # Check proper usage.
-if [[ $# -ne 1 ]]; then
-    echo "Usage: $0 RELEASE"
+if [[ $# -ne 2 ]]; then
+    echo "Usage: $0 SOURCE RELEASE"
     exit 1
 fi
 
-RELEASE=$1
+SOURCE=$1
+RELEASE=$2
 
 # Make the script directory available to all called scripts.
 export SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -30,11 +31,17 @@ IFS=$'\n\t'
 # Create Mehari database.
 mehari db create \
     --genome-release $RELEASE \
-    --path-out mehari-data-tx-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst \
-    --path-cdot-json $DATA_DIR/cdot-refseq-$VERSION_LABEL-$CDOT_VERSION.json.gz \
-    --path-cdot-json $DATA_DIR/cdot-ensembl-$VERSION_LABEL-$CDOT_VERSION.json.gz \
-    $(if [[ "$RELEASE" == "grch37" ]]; then echo --path-mane-txs-tsv; echo $DATA_DIR/mane-txs.tsv; fi) \
+    --path-out $DATA_DIR/mehari-data-tx-$SOURCE-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst \
+    $(if [[ "$SOURCE" == "refseq" ]] || [[ "$SOURCE" == "all" ]]; then \
+        echo --path-cdot-json=$DATA_DIR/cdot-refseq-$VERSION_LABEL+$CDOT_VERSION.json.gz; \
+    fi) \
+    $(if [[ "$SOURCE" == "ensembl" ]] || [[ "$SOURCE" == "all" ]]; then \
+        echo --path-cdot-json=$DATA_DIR/cdot-ensembl-$VERSION_LABEL+$CDOT_VERSION.json.gz; \
+    fi) \
+    $(if [[ "$RELEASE" == "grch37" ]]; then echo --path-mane-txs-tsv=$DATA_DIR/mane-txs.tsv; fi) \
     --path-seqrepo-instance $DATA_DIR/seqrepo/main
 
-sha256sum mehari-data-tx-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst \
-> mehari-data-tx-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst.sha256
+pushd $DATA_DIR
+sha256sum mehari-data-tx-$SOURCE-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst \
+> mehari-data-tx-$SOURCE-$RELEASE-$VERSION_LABEL+$MEHARI_VERSION+$CDOT_VERSION.bin.zst.sha256
+popd

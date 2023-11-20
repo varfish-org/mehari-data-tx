@@ -39,4 +39,4 @@ fi
 # Run the individual steps.
 bash $SCRIPT_DIR/download.sh
 bash $SCRIPT_DIR/seqrepo.sh
-bash $SCRIPT_DIR/convert.sh
+# bash $SCRIPT_DIR/convert.sh
