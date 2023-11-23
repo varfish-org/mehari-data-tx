@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.4.1](https://github.com/bihealth/mehari-data-tx/compare/v0.4.0...v0.4.1) (2023-11-23)
+
+
+### Features
+
+* bump mehari to 0.2.1 ([#5](https://github.com/bihealth/mehari-data-tx/issues/5)) ([d3caf79](https://github.com/bihealth/mehari-data-tx/commit/d3caf7992a4f7d2b169914536cff5b00ff0811f4))
+* bump mehari to v0.21.0 - release as v0.4.0 ([#15](https://github.com/bihealth/mehari-data-tx/issues/15)) ([07e5ead](https://github.com/bihealth/mehari-data-tx/commit/07e5ead23b5137b210a85b913f58ac62a3383d7b))
+* implement tx protobuf file building ([#2](https://github.com/bihealth/mehari-data-tx/issues/2)) ([44d5495](https://github.com/bihealth/mehari-data-tx/commit/44d549596ef66fc7303529e2b6077fc6b508ba74))
+
+
+### Bug Fixes
+
+* mehari version to 0.21.0 on release ([#17](https://github.com/bihealth/mehari-data-tx/issues/17)) ([c0e45f2](https://github.com/bihealth/mehari-data-tx/commit/c0e45f24fc7732014c920ff94a84f3b686c78ffd))
+
+
+### Miscellaneous Chores
+
+* bump mehari to v0.18.1 and cdot to v0.22 ([#13](https://github.com/bihealth/mehari-data-tx/issues/13)) ([5535ad3](https://github.com/bihealth/mehari-data-tx/commit/5535ad301e27ec92d92a75e01db003389fdd47fc))
+* bump mehari to v0.4.1 for proper zstd stream writing ([#7](https://github.com/bihealth/mehari-data-tx/issues/7)) ([f53dbb9](https://github.com/bihealth/mehari-data-tx/commit/f53dbb903fb4591854745229d12db50869796b14))
+* initialize repository ([b2b6ffa](https://github.com/bihealth/mehari-data-tx/commit/b2b6ffa53f762f2f9cc4e332ae2e3aba462b99c8))
+* rebuild with mehari v0.5.0 ([#11](https://github.com/bihealth/mehari-data-tx/issues/11)) ([a2fd917](https://github.com/bihealth/mehari-data-tx/commit/a2fd917ca7b28cf2a491dc78e4652c232a05008a))
+
 ## [0.4.0](https://github.com/bihealth/mehari-data-tx/compare/v0.3.0...v0.4.0) (2023-11-22)
 
 
