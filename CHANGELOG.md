@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/bihealth/mehari-data-tx/compare/v0.3.0...v0.4.0) (2023-11-22)
+
+
+### Features
+
+* bump mehari to v0.21.0 - release as v0.4.0 ([#15](https://github.com/bihealth/mehari-data-tx/issues/15)) ([07e5ead](https://github.com/bihealth/mehari-data-tx/commit/07e5ead23b5137b210a85b913f58ac62a3383d7b))
+
 ## [0.3.0](https://github.com/bihealth/mehari-data-tx/compare/v0.2.2...v0.3.0) (2023-11-20)
 
 
