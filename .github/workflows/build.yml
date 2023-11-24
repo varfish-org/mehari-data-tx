@@ -13,6 +13,9 @@ defaults:
   run:
     shell: bash -l {0}
 
+env:
+  MEHARI_VERSION: "0.21.0"
+
 jobs:
   Build:
     strategy:
@@ -20,8 +23,6 @@ jobs:
         genome_release:
           - grch37
           - grch38
-        mehari_version:
-          - "0.21.0"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +36,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ matrix.mehari_version }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
 
       - name: Install Conda environment
         uses: mamba-org/provision-with-micromamba@main
@@ -47,7 +48,7 @@ jobs:
             python =3.8
             entrez-direct =16.2
             biocommons.seqrepo =0.6.5
-            mehari =${{ matrix.mehari_version }}
+            mehari =${{ env.MEHARI_VERSION }}
             htslib =1.17
 
       - name: Run the data build
