@@ -11,6 +11,9 @@ set -x
 mkdir -p $DATA_DIR/pass-2
 
 mehari db create \
+    $(if [[ "$RELEASE" == grch37 ]]; then \
+        echo --path-mane-txs-tsv $DATA_DIR/tmp/mane-txs.tsv; \
+    fi) \
     --path-out $DATA_DIR/pass-2/txs.bin.zst \
     --path-seqrepo-instance $DATA_DIR/seqrepo/master \
     --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
