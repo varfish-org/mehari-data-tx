@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/bihealth/mehari-data-tx/compare/v0.4.1...v0.4.2) (2023-11-24)
+
+
+### Bug Fixes
+
+* using mane tx list in phase 2 as well ([#20](https://github.com/bihealth/mehari-data-tx/issues/20)) ([34eeefc](https://github.com/bihealth/mehari-data-tx/commit/34eeefc2008c4ca2460c628ab1061d76b839799e))
+
 ## [0.4.1](https://github.com/bihealth/mehari-data-tx/compare/v0.4.0...v0.4.1) (2023-11-23)
 
 
