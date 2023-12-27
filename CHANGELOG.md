@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.4](https://github.com/bihealth/mehari-data-tx/compare/v0.4.3...v0.4.4) (2023-12-27)
+
+
+### Bug Fixes
+
+* correct conditional arguments in build script ([#26](https://github.com/bihealth/mehari-data-tx/issues/26)) ([31a1159](https://github.com/bihealth/mehari-data-tx/commit/31a1159c4a42adb39167ca4f69c3f5f3d077b69b))
+
 ## [0.4.3](https://github.com/bihealth/mehari-data-tx/compare/v0.4.2...v0.4.3) (2023-12-27)
 
 
