@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/bihealth/mehari-data-tx/compare/v0.4.2...v0.4.3) (2023-12-27)
+
+
+### Bug Fixes
+
+* properly use GENOME_RELEASE to fix MANE transcripts ([#24](https://github.com/bihealth/mehari-data-tx/issues/24)) ([79e1854](https://github.com/bihealth/mehari-data-tx/commit/79e18542de40057d6eeeefbe9bdff208e1b44df3))
+
 ## [0.4.2](https://github.com/bihealth/mehari-data-tx/compare/v0.4.1...v0.4.2) (2023-11-24)
 
 
