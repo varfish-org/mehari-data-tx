@@ -30,7 +30,7 @@ if [[ "$GENOME_RELEASE" == grch37 ]]; then
 fi
 
 mehari db create \
-    $(if [[ "$RELEASE" == grch37 ]]; then \
+    $(if [[ "$GENOME_RELEASE" == grch37 ]]; then \
         echo --path-mane-txs-tsv $DATA_DIR/tmp/mane-txs.tsv; \
     fi) \
     --path-out $DATA_DIR/pass-1/txs.bin.zst \
