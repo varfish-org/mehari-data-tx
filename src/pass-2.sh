@@ -12,7 +12,8 @@ mkdir -p $DATA_DIR/pass-2
 
 mehari db create \
     $(if [[ "$GENOME_RELEASE" == grch37 ]]; then \
-        echo --path-mane-txs-tsv $DATA_DIR/tmp/mane-txs.tsv; \
+        echo --path-mane-txs-tsv; \
+        echo $DATA_DIR/tmp/mane-txs.tsv; \
     fi) \
     --path-out $DATA_DIR/pass-2/txs.bin.zst \
     --path-seqrepo-instance $DATA_DIR/seqrepo/master \
