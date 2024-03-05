@@ -28,5 +28,4 @@ wget -q \
 if [[ "$GENOME_RELEASE" == grch37 ]]; then
     wget -q \
         https://github.com/SACGF/cdot/releases/download/data_v$CDOT_RELEASE/$CDOT_FILENAME_38
-        
 fi

@@ -26,10 +26,10 @@ def main():
                 json_data = json.load(inputf)
 
         print("- processing...", file=sys.stderr)
-        for tx in json_data["transcripts"].values():
-            for idx, genome_build in enumerate(tx["genome_builds"].values()):
-                if idx > 0 and idx % 1000 == 0:
-                    print(f"  ... processed {idx} transcripts", file=sys.stderr)
+        for idx, tx in enumerate(json_data["transcripts"].values()):
+            if idx > 0 and idx % 1000 == 0:
+                print(f"  ... processed {idx} transcripts", file=sys.stderr)
+            for genome_build in tx["genome_builds"].values():
                 if genome_build.get("tag"):
                     tx_id, tx_version_ = tx["id"].split(".")
                     tx_version = int(tx_version_)

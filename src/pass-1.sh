@@ -37,6 +37,7 @@ mehari db create \
     --path-out $DATA_DIR/pass-1/txs.bin.zst \
     --path-seqrepo-instance $DATA_DIR/seqrepo/master \
     --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
+    --path-cdot-json $SCRIPT_DIR/../data/cdot-0.2.23.ensembl.chrMT.$GENOME_RELEASE.gff3.json \
     --genome-release $GENOME_RELEASE
 
 # Ensure that the output can be decompressed.
