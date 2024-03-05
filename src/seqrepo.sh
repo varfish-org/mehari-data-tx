@@ -11,7 +11,7 @@ seqrepo init -i master
 
 # seqrepo load is too verbose and we cannot silence it
 2>&1 seqrepo \
-    load --instance-name master --namespace ENSEMBL \
+    load --instance-name master --namespace Ensembl \
     $DATA_DIR/tmp/$GENOME_RELEASE/Homo_sapiens.$ENSEMBL_TOKEN.cdna.all.fa.gz \
 | tail
 

@@ -35,3 +35,17 @@ New builds of mehari-data will be considered when
 - bugs are found and make a new release necessary.
 
 Generally, only the data for the latest mehari protobuf schema is created.
+
+## Utility Files
+
+As RefSeq does not contain transcripts for mitochondrial genes, we graft the ENSEMBL transcripts over.
+
+```
+# python src/cdot_extract_chrmt.py \
+      /tmp/cdot-0.2.23.ensembl.Homo_sapiens.GRCh37.87.gff3.json.gz \
+  > data/cdot-0.2.23.ensembl.chrMT.grch37.gff3.json
+
+# python src/cdot_extract_chrmt.py \
+      /tmp/cdot-0.2.23.ensembl.Homo_sapiens.GRCh38.111.gff3.json.gz \
+  > data/cdot-0.2.23.ensembl.chrMT.grch38.gff3.json
+```

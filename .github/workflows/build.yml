@@ -14,7 +14,7 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.21.0"
+  MEHARI_VERSION: "0.25.0"
 
 jobs:
   Build:

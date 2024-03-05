@@ -11,11 +11,11 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.21.0"
+  MEHARI_VERSION: "0.25.0"
 
 jobs:
   release-please:
-    if: github.repository_owner == 'bihealth'
+    if: github.repository_owner == 'varfish-org'
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -32,7 +32,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
 
   Build-Release-Assets:
-    if: github.repository_owner == 'bihealth'
+    if: github.repository_owner == 'varfish-org'
     needs: release-please
     strategy:
       matrix:
