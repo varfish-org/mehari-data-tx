@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.4.4...v0.5.0) (2024-03-06)
+
+
+### Features
+
+* use mehari ghcr.io docker image and bump to v0.25.1 ([#30](https://github.com/varfish-org/mehari-data-tx/issues/30)) ([e0fc1a2](https://github.com/varfish-org/mehari-data-tx/commit/e0fc1a217ec17471e8720bfa325814e01727b9c5))
+
+
+### Bug Fixes
+
+* adding mitochondrial transcripts from ENSEMBL ([#28](https://github.com/varfish-org/mehari-data-tx/issues/28)) ([5bcf163](https://github.com/varfish-org/mehari-data-tx/commit/5bcf1633226c2e932f52d99e7c8381a817777942))
+
 ## [0.4.4](https://github.com/bihealth/mehari-data-tx/compare/v0.4.3...v0.4.4) (2023-12-27)
 
 
