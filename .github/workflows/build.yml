@@ -14,7 +14,7 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.25.0"
+  MEHARI_VERSION: "0.25.1"
 
 jobs:
   Build:
@@ -48,7 +48,6 @@ jobs:
             python =3.8
             entrez-direct =16.2
             biocommons.seqrepo =0.6.5
-            mehari =${{ env.MEHARI_VERSION }}
             htslib =1.17
 
       - name: Run the data build

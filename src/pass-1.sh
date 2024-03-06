@@ -29,16 +29,21 @@ if [[ "$GENOME_RELEASE" == grch37 ]]; then
     > $DATA_DIR/tmp/mane-txs.tsv
 fi
 
-mehari db create \
-    $(if [[ "$GENOME_RELEASE" == grch37 ]]; then \
-        echo --path-mane-txs-tsv; \
-        echo $DATA_DIR/tmp/mane-txs.tsv; \
-    fi) \
-    --path-out $DATA_DIR/pass-1/txs.bin.zst \
-    --path-seqrepo-instance $DATA_DIR/seqrepo/master \
-    --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
-    --path-cdot-json $SCRIPT_DIR/../data/cdot-0.2.23.ensembl.chrMT.$GENOME_RELEASE.gff3.json \
-    --genome-release $GENOME_RELEASE
+sudo docker run \
+    --volume "$DATA_DIR:$DATA_DIR:rw" \
+    --volume "$(readlink -f $SCRIPT_DIR/..):$(readlink -f $SCRIPT_DIR/..):ro" \
+    ghcr.io/varfish-org/mehari:${MEHARI_VERSION} \
+    exec /usr/local/bin/mehari \
+        db create \
+        $(if [[ "$GENOME_RELEASE" == grch37 ]]; then \
+            echo --path-mane-txs-tsv; \
+            echo $DATA_DIR/tmp/mane-txs.tsv; \
+        fi) \
+        --path-out $DATA_DIR/pass-1/txs.bin.zst \
+        --path-seqrepo-instance $DATA_DIR/seqrepo/master \
+        --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
+        --path-cdot-json $SCRIPT_DIR/../data/cdot-0.2.23.ensembl.chrMT.$GENOME_RELEASE.gff3.json \
+        --genome-release $GENOME_RELEASE
 
 # Ensure that the output can be decompressed.
 zstd -c -d $DATA_DIR/pass-1/txs.bin.zst > /dev/null
