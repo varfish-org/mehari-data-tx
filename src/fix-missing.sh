@@ -15,5 +15,5 @@ mkdir -p $DATA_DIR/for-fix
 wc -l $DATA_DIR/for-fix/missing.txt
 
 xargs -a $DATA_DIR/for-fix/missing.txt \
-seqrepo fetch-load -i master -N RefSeq \
+seqrepo fetch-load -i master -n RefSeq \
 >> $DATA_DIR/for-fix/missing.fasta
