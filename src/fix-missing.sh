@@ -7,7 +7,7 @@ IFS=$'\n\t'
 set -x
 
 # hotpatch broken seqrepo
-sed -e 's/if aliases_cur.fetchone() is not None/if next(aliases_cur, None) is not None/' \
+sed -i -e 's/if aliases_cur.fetchone() is not None/if next(aliases_cur, None) is not None/' \
   /home/runner/micromamba-root/envs/mehari-data-tx/lib/python3.8/site-packages/biocommons/seqrepo/cli.py
 
 mkdir -p $DATA_DIR/for-fix
