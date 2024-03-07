@@ -33,5 +33,5 @@ fi
 bash -x $SCRIPT_DIR/download.sh
 bash -x $SCRIPT_DIR/seqrepo.sh
 bash -x $SCRIPT_DIR/pass-1.sh
-bash -x $SCRIPT_DIR/fix-ncbi.sh
+bash -x $SCRIPT_DIR/fix-missing.sh
 bash -x $SCRIPT_DIR/pass-2.sh
