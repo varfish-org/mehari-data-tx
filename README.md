@@ -42,10 +42,10 @@ As RefSeq does not contain transcripts for mitochondrial genes, we graft the ENS
 
 ```
 # python src/cdot_extract_chrmt.py \
-      /tmp/cdot-0.2.23.ensembl.Homo_sapiens.GRCh37.87.gff3.json.gz \
-  > data/cdot-0.2.23.ensembl.chrMT.grch37.gff3.json
+      /tmp/cdot-0.2.24.ensembl.Homo_sapiens.GRCh37.87.gff3.json.gz \
+  > data/cdot-0.2.24.ensembl.chrMT.grch37.gff3.json
 
 # python src/cdot_extract_chrmt.py \
-      /tmp/cdot-0.2.23.ensembl.Homo_sapiens.GRCh38.111.gff3.json.gz \
-  > data/cdot-0.2.23.ensembl.chrMT.grch38.gff3.json
+      /tmp/cdot-0.2.24.ensembl.Homo_sapiens.GRCh38.111.gff3.json.gz \
+  > data/cdot-0.2.24.ensembl.chrMT.grch38.gff3.json
 ```
