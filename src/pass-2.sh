@@ -23,7 +23,7 @@ sudo docker run \
         --path-out $DATA_DIR/pass-2/txs.bin.zst \
         --path-seqrepo-instance $DATA_DIR/seqrepo/master \
         --path-cdot-json $DATA_DIR/tmp/$GENOME_RELEASE/$CDOT_FILENAME \
-        --path-cdot-json $SCRIPT_DIR/../data/cdot-0.2.23.ensembl.chrMT.$GENOME_RELEASE.gff3.json \
+        --path-cdot-json $SCRIPT_DIR/../data/cdot-0.2.24.ensembl.chrMT.$GENOME_RELEASE.gff3.json \
         --genome-release $GENOME_RELEASE
 cd $DATA_DIR/pass-2
 

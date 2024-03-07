@@ -1,5 +1,5 @@
 {
-  "cdot_version": "0.2.23",
+  "cdot_version": "0.2.24",
   "genes": {
     "ENSG00000198695.2": {
       "aliases": "MTND6",
@@ -12,7 +12,7 @@
       "hgnc": "7462",
       "map_location": "",
       "summary": "Enables NADH dehydrogenase (ubiquinone) activity. Involved in mitochondrial electron transport, NADH to ubiquinone and mitochondrial respiratory chain complex I assembly. Predicted to be located in mitochondrial inner membrane. Implicated in Leber hereditary optic neuropathy; Leigh disease; and spinal muscular atrophy with lower extremity predominante 2B. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198712.1": {
       "aliases": "COII, MTCO2",
@@ -25,7 +25,7 @@
       "hgnc": "7421",
       "map_location": "",
       "summary": "Contributes to cytochrome-c oxidase activity. Predicted to be involved in mitochondrial electron transport, cytochrome c to oxygen and positive regulation of vasoconstriction. Located in mitochondrial inner membrane. Part of respiratory chain complex IV. Biomarker of Huntington's disease and stomach cancer. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198727.2": {
       "aliases": "MTCYB",
@@ -38,7 +38,7 @@
       "hgnc": "7427",
       "map_location": "",
       "summary": "Predicted to enable metal ion binding activity. Predicted to be involved in several processes, including electron transport coupled proton transport; response to cobalamin; and response to glucagon. Located in mitochondrion. Implicated in ovarian carcinoma and urinary bladder cancer. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198763.3": {
       "aliases": "MTND2",
@@ -51,7 +51,7 @@
       "hgnc": "7456",
       "map_location": "",
       "summary": "Enables NADH dehydrogenase (ubiquinone) activity. Involved in mitochondrial electron transport, NADH to ubiquinone and mitochondrial respiratory chain complex I assembly. Part of mitochondrial respiratory chain complex I. Implicated in Leber hereditary optic neuropathy; multiple sclerosis; myocardial infarction; neurodegenerative disease (multiple); and urinary bladder cancer. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198786.2": {
       "aliases": "MTND5",
@@ -64,7 +64,7 @@
       "hgnc": "7461",
       "map_location": "",
       "summary": "Enables NADH dehydrogenase (ubiquinone) activity. Involved in mitochondrial electron transport, NADH to ubiquinone and mitochondrial respiratory chain complex I assembly. Part of mitochondrial respiratory chain complex I. Implicated in Leber hereditary optic neuropathy; Leigh disease; and MELAS syndrome. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198804.2": {
       "aliases": "COI, MTCO1",
@@ -77,7 +77,7 @@
       "hgnc": "7419",
       "map_location": "",
       "summary": "Contributes to cytochrome-c oxidase activity. Predicted to be involved in electron transport coupled proton transport and mitochondrial electron transport, cytochrome c to oxygen. Part of mitochondrial respiratory chain complex III and mitochondrial respiratory chain complex IV. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198840.2": {
       "aliases": "MTND3",
@@ -90,7 +90,7 @@
       "hgnc": "7458",
       "map_location": "",
       "summary": "Enables NADH dehydrogenase (ubiquinone) activity. Involved in mitochondrial electron transport, NADH to ubiquinone. Part of mitochondrial respiratory chain complex I. Implicated in Leber hereditary optic neuropathy; Leigh disease; and Parkinson's disease. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198886.2": {
       "aliases": "MTND4",
@@ -103,7 +103,7 @@
       "hgnc": "7459",
       "map_location": "",
       "summary": "Enables NADH dehydrogenase (ubiquinone) activity. Involved in mitochondrial electron transport, NADH to ubiquinone and mitochondrial respiratory chain complex I assembly. Part of mitochondrial respiratory chain complex I. Implicated in Leber hereditary optic neuropathy; Parkinson's disease; macular degeneration; and schizophrenia. Biomarker of Alzheimer's disease. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198888.2": {
       "aliases": "MTND1",
@@ -116,7 +116,7 @@
       "hgnc": "7455",
       "map_location": "",
       "summary": "Enables NADH dehydrogenase (ubiquinone) activity. Involved in mitochondrial electron transport, NADH to ubiquinone and mitochondrial respiratory chain complex I assembly. Located in mitochondrial membrane. Part of mitochondrial respiratory chain complex I. Implicated in several diseases, including MELAS syndrome; neurodegenerative disease (multiple); optic nerve disease (multiple); toxic shock syndrome; and type 2 diabetes mellitus. Biomarker of Alzheimer's disease; Parkinson's disease; and multiple sclerosis. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198899.2": {
       "aliases": "ATPase6, MTATP6",
@@ -129,7 +129,7 @@
       "hgnc": "7414",
       "map_location": "",
       "summary": "Contributes to proton-transporting ATP synthase activity, rotational mechanism. Involved in mitochondrial ATP synthesis coupled proton transport. Part of mitochondrial proton-transporting ATP synthase complex. Implicated in Leber hereditary optic neuropathy; NARP syndrome; Parkinson's disease; multiple sclerosis; and systemic lupus erythematosus. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000198938.2": {
       "aliases": "COIII, MTCO3",
@@ -142,231 +142,343 @@
       "hgnc": "7422",
       "map_location": "",
       "summary": "Predicted to enable electron transfer activity and oxidoreduction-driven active transmembrane transporter activity. Involved in respiratory chain complex IV assembly. Part of respiratory chain complex IV. Implicated in MELAS syndrome. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000209082": {
+      "aliases": "MTTL1",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA leucine 1 (UUA/G)",
+      "gene_symbol": "MT-TL1",
+      "hgnc": "7490",
+      "map_location": "",
+      "summary": "Implicated in cardiomyopathy. [provided by Alliance of Genome Resources, Apr 2022]",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210049": {
+      "aliases": "",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA phenylalanine",
+      "gene_symbol": "MT-TF",
+      "hgnc": "7481",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210077": {
+      "aliases": "MTTV",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA valine",
+      "gene_symbol": "MT-TV",
+      "hgnc": "7500",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
-    "ENSG00000210082.2": {
+    "ENSG00000210082": {
       "aliases": "MTRNR2",
       "biotype": [
         "Mt_rRNA",
-        "ncRNA"
+        "ncRNA",
+        "rRNA"
       ],
       "description": "mitochondrially encoded 16S RNA",
       "gene_symbol": "MT-RNR2",
       "hgnc": "7471",
       "map_location": "",
       "summary": "Enables G protein-coupled receptor binding activity; protein self-association; and receptor antagonist activity. Involved in several processes, including leukocyte chemotaxis; negative regulation of cell death; and negative regulation of neuroinflammatory response. Located in several cellular components, including mitochondrion; perinuclear region of cytoplasm; and sperm midpiece. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210100": {
+      "aliases": "MTTI",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA isoleucine",
+      "gene_symbol": "MT-TI",
+      "hgnc": "7488",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210107": {
+      "aliases": "MTTQ",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA glutamine",
+      "gene_symbol": "MT-TQ",
+      "hgnc": "7495",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210112": {
+      "aliases": "MTTM",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA methionine",
+      "gene_symbol": "MT-TM",
+      "hgnc": "7492",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210117": {
+      "aliases": "MTTW",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA tryptophan",
+      "gene_symbol": "MT-TW",
+      "hgnc": "7501",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210127": {
+      "aliases": "MTTA",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA alanine",
+      "gene_symbol": "MT-TA",
+      "hgnc": "7475",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210135": {
+      "aliases": "MTTN",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA asparagine",
+      "gene_symbol": "MT-TN",
+      "hgnc": "7493",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210140": {
+      "aliases": "MTTC",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA cysteine",
+      "gene_symbol": "MT-TC",
+      "hgnc": "7477",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210144": {
+      "aliases": "MTTY",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA tyrosine",
+      "gene_symbol": "MT-TY",
+      "hgnc": "7502",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210151": {
+      "aliases": "MTTS1",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA serine 1 (UCN)",
+      "gene_symbol": "MT-TS1",
+      "hgnc": "7497",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210154": {
+      "aliases": "MTTD",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA aspartic acid",
+      "gene_symbol": "MT-TD",
+      "hgnc": "7478",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210156": {
+      "aliases": "MTTK",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA lysine",
+      "gene_symbol": "MT-TK",
+      "hgnc": "7489",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210164": {
+      "aliases": "MTTG",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA glycine",
+      "gene_symbol": "MT-TG",
+      "hgnc": "7486",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210174": {
+      "aliases": "MTTR",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA arginine",
+      "gene_symbol": "MT-TR",
+      "hgnc": "7496",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210176": {
+      "aliases": "MTTH",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA histidine",
+      "gene_symbol": "MT-TH",
+      "hgnc": "7487",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210184": {
+      "aliases": "MTTS2",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA serine 2 (AGU/C)",
+      "gene_symbol": "MT-TS2",
+      "hgnc": "7498",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210191": {
+      "aliases": "MTTL2",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA leucine 2 (CUN)",
+      "gene_symbol": "MT-TL2",
+      "hgnc": "7491",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210194": {
+      "aliases": "MTTE",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA glutamic acid",
+      "gene_symbol": "MT-TE",
+      "hgnc": "7479",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210195": {
+      "aliases": "MTTT",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA threonine",
+      "gene_symbol": "MT-TT",
+      "hgnc": "7499",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000210196": {
+      "aliases": "MTTP",
       "biotype": [
         "Mt_tRNA",
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "description": null,
-      "gene_symbol": null,
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "description": "mitochondrially encoded tRNA proline",
+      "gene_symbol": "MT-TP",
+      "hgnc": "7494",
+      "map_location": "",
+      "summary": "",
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
-    "ENSG00000211459.2": {
+    "ENSG00000211459": {
       "aliases": "MTRNR1",
       "biotype": [
         "Mt_rRNA",
-        "ncRNA"
+        "ncRNA",
+        "rRNA"
       ],
       "description": "mitochondrially encoded 12S RNA",
       "gene_symbol": "MT-RNR1",
       "hgnc": "7470",
       "map_location": "",
       "summary": "Enables DNA binding activity and DNA-binding transcription factor binding activity. Involved in several processes, including osteoblast proliferation; regulation of carbohydrate utilization; and regulation of phosphate metabolic process. Located in extracellular space; mitochondrion; and nucleus. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000212907.2": {
       "aliases": "MTND4L",
@@ -379,7 +491,7 @@
       "hgnc": "7460",
       "map_location": "",
       "summary": "Predicted to enable NADH dehydrogenase (ubiquinone) activity. Predicted to be located in mitochondrial inner membrane. Implicated in Leber hereditary optic neuropathy and diabetes mellitus. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     },
     "ENSG00000228253.1": {
       "aliases": "ATPase8, MTATP8",
@@ -392,13 +504,13 @@
       "hgnc": "7415",
       "map_location": "",
       "summary": "Contributes to proton-transporting ATP synthase activity, rotational mechanism. Involved in mitochondrial ATP synthesis coupled proton transport. Part of mitochondrial proton-transporting ATP synthase complex. Implicated in multiple sclerosis and urinary bladder cancer. [provided by Alliance of Genome Resources, Apr 2022]",
-      "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+      "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
     }
   },
   "genome_builds": [
-    "GRCh37"
+    "GRCh38"
   ],
-  "refseq_gene_summary_api_retrieval_date": "2024-01-16T15:03:19.244397",
+  "refseq_gene_summary_api_retrieval_date": "2024-03-06T22:44:49.850012",
   "transcripts": {
     "ENST00000361227.2": {
       "biotype": [
@@ -407,7 +519,7 @@
       "gene_name": "MT-ND3",
       "gene_version": "ENSG00000198840.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 10404,
           "cds_start": 10058,
           "contig": "NC_012920.1",
@@ -422,8 +534,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7458",
@@ -438,7 +550,7 @@
       "gene_name": "MT-ND4L",
       "gene_version": "ENSG00000212907.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 10766,
           "cds_start": 10469,
           "contig": "NC_012920.1",
@@ -453,8 +565,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7460",
@@ -469,7 +581,7 @@
       "gene_name": "MT-ND4",
       "gene_version": "ENSG00000198886.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 12137,
           "cds_start": 10759,
           "contig": "NC_012920.1",
@@ -484,8 +596,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7459",
@@ -500,7 +612,7 @@
       "gene_name": "MT-ND1",
       "gene_version": "ENSG00000198888.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 4262,
           "cds_start": 3306,
           "contig": "NC_012920.1",
@@ -515,8 +627,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7455",
@@ -531,7 +643,7 @@
       "gene_name": "MT-ND2",
       "gene_version": "ENSG00000198763.3",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 5511,
           "cds_start": 4469,
           "contig": "NC_012920.1",
@@ -546,8 +658,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7456",
@@ -562,7 +674,7 @@
       "gene_name": "MT-ND5",
       "gene_version": "ENSG00000198786.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 14148,
           "cds_start": 12336,
           "contig": "NC_012920.1",
@@ -577,8 +689,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7461",
@@ -593,7 +705,7 @@
       "gene_name": "MT-CO1",
       "gene_version": "ENSG00000198804.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 7445,
           "cds_start": 5903,
           "contig": "NC_012920.1",
@@ -608,8 +720,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7419",
@@ -624,7 +736,7 @@
       "gene_name": "MT-ND6",
       "gene_version": "ENSG00000198695.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 14673,
           "cds_start": 14148,
           "contig": "NC_012920.1",
@@ -639,8 +751,8 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7462",
@@ -655,7 +767,7 @@
       "gene_name": "MT-CO2",
       "gene_version": "ENSG00000198712.1",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 8269,
           "cds_start": 7585,
           "contig": "NC_012920.1",
@@ -670,8 +782,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7421",
@@ -686,7 +798,7 @@
       "gene_name": "MT-CYB",
       "gene_version": "ENSG00000198727.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 15887,
           "cds_start": 14746,
           "contig": "NC_012920.1",
@@ -701,8 +813,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7427",
@@ -717,7 +829,7 @@
       "gene_name": "MT-ATP8",
       "gene_version": "ENSG00000228253.1",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 8572,
           "cds_start": 8365,
           "contig": "NC_012920.1",
@@ -732,8 +844,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7415",
@@ -748,7 +860,7 @@
       "gene_name": "MT-ATP6",
       "gene_version": "ENSG00000198899.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 9207,
           "cds_start": 8526,
           "contig": "NC_012920.1",
@@ -763,8 +875,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7414",
@@ -779,7 +891,7 @@
       "gene_name": "MT-CO3",
       "gene_version": "ENSG00000198938.2",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "cds_end": 9990,
           "cds_start": 9206,
           "contig": "NC_012920.1",
@@ -794,8 +906,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7422",
@@ -805,12 +917,13 @@
     },
     "ENST00000386347.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TL1",
       "gene_version": "ENSG00000209082",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -823,20 +936,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7490",
       "id": "ENST00000386347.1"
     },
     "ENST00000387314.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TF",
       "gene_version": "ENSG00000210049",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -849,20 +964,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7481",
       "id": "ENST00000387314.1"
     },
     "ENST00000387342.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TV",
       "gene_version": "ENSG00000210077",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -875,20 +992,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7500",
       "id": "ENST00000387342.1"
     },
     "ENST00000387347.2": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "rRNA"
       ],
       "gene_name": "MT-RNR2",
-      "gene_version": "ENSG00000210082.2",
+      "gene_version": "ENSG00000210082",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -901,8 +1020,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7471",
@@ -910,12 +1029,13 @@
     },
     "ENST00000387365.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TI",
       "gene_version": "ENSG00000210100",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -928,20 +1048,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7488",
       "id": "ENST00000387365.1"
     },
     "ENST00000387372.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TQ",
       "gene_version": "ENSG00000210107",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -954,20 +1076,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7495",
       "id": "ENST00000387372.1"
     },
     "ENST00000387377.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TM",
       "gene_version": "ENSG00000210112",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -980,20 +1104,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7492",
       "id": "ENST00000387377.1"
     },
     "ENST00000387382.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TW",
       "gene_version": "ENSG00000210117",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1006,20 +1132,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7501",
       "id": "ENST00000387382.1"
     },
     "ENST00000387392.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TA",
       "gene_version": "ENSG00000210127",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1032,20 +1160,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7475",
       "id": "ENST00000387392.1"
     },
     "ENST00000387400.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TN",
       "gene_version": "ENSG00000210135",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1058,20 +1188,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7493",
       "id": "ENST00000387400.1"
     },
     "ENST00000387405.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TC",
       "gene_version": "ENSG00000210140",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1084,20 +1216,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7477",
       "id": "ENST00000387405.1"
     },
     "ENST00000387409.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TY",
       "gene_version": "ENSG00000210144",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1110,20 +1244,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7502",
       "id": "ENST00000387409.1"
     },
     "ENST00000387416.2": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TS1",
       "gene_version": "ENSG00000210151",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1136,20 +1272,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7497",
       "id": "ENST00000387416.2"
     },
     "ENST00000387419.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TD",
       "gene_version": "ENSG00000210154",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1162,20 +1300,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7478",
       "id": "ENST00000387419.1"
     },
     "ENST00000387421.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TK",
       "gene_version": "ENSG00000210156",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1188,20 +1328,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7489",
       "id": "ENST00000387421.1"
     },
     "ENST00000387429.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TG",
       "gene_version": "ENSG00000210164",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1214,20 +1356,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7486",
       "id": "ENST00000387429.1"
     },
     "ENST00000387439.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TR",
       "gene_version": "ENSG00000210174",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1240,20 +1384,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7496",
       "id": "ENST00000387439.1"
     },
     "ENST00000387441.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TH",
       "gene_version": "ENSG00000210176",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1266,20 +1412,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7487",
       "id": "ENST00000387441.1"
     },
     "ENST00000387449.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TS2",
       "gene_version": "ENSG00000210184",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1292,20 +1440,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7498",
       "id": "ENST00000387449.1"
     },
     "ENST00000387456.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TL2",
       "gene_version": "ENSG00000210191",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1318,20 +1468,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7491",
       "id": "ENST00000387456.1"
     },
     "ENST00000387459.1": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TE",
       "gene_version": "ENSG00000210194",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1344,20 +1496,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7479",
       "id": "ENST00000387459.1"
     },
     "ENST00000387460.2": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TT",
       "gene_version": "ENSG00000210195",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1370,20 +1524,22 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7499",
       "id": "ENST00000387460.2"
     },
     "ENST00000387461.2": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "tRNA"
       ],
-      "gene_name": null,
+      "gene_name": "MT-TP",
       "gene_version": "ENSG00000210196",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1396,20 +1552,22 @@
             ]
           ],
           "strand": "-",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
+      "hgnc": "7494",
       "id": "ENST00000387461.2"
     },
     "ENST00000389680.2": {
       "biotype": [
-        "ncRNA"
+        "ncRNA",
+        "rRNA"
       ],
       "gene_name": "MT-RNR1",
-      "gene_version": "ENSG00000211459.2",
+      "gene_version": "ENSG00000211459",
       "genome_builds": {
-        "GRCh37": {
+        "GRCh38": {
           "contig": "NC_012920.1",
           "exons": [
             [
@@ -1422,8 +1580,8 @@
             ]
           ],
           "strand": "+",
-          "tag": "basic",
-          "url": "ftp://ftp.ensembl.org/pub/grch37/release-87/gff3/homo_sapiens/Homo_sapiens.GRCh37.87.gff3.gz"
+          "tag": "basic,Ensembl_canonical",
+          "url": "ftp://ftp.ensembl.org/pub/release-111/gff3/homo_sapiens/Homo_sapiens.GRCh38.111.gff3.gz"
         }
       },
       "hgnc": "7470",
