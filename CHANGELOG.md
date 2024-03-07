@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.5.0...v0.6.0) (2024-03-07)
+
+
+### Features
+
+* bump cdot to v0.2.24 ([#33](https://github.com/varfish-org/mehari-data-tx/issues/33)) ([c08ae15](https://github.com/varfish-org/mehari-data-tx/commit/c08ae15c7580000dfdee493bbcafc4d16ff6cf80))
+* use "seqrepo fetch-load" to fetch missing sequences ([#32](https://github.com/varfish-org/mehari-data-tx/issues/32)) ([7b8c063](https://github.com/varfish-org/mehari-data-tx/commit/7b8c063763bce26faea9d069466f8094cb6f5731))
+
+
+### Bug Fixes
+
+* bump cdot to 0.2.24 for chrMT transcripts ([#31](https://github.com/varfish-org/mehari-data-tx/issues/31)) ([d40bd32](https://github.com/varfish-org/mehari-data-tx/commit/d40bd32296a761be058953392647217872496412))
+
 ## [0.5.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.4.4...v0.5.0) (2024-03-06)
 
 
