@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.6.0...v0.6.1) (2024-03-09)
+
+
+### Bug Fixes
+
+* bump mehari to 0.25.4 ([#35](https://github.com/varfish-org/mehari-data-tx/issues/35)) ([253b6ac](https://github.com/varfish-org/mehari-data-tx/commit/253b6acdf7d3c6541e7b146f9179a73b91d7f5f6))
+
 ## [0.6.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.5.0...v0.6.0) (2024-03-07)
 
 
