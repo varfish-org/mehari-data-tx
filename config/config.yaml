@@ -1,0 +1,48 @@
+reference:
+  GRCh38:
+    ensembl:
+      species: homo_sapiens
+      release: 110
+      build: GRCh38
+      datatype: cdna
+    refseq:
+      species: H_sapiens
+      species_name: human
+  GRCh37:
+    ensembl:
+      species: homo_sapiens
+      release: 105
+      build: GRCh37
+      datatype: cdna
+    refseq:
+      species: H_sapiens
+      species_name: human
+
+
+transcripts:
+  GRCh38:
+    cdot:
+      release: 0.2.25
+      custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
+  GRCh37:
+    cdot:
+      release: 0.2.25
+      custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
+  # the following entry is semi hardcoded for now
+  # (rules::txdb::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
+  GRCh38-ensembl:
+    cdot:
+      release: 0.2.25
+      custom: ensembl.grch38
+
+
+
+hgnc:
+  # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
+  # format: yyyy-mm-dd
+  # quarterly versions: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
+  version: "2024-04-01"
+
+
+mehari:
+  version: 0.26.0

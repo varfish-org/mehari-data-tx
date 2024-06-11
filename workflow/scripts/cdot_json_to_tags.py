@@ -10,11 +10,12 @@ import gzip
 import json
 import sys
 import typing
+from contextlib import redirect_stderr
 
 
-def main():
-    txs: typing.Dict[str, typing.Tuple[int, typing.List[str]]] = {}
-    for json_path in sys.argv[1:]:
+def main(paths: typing.Iterable[str], file=sys.stdout):
+    txs: dict[str, tuple[int, str, list[str]]] = {}
+    for json_path in paths:
         print(f"processing {json_path}...", file=sys.stderr)
 
         print(f"- loading {json_path}", file=sys.stderr)
@@ -41,10 +42,12 @@ def main():
         print(f"... done processing {json_path}", file=sys.stderr)
     print("finalizing...", file=sys.stderr)
     for tx_id, (tx_version, gene, tags) in sorted(txs.items()):
-        lst = ','.join(sorted(tags))
-        print(f"{tx_id}\t{gene}\t{lst}")
+        lst = ",".join(sorted(tags))
+        print(f"{tx_id}\t{gene}\t{lst}", file=file)
+    print(file=file, flush=True)
     print("... done finalizing", file=sys.stderr)
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+with open(snakemake.output.mane_txs, "w") as out:
+    with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+        main((snakemake.input.cdot,), file=out)

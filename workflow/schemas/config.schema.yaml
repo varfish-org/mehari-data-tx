@@ -1,0 +1,101 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+
+description: snakemake configuration file
+
+type: object
+
+definitions:
+  ensembl-entry:
+    type: object
+    properties:
+      ensembl:
+        type: object
+        additionalProperties: false
+        properties:
+          species:
+            type: string
+          release:
+            type: integer
+          build:
+            type: string
+          datatype:
+            type: string
+        required:
+          - species
+          - release
+          - build
+          - datatype
+  refseq-entry:
+    type: object
+    properties:
+      refseq:
+        type: object
+        additionalProperties: false
+        properties:
+          species:
+            type: string
+          species_name:
+            type: string
+        required:
+          - species
+          - species_name
+  cdot-entry:
+    type: object
+    properties:
+      cdot:
+        type: object
+        additionalProperties: false
+        properties:
+          release:
+            type: string
+          source:
+            type: string
+          custom:
+            type: string
+        required:
+          - release
+        oneOf:
+          - required:
+              - custom
+          - required:
+              - source
+
+properties:
+  reference:
+    type: object
+    minProperties: 1
+    additionalProperties:
+      anyOf:
+        - $ref: "#/definitions/ensembl-entry"
+        - $ref: "#/definitions/refseq-entry"
+  transcripts:
+    type: object
+    minProperties: 1
+    additionalProperties:
+      anyOf:
+        - $ref: "#/definitions/cdot-entry"
+    required:
+      - GRCh38-ensembl
+  hgnc:
+    type: object
+    properties:
+      version:
+        type: string
+        format: date
+    required:
+      - version
+  mehari:
+    type: object
+    additionalProperties: false
+    properties:
+      version:
+        type: string
+    required:
+      - version
+required:
+    - reference
+    - transcripts
+    - hgnc
+    - mehari
+
+additionalProperties: false

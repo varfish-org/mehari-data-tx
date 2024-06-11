@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - curl ==7.87.0
+  - wget ==1.21.4
+  - grep ==3.11
+  - python =3.12
+  - gzip ==1.13

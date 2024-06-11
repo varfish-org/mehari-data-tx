@@ -8,22 +8,17 @@ database.
 import gzip
 import json
 import sys
-import typing
+from contextlib import redirect_stderr
 
 #: Contig name for chrMT
 CHRMT_CONTIG = "NC_012920.1"
 
 
-def main():
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <json_path>", file=sys.stderr)
-        return 1
-    json_path = sys.argv[1]
-
+def main(json_path: str, file=sys.stdout):
     #: Transcript IDs (with version) to keep.
-    tx_ids: typing.Set[str] = set()
+    tx_ids: set[str] = set()
     #: Gene IDs (with version) tok eep.
-    gene_ids: typing.Set[str] = set()
+    gene_ids: set[str] = set()
 
     print(f"processing {json_path}...", file=sys.stderr)
 
@@ -56,9 +51,10 @@ def main():
             json_data["transcripts"].pop(tx_id)
     print("... done reducing to chrMT", file=sys.stderr)
 
-    json.dump(json_data, sys.stdout, indent=2)
-    print(file=sys.stdout)
+    json.dump(json_data, file, indent=2)
+    print(file=file, flush=True)
 
 
-if __name__ == "__main__":
-    sys.exit(main())
+with open(snakemake.output.cdot, "w") as out:
+    with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+        main(json_path=snakemake.input.cdot, file=out)

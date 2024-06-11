@@ -1,0 +1,28 @@
+from snakemake.utils import validate
+
+
+configfile: "config/config.yaml"
+
+
+validate(config, schema="schemas/config.schema.yaml")
+
+
+wildcard_constraints:
+    seqrepo=r"(seqrepo|seqrepo_fixed)",
+    alias=r"(GRCh37|GRCh38|GRCh38-ensembl)",
+
+
+include: "rules/common.smk"
+include: "rules/download.smk"
+include: "rules/seqrepo.smk"
+include: "rules/txdb.smk"
+
+
+rule all:
+    input:
+        expand(
+            ["results/mehari/{alias}/seqrepo_fixed/{what}{ext}"],
+            alias=["GRCh37", "GRCh38"],
+            what=["txs.bin.zst", "txs.bin.zst.report.jsonl"],
+            ext=["", ".sha256"],
+        ),

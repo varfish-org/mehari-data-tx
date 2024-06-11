@@ -14,7 +14,7 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.25.4"
+  MEHARI_VERSION: "0.26.0"
 
 jobs:
   Build:
@@ -36,21 +36,12 @@ jobs:
         uses: actions/cache@v3
         with:
           path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
 
-      - name: Install Conda environment
-        uses: mamba-org/provision-with-micromamba@main
+      - name: Run data build workflow
+        uses: snakemake/snakemake-github-action@v1
         with:
-          environment-file: false
-          environment-name: mehari-data-tx
-          channels: conda-forge,bioconda,defaults
-          extra-specs: |
-            python =3.8
-            entrez-direct =16.2
-            biocommons.seqrepo =0.6.5
-            htslib =1.17
-
-      - name: Run the data build
-        run: |
-          export GENOME_RELEASE=${{ matrix.genome_release }}
-          bash src/run.sh
+          directory: data
+          snakefile: workflow/Snakefile
+          args: "--configfile config/config.yaml --sdm conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache"
+          show-disk-usage-on-error: true
