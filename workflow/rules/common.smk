@@ -41,7 +41,7 @@ def get_mehari_input(wildcards):
         "seqrepo_instance": f"results/{seqrepo}/{alias}/master",
         "cdot": f"results/transcripts/cdot/{alias}.json.gz",
         "cdot_hgnc": f"results/transcripts/cdot/{alias}.hgnc.json.gz",
-        "cdot_mt": f"results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
+        "cdot_mt": "results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
     }
     if alias == "GRCh37":
         result.update({"mane_txs": "results/transcripts/cdot/GRCh37/mane-txs.tsv"})

@@ -14,7 +14,7 @@ rule initialize_seqrepo:
         "../envs/seqrepo.yaml"
     shell:
         """
-        seqrepo --root-directory {output.seqrepo_root} init -i master
+        seqrepo --root-directory {output.seqrepo_root} init --instance-name master
 
         # seqrepo load is too verbose and we cannot silence it
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root} \
@@ -53,8 +53,8 @@ rule fix_missing:
         IFS=$'\n\t'
         set -x
         jq -r 'select(.reason == "MissingSequence").id' {input.txs_db_report} > {output.missing_txt}
-        cp -r {input.seqrepo_root} {output.seqrepo_root_fixed}
+        cp -r {input.seqrepo_root}/* {output.seqrepo_root_fixed}
         2>{log} xargs -a {output.missing_txt} \
          seqrepo --root-directory {output.seqrepo_root_fixed} \
-          fetch-load -i master -n {params.refseq_namespace} >> {missing.fasta}
+          fetch-load --instance-name master --namespace {params.refseq_namespace} >> {output.missing_fasta}
         """
