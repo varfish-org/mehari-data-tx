@@ -52,6 +52,6 @@ rule fix_missing:
         jq -r 'select(.reason == "MissingSequence").id' {input.txs_db_report} > {output.missing_txt}
         cp -r {input.seqrepo_root} {output.seqrepo_root_fixed}
         2>{log} xargs -a {output.missing_txt} \
-         seqrepo --root-dir {output.seqrepo_root_fixed} \
+         seqrepo --root-directory {output.seqrepo_root_fixed} \
           fetch-load -i master -n RefSeq
         """
