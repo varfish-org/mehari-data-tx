@@ -95,6 +95,7 @@ properties:
           - update
     required:
       - version
+      - cdot-mode
   namespaces:
     type: object
     properties:
