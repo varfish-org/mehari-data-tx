@@ -40,6 +40,9 @@ rule fix_missing:
         seqrepo_root_fixed=directory("results/seqrepo_fixed/{alias}"),
         seqrepo_fixed_instance=directory("results/seqrepo_fixed/{alias}/master"),
         missing_txt="results/for-fix/{alias}/missing.txt",
+        missing_fasta="results/for-fix/{alias}/missing.fasta",
+    params:
+        refseq_namespace=config["namespaces"]["refseq"],
     conda:
         "../envs/seqrepo.yaml"
     log:
@@ -53,5 +56,5 @@ rule fix_missing:
         cp -r {input.seqrepo_root} {output.seqrepo_root_fixed}
         2>{log} xargs -a {output.missing_txt} \
          seqrepo --root-directory {output.seqrepo_root_fixed} \
-          fetch-load -i master -n RefSeq
+          fetch-load -i master -n {params.refseq_namespace} >> {missing.fasta}
         """
