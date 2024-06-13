@@ -1,3 +1,4 @@
+# reference sequence definitions
 reference:
   GRCh38:
     ensembl:
@@ -19,6 +20,7 @@ reference:
       species_name: human
 
 
+# cdot transcript sources for the references defined above
 transcripts:
   GRCh38:
     cdot:
@@ -36,7 +38,7 @@ transcripts:
       custom: ensembl.grch38
 
 
-
+# HGNC complete set file to check missing HGNC ids from cdot against
 hgnc:
   # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
   # format: yyyy-mm-dd
@@ -44,5 +46,12 @@ hgnc:
   version: "2024-04-01"
 
 
+# namespaces to use for seqrepo
+namespaces:
+  ensembl: Ensembl
+  refseq: NCBI
+
+
+# mehari version to use (currently ignored)
 mehari:
   version: 0.26.0

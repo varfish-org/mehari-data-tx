@@ -84,6 +84,16 @@ properties:
         format: date
     required:
       - version
+  namespaces:
+    type: object
+    properties:
+      ensembl:
+        type: string
+      refseq:
+        type: string
+    required:
+      - ensembl
+      - refseq
   mehari:
     type: object
     additionalProperties: false
@@ -93,9 +103,10 @@ properties:
     required:
       - version
 required:
-    - reference
-    - transcripts
-    - hgnc
-    - mehari
+  - reference
+  - transcripts
+  - hgnc
+  - namespaces
+  - mehari
 
 additionalProperties: false

@@ -5,6 +5,9 @@ rule initialize_seqrepo:
     output:
         seqrepo_root=directory("results/seqrepo/{alias}"),
         seqrepo_instance=directory("results/seqrepo/{alias}/master"),
+    params:
+        ensembl_namespace=config["namespaces"]["ensembl"],
+        refseq_namespace=config["namespaces"]["refseq"],
     log:
         "logs/{alias}/seqrepo/initialize.log",
     conda:
@@ -15,13 +18,13 @@ rule initialize_seqrepo:
 
         # seqrepo load is too verbose and we cannot silence it
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root} \
-            load --instance-name master --namespace Ensembl \
+            load --instance-name master --namespace {params.ensembl_namespace} \
             {input.ensembl} \
         | tail
 
         # seqrepo load is too verbose and we cannot silence it
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root} \
-            load --instance-name master --namespace RefSeq \
+            load --instance-name master --namespace {params.refseq_namespace} \
             {input.refseq} \
         | tail
         """
