@@ -20,6 +20,12 @@ definitions:
             type: string
           datatype:
             type: string
+            enum:
+              - cdna
+              - cds
+              - dna
+              - ncrna
+              - pep
         required:
           - species
           - release
@@ -82,6 +88,11 @@ properties:
       version:
         type: string
         format: date
+      cdot-mode:
+        type: string
+        enum:
+          - create
+          - update
     required:
       - version
   namespaces:

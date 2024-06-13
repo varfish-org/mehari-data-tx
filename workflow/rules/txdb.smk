@@ -24,12 +24,14 @@ rule mane_txs_for_grch37:
         "../scripts/cdot_json_to_tags.py"
 
 
-rule update_cdot_with_hgnc_complete_set:
+rule cdot_from_hgnc_complete_set:
     input:
         cdot="results/transcripts/cdot/{alias}.json.gz",
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
         cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
+    params:
+        mode=config["hgnc"]["cdot-mode"],
     log:
         "logs/{alias}/transcripts/update_cdot_with_hgnc_complete_set.log",
     conda:
@@ -45,26 +47,30 @@ rule mehari_build_txs_db:
         txs="results/mehari/{alias}/{seqrepo}/txs.bin.zst",
         report="results/mehari/{alias}/{seqrepo}/txs.bin.zst.report.jsonl",
     params:
-        extra=lambda wildcards, input: (
+        mane=lambda wildcards, input: (
             f"--path-mane-txs-tsv {input.mane_txs}"
             if wildcards.alias == "GRCh37"
             else ""
         ),
+        cdot=lambda wildcards, input: (
+            f"--path-cdot-json {input.cdot} --path-cdot-json {input.cdot_hgnc}"
+            if config["hgnc"]["cdot-mode"] == "create"
+            else f"--path-cdot-json {input.cdot_hgnc}"
+        ),
         genome_release=lambda wildcards: wildcards.alias.lower(),
     log:
         "logs/{alias}/mehari/{seqrepo}/build_txs_db.log",
-    conda:
-        "../envs/mehari.yaml"
+    # conda:
+    #     "../envs/mehari.yaml"
     shell:
         """
         mehari db create \
         --path-out {output.txs} \
         --path-seqrepo-instance {input.seqrepo_instance} \
-        --path-cdot-json {input.cdot} \
-        --path-cdot-json {input.cdot_hgnc} \
+        {params.cdot} \
         --path-cdot-json {input.cdot_mt} \
         --genome-release {params.genome_release} \
-        {params.extra} 2> {log}
+        {params.mane} 2> {log}
         """
 
 

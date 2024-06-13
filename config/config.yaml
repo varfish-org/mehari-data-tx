@@ -45,6 +45,11 @@ hgnc:
   # quarterly versions: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
   version: "2024-04-01"
 
+  # In the case of "create", generate an artificial cdot file from the hgnc complete set.
+  # In the case of "update" use the provided cdot file and update its transcripts with missing hgnc ids
+  # with those from the complete set
+  cdot-mode: create
+
 
 # namespaces to use for seqrepo
 namespaces:

@@ -5,7 +5,7 @@ The resulting file will be a TSV file and have the columns (1) tx_id,
 (2) gene symbol, and (3) tags.  This can be used as the input for mehari
 database building for applying the tags.
 """
-
+import enum
 import gzip
 import json
 import sys
@@ -22,7 +22,12 @@ def load_json(path: str) -> dict:
             return json.load(inputf)
 
 
-def update_cdot_hgnc_ids(cdot: str, hgnc: str, file=sys.stdout):
+class Mode(enum.StrEnum):
+    create = "create"
+    update = "update"
+
+
+def cdot_from_hgnc(cdot: str, hgnc: str, file=sys.stdout, mode=Mode.create):
     cdot = load_json(cdot)
     hgnc = load_json(hgnc)["response"]
     name_to_hgnc = defaultdict(lambda: defaultdict(str))
@@ -44,7 +49,45 @@ def update_cdot_hgnc_ids(cdot: str, hgnc: str, file=sys.stdout):
         "transcripts": {},
     }
 
-    # Generate cdot records from hgnc information for records missing from the given cdot file
+    match mode:
+        case Mode.create:
+            build_cdot(cdot_refseq_ids, hgnc_cdot, hgnc_refseq_ids, id_to_hgnc)
+            update_cdot(cdot, hgnc_cdot, name_to_hgnc)
+            json.dump(hgnc_cdot, file, indent=2)
+        case Mode.update:
+            update_cdot(cdot, cdot, name_to_hgnc)
+            json.dump(cdot, file, indent=2)
+
+
+def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
+    """
+    check transcript entries in cdot file for missing hgnc ids
+    and add them from the hgnc file
+    """
+
+    for key, tx in cdot["transcripts"].items():
+        for genome_build in tx.get("genome_builds", dict()).values():
+            if genome_build.get("tag"):
+                gene = tx["gene_name"]
+                hgnc_id = tx.get("hgnc", None)
+                if not hgnc_id:
+                    print("Transcript without HGNC ID:", gene, file=sys.stderr)
+                    for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
+                        if hgnc_id := name_to_hgnc[source].get(gene, None):
+                            print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
+                            tx["hgnc"] = hgnc_id
+                            update_target["transcripts"].update({key: tx})
+                            break
+
+
+def build_cdot(
+    cdot_refseq_ids: set[str],
+    hgnc_cdot: dict,
+    hgnc_refseq_ids: set[str],
+    id_to_hgnc: dict,
+):
+    """Generate cdot records from hgnc information for records missing from the given cdot file"""
+
     for refseq_id in hgnc_refseq_ids - cdot_refseq_ids:
         r = id_to_hgnc[refseq_id]
         record = {
@@ -69,25 +112,12 @@ def update_cdot_hgnc_ids(cdot: str, hgnc: str, file=sys.stdout):
         }
         hgnc_cdot["genes"][refseq_id] = record
 
-    # check transcript entries in cdot file for missing hgnc ids
-    # and add them from the hgnc file
-    for key, tx in cdot["transcripts"].items():
-        for genome_build in tx.get("genome_builds", dict()).values():
-            if genome_build.get("tag"):
-                gene = tx["gene_name"]
-                hgnc_id = tx.get("hgnc", None)
-                if not hgnc_id:
-                    print(f"Transcript without HGNC ID:", gene, file=sys.stderr)
-                    for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                        if hgnc_id := name_to_hgnc[source].get(gene, None):
-                            print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
-                            tx["hgnc"] = hgnc_id
-                            hgnc_cdot["transcripts"].update({key: tx})
-                            break
-
-    json.dump(hgnc_cdot, file, indent=2)
-
 
 with gzip.open(snakemake.output.cdot, "wt") as out:
     with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-        update_cdot_hgnc_ids(snakemake.input.cdot, snakemake.input.hgnc, file=out)
+        cdot_from_hgnc(
+            snakemake.input.cdot,
+            snakemake.input.hgnc,
+            file=out,
+            mode=snakemake.params.mode,
+        )
