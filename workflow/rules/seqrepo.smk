@@ -30,17 +30,40 @@ rule initialize_seqrepo:
         """
 
 
-rule fix_missing:
+rule detect_missing_sequences:
+    input:
+        txs_db_report="results/mehari/{alias}/seqrepo/txs.bin.zst.report.jsonl",
+    output:
+        missing_txt="results/for-fix/{alias}/missing.txt",
+    log:
+        "logs/{alias}/seqrepo/detect-missing.log",
+    conda:
+        "../envs/jq.yaml"
+    shell:
+        """(jq -r 'select(.reason == "MissingSequence").id' {input.txs_db_report} > {output.missing_txt}) >{log} 2>&1"""
+
+
+rule fetch_missing_sequences:
+    input:
+        missing_txt="results/for-fix/{alias}/missing.txt",
+    output:
+        missing_fasta="results/for-fix/{alias}/missing.fasta",
+    log:
+        "logs/{alias}/seqrepo/fetch-missing.log",
+    conda:
+        "../envs/seqrepo.yaml"
+    script:
+        "../scripts/fetch_missing_sequences.py"
+
+
+rule fix_missing_sequences_in_seqrepo:
     input:
         seqrepo_root="results/seqrepo/{alias}",
         seqrepo_instance="results/seqrepo/{alias}/master",
-        txs_db="results/mehari/{alias}/seqrepo/txs.bin.zst",
-        txs_db_report="results/mehari/{alias}/seqrepo/txs.bin.zst.report.jsonl",
+        missing_fasta="results/for-fix/{alias}/missing.fasta",
     output:
         seqrepo_root_fixed=directory("results/seqrepo_fixed/{alias}"),
         seqrepo_fixed_instance=directory("results/seqrepo_fixed/{alias}/master"),
-        missing_txt="results/for-fix/{alias}/missing.txt",
-        missing_fasta="results/for-fix/{alias}/missing.fasta",
     params:
         refseq_namespace=config["namespaces"]["refseq"],
     conda:
@@ -49,12 +72,7 @@ rule fix_missing:
         "logs/{alias}/seqrepo/fix-missing.log",
     shell:
         """
-        set -euo pipefail
-        IFS=$'\n\t'
-        set -x
-        jq -r 'select(.reason == "MissingSequence").id' {input.txs_db_report} > {output.missing_txt}
         cp -r {input.seqrepo_root}/* {output.seqrepo_root_fixed}
-        2>{log} xargs -a {output.missing_txt} \
-         seqrepo --root-directory {output.seqrepo_root_fixed} \
-          fetch-load --instance-name master --namespace {params.refseq_namespace} >> {output.missing_fasta}
+        >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root_fixed} \
+          load --instance-name master --namespace {params.refseq_namespace} {input.missing_fasta} | tail
         """
