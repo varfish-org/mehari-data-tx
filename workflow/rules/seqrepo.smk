@@ -66,6 +66,7 @@ rule fix_missing_sequences_in_seqrepo:
         seqrepo_fixed_instance=directory("results/seqrepo_fixed/{alias}/master"),
     params:
         refseq_namespace=config["namespaces"]["refseq"],
+        ensembl_namespace=config["namespaces"]["ensembl"],
     conda:
         "../envs/seqrepo.yaml"
     log:
@@ -75,4 +76,6 @@ rule fix_missing_sequences_in_seqrepo:
         cp -r {input.seqrepo_root}/* {output.seqrepo_root_fixed}
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root_fixed} \
           load --instance-name master --namespace {params.refseq_namespace} {input.missing_fasta} | tail
+        >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root_fixed} \
+          load --instance-name master --namespace {params.ensembl_namespace} {input.missing_fasta} | tail
         """
