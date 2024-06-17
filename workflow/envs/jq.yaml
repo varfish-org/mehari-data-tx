@@ -1,0 +1,5 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - jq ==1.7.1
