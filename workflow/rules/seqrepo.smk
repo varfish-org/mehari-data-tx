@@ -40,7 +40,7 @@ rule detect_missing_sequences:
     conda:
         "../envs/jq.yaml"
     shell:
-        """(jq -r 'select(.reason == "MissingSequence").id' {input.txs_db_report} > {output.missing_txt}) >{log} 2>&1"""
+        """(jq -r 'select(.reason == "MissingSequence" and .kind == "Transcript").id.TxId' {input.txs_db_report} > {output.missing_txt}) >{log} 2>&1"""
 
 
 rule fetch_missing_sequences:
