@@ -1,10 +1,4 @@
 #!/usr/bin/env python
-"""Helper script to extract transcript identifier to tags from GRCh38.
-
-The resulting file will be a TSV file and have the columns (1) tx_id,
-(2) gene symbol, and (3) tags.  This can be used as the input for mehari
-database building for applying the tags.
-"""
 import enum
 import gzip
 import json
@@ -36,7 +30,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str, file=sys.stdout, mode=Mode.create):
         hgnc_id = record["hgnc_id"][5:]  # strip "HGNC:" prefix
         for source in ["ensembl_gene_id", "symbol", "entrez_id"]:
             if r := record.get(source):
-                name_to_hgnc[source][r] = hgnc_id[5:]
+                name_to_hgnc[source][r] = hgnc_id
                 if source == "entrez_id":
                     id_to_hgnc[r] = record
     hgnc_refseq_ids = set(id_to_hgnc.keys())
@@ -65,19 +59,28 @@ def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
     and add them from the hgnc file
     """
 
+    for key, gene in cdot["genes"].items():
+        hgnc_id = gene.get("hgnc", None)
+        if not hgnc_id:
+            print("Gene without HGNC ID:", key, file=sys.stderr)
+            for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
+                if hgnc_id := name_to_hgnc[source].get(key, name_to_hgnc[source].get(gene["gene_symbol"], None)):
+                    print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
+                    gene["hgnc"] = hgnc_id
+                    update_target["genes"].update({key: gene})
+                    break
+
     for key, tx in cdot["transcripts"].items():
-        for genome_build in tx.get("genome_builds", dict()).values():
-            if genome_build.get("tag"):
-                gene = tx["gene_name"]
-                hgnc_id = tx.get("hgnc", None)
-                if not hgnc_id:
-                    print("Transcript without HGNC ID:", gene, file=sys.stderr)
-                    for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                        if hgnc_id := name_to_hgnc[source].get(gene, None):
-                            print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
-                            tx["hgnc"] = hgnc_id
-                            update_target["transcripts"].update({key: tx})
-                            break
+        gene = tx["gene_name"]
+        hgnc_id = tx.get("hgnc", None)
+        if not hgnc_id:
+            print("Transcript without HGNC ID:", gene, file=sys.stderr)
+            for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
+                if hgnc_id := name_to_hgnc[source].get(gene, None):
+                    print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
+                    tx["hgnc"] = hgnc_id
+                    update_target["transcripts"].update({key: tx})
+                    break
 
 
 def build_cdot(

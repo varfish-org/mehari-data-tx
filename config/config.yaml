@@ -48,7 +48,7 @@ hgnc:
   # In the case of "create", generate an artificial cdot file from the hgnc complete set.
   # In the case of "update" use the provided cdot file and update its transcripts with missing hgnc ids
   # with those from the complete set
-  cdot-mode: create
+  cdot-mode: update
 
 
 # namespaces to use for seqrepo
