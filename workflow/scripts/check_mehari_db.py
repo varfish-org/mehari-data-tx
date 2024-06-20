@@ -54,6 +54,10 @@ print(f"Number of kept transcripts: {len(kept_tx_ids)}")
 
 num_kept = len(cdot_tx_ids & kept_tx_ids)
 num_discarded = len(cdot_tx_ids & discarded_tx_ids)
+
+print(f"Number of kept transcripts in cdot: {num_kept}")
+print(f"Number of discarded transcripts in cdot: {num_discarded}")
+
 assert num_kept + num_discarded == len(cdot_tx_ids)
 
 for transcript_id in cdot_tx_ids:
@@ -63,5 +67,3 @@ for transcript_id in cdot_tx_ids:
         raise ValueError(f"Tx {transcript_id} is both kept and discarded")
     if not tx_discarded and not tx_kept:
         raise ValueError(f"Tx {transcript_id} is neither kept nor discarded")
-
-print(f"Kept: {num_kept}, Discarded: {num_discarded}")
