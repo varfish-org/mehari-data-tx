@@ -5,6 +5,7 @@ import json
 import sys
 from collections import defaultdict
 from contextlib import redirect_stderr
+from copy import deepcopy
 
 
 def load_json(path: str) -> dict:
@@ -21,7 +22,7 @@ class Mode(enum.StrEnum):
     update = "update"
 
 
-def cdot_from_hgnc(cdot: str, hgnc: str, file=sys.stdout, mode=Mode.create):
+def cdot_from_hgnc(cdot: str, hgnc: str, mode=Mode.update):
     cdot = load_json(cdot)
     hgnc = load_json(hgnc)["response"]
     name_to_hgnc = defaultdict(lambda: defaultdict(str))
@@ -46,11 +47,12 @@ def cdot_from_hgnc(cdot: str, hgnc: str, file=sys.stdout, mode=Mode.create):
     match mode:
         case Mode.create:
             build_cdot(cdot_refseq_ids, hgnc_cdot, hgnc_refseq_ids, id_to_hgnc)
-            update_cdot(cdot, hgnc_cdot, name_to_hgnc)
-            json.dump(hgnc_cdot, file, indent=2)
+            hgnc_cdot = update_cdot(cdot, hgnc_cdot, name_to_hgnc)
+            return hgnc_cdot
         case Mode.update:
-            update_cdot(cdot, cdot, name_to_hgnc)
-            json.dump(cdot, file, indent=2)
+            cdot_fixed = deepcopy(cdot)
+            cdot_fixed = update_cdot(cdot, cdot_fixed, name_to_hgnc)
+            return cdot_fixed
 
 
 def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
@@ -64,7 +66,9 @@ def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
         if not hgnc_id:
             print("Gene without HGNC ID:", key, file=sys.stderr)
             for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                if hgnc_id := name_to_hgnc[source].get(key, name_to_hgnc[source].get(gene["gene_symbol"], None)):
+                if hgnc_id := name_to_hgnc[source].get(
+                    key, name_to_hgnc[source].get(gene["gene_symbol"], None)
+                ):
                     print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
                     gene["hgnc"] = hgnc_id
                     update_target["genes"].update({key: gene})
@@ -81,6 +85,8 @@ def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
                     tx["hgnc"] = hgnc_id
                     update_target["transcripts"].update({key: tx})
                     break
+
+    return update_target
 
 
 def build_cdot(
@@ -116,11 +122,13 @@ def build_cdot(
         hgnc_cdot["genes"][refseq_id] = record
 
 
-with gzip.open(snakemake.output.cdot, "wt") as out:
-    with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-        cdot_from_hgnc(
-            snakemake.input.cdot,
-            snakemake.input.hgnc,
-            file=out,
-            mode=snakemake.params.mode,
-        )
+with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    cdot = cdot_from_hgnc(
+        snakemake.input.cdot,
+        snakemake.input.hgnc,
+        mode=snakemake.params.mode,
+    )
+
+    with gzip.open(snakemake.output.cdot, "wt") as out:
+        json.dump(cdot, out, indent=2)
+        out.flush()
