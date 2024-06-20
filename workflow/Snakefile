@@ -16,6 +16,7 @@ include: "rules/common.smk"
 include: "rules/download.smk"
 include: "rules/seqrepo.smk"
 include: "rules/txdb.smk"
+include: "rules/validate.smk"
 
 
 rule all:
