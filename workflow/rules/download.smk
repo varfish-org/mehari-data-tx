@@ -29,4 +29,3 @@ rule get_refseq_sequence:
         "../envs/base.yaml"
     script:
         "../scripts/download_refseq.py"
-
