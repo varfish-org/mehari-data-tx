@@ -35,6 +35,12 @@ def update_cdot(cdot, doc):
             cds_pos_from = interval.findtext("GBInterval_from")
             cds_pos_to = interval.findtext("GBInterval_to")
             cds_positions[accession].add((int(cds_pos_from) - 1, int(cds_pos_to)))
+        # TODO make use of
+        #  <GBQualifier>
+        #      <GBQualifier_name>codon_start</GBQualifier_name>
+        #      <GBQualifier_value>${some_integer}</GBQualifier_value>
+        #  </GBQualifier>
+        #  to determine start codon position and adjust accordingly
 
     for accession in exons.keys() & cds_positions.keys():
         # skip fixing exons for now until we know what cdot needs
