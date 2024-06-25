@@ -1,7 +1,6 @@
 rule dump_mehari_db:
     input:
         tx_db="results/mehari/{alias}/{seqrepo}/txs.bin.zst",
-        # report="results/mehari/{alias}/{seqrepo}/txs.bin.zst.report.jsonl",
     output:
         db_yaml="results/mehari/{alias}/{seqrepo}/txs.bin.zst.yaml.gz",
     # conda:

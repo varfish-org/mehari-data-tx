@@ -37,9 +37,40 @@ rule mane_txs_for_grch37:
         "../scripts/cdot_json_to_tags.py"
 
 
+rule fetch_incorrect_entries:
+    params:
+        # TODO: transcript retrieval for GRCh37, uses a dummy value atm
+        transcripts=lambda wildcards: (
+            [
+                "NM_001137667.2",
+                    "NM_001137668.2",
+                    "NM_012115.4",
+                    "NM_001177639.3",
+                    "NM_001291281.3",
+                    "NM_001345921.3",
+                ]
+            if wildcards.alias == "GRCh38"
+            else ["NM_182705.2"]
+        ),
+    output:
+        xml="results/for-fix/{alias}/nuccore.xml.gz",
+    script:
+        "../scripts/cdot_fetch_incorrect_entries.py"
+
+
+rule fix_incorrect_entries:
+    input:
+        xml="results/for-fix/{alias}/nuccore.xml.gz",
+        cdot="results/transcripts/cdot/{alias}.json.gz",
+    output:
+        cdot="results/for-fix/{alias}/cdot.json.gz",
+    script:
+        "../scripts/cdot_fix_incorrect_entries.py"
+
+
 rule cdot_from_hgnc_complete_set:
     input:
-        cdot="results/transcripts/cdot/{alias}.json.gz",
+        cdot="results/for-fix/{alias}/cdot.json.gz",
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
         cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
@@ -64,22 +95,3 @@ rule cdot_chrMT:
         "../envs/base.yaml"
     script:
         "../scripts/cdot_extract_chrmt.py"
-
-
-rule fetch_incorrect_entries:
-    input:
-        transcripts="results/transcripts/cdot/{alias}.json.gz",
-    params:
-        transcripts=[
-            "NM_001137667.2",
-            "NM_001137668.2",
-            "NM_012115.4",
-            "NM_001177639.3",
-            "NM_001291281.3",
-            "NM_001345921.3",
-        ],
-    output:
-        cdot="results/for-fix/{alias}/cdot.json.gz",
-        xml="results/for-fix/{alias}/nuccore.xml",
-    script:
-        "../scripts/cdot_fetch_incorrect_entries.py"
