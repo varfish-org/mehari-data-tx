@@ -22,14 +22,14 @@ def update_cdot(cdot, doc):
             accession = interval.findtext("GBInterval_accession")
             pos_from = interval.findtext("GBInterval_from")
             pos_to = interval.findtext("GBInterval_to")
-            exons[accession].append((pos_from, pos_to))
+            exons[accession].append((int(pos_from), int(pos_to)))
 
         cds = e.findall(".//GBFeature[GBFeature_key='CDS']/GBFeature_intervals/GBInterval")
         for interval in cds:
             accession = interval.findtext("GBInterval_accession")
             cds_pos_from = interval.findtext("GBInterval_from")
             cds_pos_to = interval.findtext("GBInterval_to")
-            cds_positions[accession].append((cds_pos_from, cds_pos_to))
+            cds_positions[accession].append((int(cds_pos_from), int(cds_pos_to)))
 
     for accession in exons.keys() & cds_positions.keys():
         # skip fixing exons for now until we know what cdot needs
