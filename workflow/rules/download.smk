@@ -30,28 +30,3 @@ rule get_refseq_sequence:
     script:
         "../scripts/download_refseq.py"
 
-
-rule get_cdot_transcripts:
-    output:
-        "results/transcripts/cdot/{alias}.json.gz",
-    params:
-        url=get_cdot_download_url,
-    conda:
-        "../envs/base.yaml"
-    log:
-        "logs/{alias}/get_cdot_transcripts.log",
-    shell:
-        """wget --quiet -O {output} {params.url} 2> {log}"""
-
-
-rule get_hgnc_complete_set:
-    output:
-        "results/hgnc/hgnc_complete_set.json",
-    params:
-        url=get_hgnc_complete_set_download_url,
-    conda:
-        "../envs/base.yaml"
-    log:
-        "logs/hgnc/get_hgnc_complete_set.log",
-    shell:
-        """wget --quiet -O {output} {params.url} 2> {log}"""
