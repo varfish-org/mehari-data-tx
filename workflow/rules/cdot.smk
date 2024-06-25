@@ -39,19 +39,7 @@ rule mane_txs_for_grch37:
 
 rule fetch_incorrect_entries:
     params:
-        # TODO: transcript retrieval for GRCh37, uses a dummy value atm
-        transcripts=lambda wildcards: (
-            [
-                "NM_001137667.2",
-                    "NM_001137668.2",
-                    "NM_012115.4",
-                    "NM_001177639.3",
-                    "NM_001291281.3",
-                    "NM_001345921.3",
-                ]
-            if wildcards.alias == "GRCh38"
-            else ["NM_182705.2"]
-        ),
+        transcripts=transcripts_to_fix_start_stop_codons_for,
     output:
         xml="results/for-fix/{alias}/nuccore.xml.gz",
     script:
