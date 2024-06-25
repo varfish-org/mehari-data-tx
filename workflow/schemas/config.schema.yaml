@@ -65,6 +65,12 @@ definitions:
               - custom
           - required:
               - source
+      fix_cds:
+        type: array
+        items:
+          type: string
+    required:
+      - cdot
 
 properties:
   reference:
