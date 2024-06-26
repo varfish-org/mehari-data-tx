@@ -48,7 +48,8 @@ def update_cdot(cdot, doc):
 
         if (num := len(cds_positions[accession])) != 1:
             logging.warning(
-                f"Expected exactly one CDS per transcript, got {num}. {accession=}:\n{cds_positions[accession]=}"
+                f"Expected exactly one CDS per transcript, got {num}. Likely a CDS join. "
+                f"{accession=}:\n{cds_positions[accession]=}"
             )
         # assume start and stop codon are at from and to positions of the CDS
         cds_pos = next(iter(cds_positions[accession]))

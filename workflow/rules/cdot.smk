@@ -83,3 +83,26 @@ rule cdot_chrMT:
         "../envs/base.yaml"
     script:
         "../scripts/cdot_extract_chrmt.py"
+
+
+rule lookup_ensembl_ids_for_refseq_ids:
+    params:
+        refseq_ids=config["transcripts"]["GRCh38"]["add_from_ensembl"],
+    output:
+        tsv="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
+    log:
+        "logs/GRCh38-ensembl/transcripts/lookup_ensembl_ids_for_refseq_ids.log",
+    script:
+        "../scripts/lookup_ensembl_ids_for_refseq_ids.py"
+
+
+rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
+    input:
+        cdot="results/transcripts/cdot/GRCh38-ensembl.json.gz",
+        lookup="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
+    output:
+        cdot="results/transcripts/cdot/GRCh38-ensembl.grafted.json.gz",
+    log:
+        "logs/GRCh38-ensembl/transcripts/graft_ensembl_ids.log",
+    script:
+        "../scripts/cdot_graft_ensembl_ids.py"

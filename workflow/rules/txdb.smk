@@ -10,11 +10,7 @@ rule mehari_build_txs_db:
             if wildcards.alias == "GRCh37"
             else ""
         ),
-        cdot=lambda wildcards, input: (
-            f"--path-cdot-json {input.cdot} --path-cdot-json {input.cdot_hgnc}"
-            if config["hgnc"]["cdot-mode"] == "create"
-            else f"--path-cdot-json {input.cdot_hgnc}"
-        ),
+        cdot=get_mehari_cdot_param_string,
         genome_release=lambda wildcards: wildcards.alias.lower(),
     log:
         "logs/{alias}/mehari/{seqrepo}/build_txs_db.log",
@@ -26,7 +22,6 @@ rule mehari_build_txs_db:
         --path-out {output.txs} \
         --path-seqrepo-instance {input.seqrepo_instance} \
         {params.cdot} \
-        --path-cdot-json {input.cdot_mt} \
         --genome-release {params.genome_release} \
         {params.mane} 2> {log}
         """

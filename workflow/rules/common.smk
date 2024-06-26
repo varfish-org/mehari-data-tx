@@ -34,18 +34,39 @@ def get_hgnc_complete_set_download_url(_wildcards):
     return url
 
 
+def _mehari_cdot_input(wildcards):
+    alias = wildcards.alias
+    cdot_files = {
+        "cdot": f"results/transcripts/cdot/{alias}.json.gz",
+        "cdot_mt": "results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
+    }
+    if config["hgnc"]["cdot-mode"] == "create":
+        cdot_files["cdot_hgnc"] = f"results/transcripts/cdot/{alias}.hgnc.json.gz"
+    if alias == "GRCh38":
+        cdot_files["cdot_graft"] = (
+            "results/transcripts/cdot/GRCh38-ensembl.grafted.json.gz"
+        )
+    return cdot_files
+
+
 def get_mehari_input(wildcards):
     alias = wildcards.alias
     seqrepo = wildcards.seqrepo
     result = {
         "seqrepo_instance": f"results/{seqrepo}/{alias}/master",
-        "cdot": f"results/transcripts/cdot/{alias}.json.gz",
-        "cdot_hgnc": f"results/transcripts/cdot/{alias}.hgnc.json.gz",
-        "cdot_mt": "results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
+        **_mehari_cdot_input(wildcards),
     }
     if alias == "GRCh37":
         result.update({"mane_txs": "results/transcripts/cdot/GRCh37/mane-txs.tsv"})
     return result
+
+
+def get_mehari_cdot_param_string(wildcards, input):
+    cdot_files = _mehari_cdot_input(wildcards)
+    expected_input_keys = cdot_files.keys()
+    for key in cdot_files.keys():
+        assert key in expected_input_keys
+    return " ".join(f"--path-cdot-json {path}" for path in cdot_files.values())
 
 
 def transcripts_to_fix_start_stop_codons_for(wildcards) -> set[str]:

@@ -56,6 +56,8 @@ transcripts:
       "NM_003890.2",
       "NM_012234.6",
       "NM_017940.6",
+    ]
+    add_from_ensembl: [
       # Invalid CDS length in cdot:
       # Most (or all?) of these are marked as CDS join(a..b,c..d) in nuccore
       "NM_001172437.2",
@@ -82,7 +84,7 @@ transcripts:
       "NM_182705.2",
     ]
   # the following entry is semi hardcoded for now
-  # (rules::txdb::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
+  # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:
     cdot:
       release: 0.2.25
