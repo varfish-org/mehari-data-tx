@@ -31,12 +31,12 @@ def main(cdot, lookup):
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with gzip.open(snakemake.input.cdot, "r") as f:
         cdot = json.load(f)
-    lookup = pd.read_csv(snakemake.input.lookup, sep="\t").set_index(
-        REFSEQ_KEY, drop=False
-    )
+    lookup = pd.read_csv(snakemake.input.lookup, sep="\t")
     if not lookup.empty:
-        print("Empty lookup table, skipping grafting.", file=sys.stderr)
+        lookup = lookup.set_index(REFSEQ_KEY, drop=False)
         cdot = main(cdot, lookup)
+    else:
+        print("Empty lookup table, skipping grafting.", file=sys.stderr)
 
     with gzip.open(snakemake.output.cdot, "wt") as out:
         json.dump(cdot, out, indent=2)
