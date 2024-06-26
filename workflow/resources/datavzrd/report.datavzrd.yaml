@@ -2,16 +2,16 @@ __use_yte__: true
 
 datasets:
   mehari_check_db_stats:
-    path: ?snakemake.input.mehari_check_db_stats
+    path: ?input.mehari_check_db_stats
     separator: "\t"
   cdot_hgnc_update:
-    path: ?snakemake.input.cdot_hgnc_update
+    path: ?input.cdot_hgnc_update
     separator: "\t"
   fix_incorrect_entries:
-    path: ?snakemake.input.fix_incorrect_entries
+    path: ?input.fix_incorrect_entries
     separator: "\t"
   refseq_id_to_ensembl_id:
-    path: ?snakemake.input.refseq_id_to_ensembl_id
+    path: ?input.refseq_id_to_ensembl_id
     separator: "\t"
 views:
   mehari_check_db_stats:

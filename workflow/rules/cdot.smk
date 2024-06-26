@@ -54,10 +54,7 @@ rule fix_incorrect_entries:
         cdot="results/transcripts/cdot/{alias}.json.gz",
     output:
         cdot="results/for-fix/{alias}/cdot.json.gz",
-        report=report(
-            "results/report/{alias}/fix_incorrect_entries.tsv",
-            category="{alias}",
-        ),
+        report="results/report/{alias}/fix_incorrect_entries.tsv",
     log:
         "logs/{alias}/transcripts/fix_incorrect_entries.log",
     script:
@@ -70,10 +67,7 @@ rule cdot_from_hgnc_complete_set:
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
         cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
-        report=report(
-            "results/report/{alias}/cdot_hgnc_update.tsv",
-            category="{alias}",
-        ),
+        report="results/report/{alias}/cdot_hgnc_update.tsv",
     log:
         "logs/{alias}/transcripts/update_cdot_with_hgnc_complete_set.log",
     conda:
@@ -99,10 +93,7 @@ rule lookup_ensembl_ids_for_refseq_ids:
     params:
         refseq_ids=config["transcripts"]["GRCh38"]["add_from_ensembl"],
     output:
-        tsv=report(
-            "results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
-            category="GRCh38",
-        ),
+        tsv="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
     log:
         "logs/GRCh38-ensembl/transcripts/lookup_ensembl_ids_for_refseq_ids.log",
     script:

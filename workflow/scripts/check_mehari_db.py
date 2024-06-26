@@ -1,8 +1,6 @@
-import json
 from contextlib import redirect_stderr
 
 import polars as pl
-import gzip
 
 
 def cdot_transcript_ids() -> set[str]:
@@ -20,7 +18,7 @@ def discarded_transcripts() -> pl.DataFrame:
     )
 
 
-def discarded_transcript_ids(discarded) -> set[str]:
+def discarded_transcript_ids(discarded: pl.DataFrame) -> set[str]:
     discarded_transcript_ids = (
         discarded.select(pl.col("id"))
         .unnest("id")
@@ -44,19 +42,6 @@ def main():
     stats: pl.DataFrame = (
         discarded.group_by(["source", "kind", "reason"])
         .len()
-        .sort(["source", "kind", "len"])
-    )
-    # add 0 entry for all missing reasons
-    stats = (
-        stats.pivot(
-            values="len",
-            index=["source", "kind"],
-            columns="reason",
-            aggregate_function="first",
-        )
-        .melt(id_vars=["source", "kind"], variable_name="reason", value_name="len")
-        .fill_null(0)
-        .sort(["source", "kind", "reason", "len"])
     )
 
     discarded_tx_ids = discarded_transcript_ids(discarded)
@@ -73,15 +58,17 @@ def main():
     report.append(f"Number of kept transcripts in cdot:\t{num_kept}")
     report.append(f"Number of discarded transcripts in cdot:\t{num_discarded}")
 
-    assert num_kept + num_discarded == len(cdot_tx_ids)
-
+    valid = num_kept + num_discarded == len(cdot_tx_ids)
     for transcript_id in cdot_tx_ids:
         tx_discarded = transcript_id in discarded_tx_ids
         tx_kept = transcript_id in kept_tx_ids
         if tx_discarded and tx_kept:
-            raise ValueError(f"Tx {transcript_id} is both kept and discarded")
+            report.append(f"Both kept and discarded:\t{transcript_id}")
+            valid = False
         if not tx_discarded and not tx_kept:
-            raise ValueError(f"Tx {transcript_id} is neither kept nor discarded")
+            report.append(f"Neither kept nor discarded:\t{transcript_id}")
+            valid = False
+    report.append(f"Status:\t{'OK' if valid else 'ERROR'}")
 
     return stats, report
 

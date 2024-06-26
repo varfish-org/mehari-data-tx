@@ -75,6 +75,8 @@ rule datavzrd:
         report(
             directory("results/datavzrd-report/{alias}/{seqrepo}"),
             htmlindex="index.html",
+            category="{alias}",
+            subcategory="{seqrepo}",
         ),
     log:
         "logs/datavzrd_report/{alias}/{seqrepo}/check_mehari_db.log",
