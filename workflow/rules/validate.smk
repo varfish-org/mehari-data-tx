@@ -44,6 +44,8 @@ rule check_mehari_db:
             category="{alias}",
             subcategory="{seqrepo}",
         ),
+    log:
+        "logs/mehari/{alias}/{seqrepo}/check.log",
     conda:
         "../envs/datastuff.yaml"
     script:

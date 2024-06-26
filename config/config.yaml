@@ -75,6 +75,9 @@ transcripts:
       "NM_001301371.1",
       "NM_016178.2",
       "NM_053005.5",
+      # MANE select but refseq transcript + annotation seems to be problematic (missing stop codon)
+      "NM_001405666.3",
+      "NM_012234.6",
     ]
 
   GRCh37:
