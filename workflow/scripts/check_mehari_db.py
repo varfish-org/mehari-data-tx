@@ -47,6 +47,18 @@ def main():
         .len()
         .sort(["source", "kind", "len"])
     )
+    # add 0 entry for all missing reasons
+    stats = (
+        stats.pivot(
+            values="len",
+            index=["source", "kind"],
+            columns="reason",
+            aggregate_function="first",
+        )
+        .melt(id_vars=["source", "kind"], variable_name="reason", value_name="len")
+        .fill_null(0)
+        .sort(["source", "kind", "reason", "len"])
+    )
 
     discarded_tx_ids = discarded_transcript_ids(discarded)
 

@@ -34,7 +34,7 @@ rule mane_txs_for_grch37:
     conda:
         "../envs/base.yaml"
     script:
-        "../scripts/cdot_json_to_tags.py"
+        "../scripts/cdot/extract_tags.py"
 
 
 rule fetch_incorrect_entries:
@@ -45,7 +45,7 @@ rule fetch_incorrect_entries:
     log:
         "logs/{alias}/transcripts/fetch_incorrect_entries.log",
     script:
-        "../scripts/cdot_fetch_incorrect_entries.py"
+        "../scripts/cdot/fetch_incorrect_entries.py"
 
 
 rule fix_incorrect_entries:
@@ -61,7 +61,7 @@ rule fix_incorrect_entries:
     log:
         "logs/{alias}/transcripts/fix_incorrect_entries.log",
     script:
-        "../scripts/cdot_fix_incorrect_entries.py"
+        "../scripts/cdot/fix_incorrect_entries.py"
 
 
 rule cdot_from_hgnc_complete_set:
@@ -79,7 +79,7 @@ rule cdot_from_hgnc_complete_set:
     conda:
         "../envs/base.yaml"
     script:
-        "../scripts/cdot_from_hgnc.py"
+        "../scripts/cdot/update_from_hgnc.py"
 
 
 rule cdot_chrMT:
@@ -92,7 +92,7 @@ rule cdot_chrMT:
     conda:
         "../envs/base.yaml"
     script:
-        "../scripts/cdot_extract_chrmt.py"
+        "../scripts/cdot/extract_chrmt.py"
 
 
 rule lookup_ensembl_ids_for_refseq_ids:
@@ -118,4 +118,4 @@ rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
     log:
         "logs/GRCh38-ensembl/transcripts/graft_ensembl_ids.log",
     script:
-        "../scripts/cdot_graft_ensembl_ids.py"
+        "../scripts/cdot/graft_ensembl_ids.py"

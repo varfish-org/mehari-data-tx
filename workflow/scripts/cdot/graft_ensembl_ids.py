@@ -10,7 +10,7 @@ import pandas as pd
 from contextlib import redirect_stderr
 
 REFSEQ_KEY = "RefSeq mRNA ID"
-ENSEMBL_GENE_KEY = "Gene stable ID"
+ENSEMBL_GENE_KEY = "Gene stable ID version"
 ENSEMBL_TRANSCRIPT_KEY = "Transcript stable ID version"
 
 
