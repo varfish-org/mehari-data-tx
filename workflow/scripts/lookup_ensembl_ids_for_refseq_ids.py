@@ -17,7 +17,6 @@ def main(refseq_ids: list[str]):
             <Attribute name = "ensembl_gene_id_version" />\
             <Attribute name = "ensembl_transcript_id" />
             <Attribute name = "ensembl_transcript_id_version" />
-            <Attribute name = "hgnc_symbol" />
             <Attribute name = "hgnc_id" />
         </Dataset>
     </Query>"""
