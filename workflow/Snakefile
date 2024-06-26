@@ -23,7 +23,10 @@ include: "rules/validate.smk"
 rule all:
     input:
         expand(
-            ["results/report/{alias}/{seqrepo}/mehari_db_check.txt"],
+            [
+                "results/report/{alias}/{seqrepo}/mehari_db_check.txt",
+                "results/datavzrd-report/{alias}/{seqrepo}",
+            ],
             alias=["GRCh37", "GRCh38"],
             seqrepo=["seqrepo_fixed"],
         ),

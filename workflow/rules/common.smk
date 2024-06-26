@@ -39,7 +39,7 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
     return url
 
 
-def _mehari_cdot_input(wildcards: Wildcards) -> dict[str, str]:
+def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     cdot_files = {
         "cdot": f"results/transcripts/cdot/{alias}.hgnc.json.gz",
@@ -57,7 +57,7 @@ def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
     seqrepo = wildcards.seqrepo
     result = {
         "seqrepo_instance": f"results/{seqrepo}/{alias}/master",
-        **_mehari_cdot_input(wildcards),
+        **cdot_input_mapping(wildcards),
     }
     if alias == "GRCh37":
         result.update({"mane_txs": "results/transcripts/cdot/GRCh37/mane-txs.tsv"})
@@ -65,7 +65,7 @@ def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
 
 
 def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str:
-    cdot_files = _mehari_cdot_input(wildcards)
+    cdot_files = cdot_input_mapping(wildcards)
     expected_input_keys = input.keys()
     for key in cdot_files.keys():
         assert key in expected_input_keys

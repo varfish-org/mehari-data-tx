@@ -6,9 +6,8 @@ import gzip
 
 
 def cdot_transcript_ids() -> set[str]:
-    with gzip.open(snakemake.input.cdot, "r") as f:
-        cdot = json.load(f)
-        cdot_transcript_ids = set(cdot["transcripts"].keys())
+    with open(snakemake.input.cdot_tx_ids, "r") as f:
+        cdot_transcript_ids = set(line.rstrip() for line in f)
         return cdot_transcript_ids
 
 
