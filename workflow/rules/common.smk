@@ -1,11 +1,16 @@
-def get_ensembl_sequence_param(param):
+from typing import Callable
+
+from snakemake.io import InputFiles, Wildcards
+
+
+def get_ensembl_sequence_param(param: str) -> Callable[[Wildcards], str]:
     def inner(wildcards):
         return config["reference"][wildcards.alias]["ensembl"][param]
 
     return inner
 
 
-def get_cdot_download_url(wildcards):
+def get_cdot_download_url(wildcards: Wildcards) -> str:
     alias = wildcards.alias
     params = config["transcripts"][alias]["cdot"]
     release = params["release"]
@@ -24,7 +29,7 @@ def get_cdot_download_url(wildcards):
     return url
 
 
-def get_hgnc_complete_set_download_url(_wildcards):
+def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
     version = config["hgnc"]["version"]
     if version[5:] in {"01-01", "04-01", "07-01", "10-01"}:
         where = "quarterly"
@@ -34,7 +39,7 @@ def get_hgnc_complete_set_download_url(_wildcards):
     return url
 
 
-def _mehari_cdot_input(wildcards):
+def _mehari_cdot_input(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     cdot_files = {
         "cdot": f"results/transcripts/cdot/{alias}.json.gz",
@@ -49,7 +54,7 @@ def _mehari_cdot_input(wildcards):
     return cdot_files
 
 
-def get_mehari_input(wildcards):
+def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     seqrepo = wildcards.seqrepo
     result = {
@@ -61,14 +66,14 @@ def get_mehari_input(wildcards):
     return result
 
 
-def get_mehari_cdot_param_string(wildcards, input):
+def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str:
     cdot_files = _mehari_cdot_input(wildcards)
-    expected_input_keys = cdot_files.keys()
+    expected_input_keys = input.keys()
     for key in cdot_files.keys():
         assert key in expected_input_keys
     return " ".join(f"--path-cdot-json {path}" for path in cdot_files.values())
 
 
-def transcripts_to_fix_start_stop_codons_for(wildcards) -> set[str]:
+def transcripts_to_fix_start_stop_codons_for(wildcards: Wildcards) -> set[str]:
     alias = wildcards.alias
     return set(config["transcripts"][alias]["fix_cds"])
