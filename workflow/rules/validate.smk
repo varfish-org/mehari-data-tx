@@ -9,7 +9,9 @@ rule dump_mehari_db:
         "logs/mehari/{alias}/{seqrepo}/dump.log",
     shell:
         """
-        mehari db dump --path-db {input.tx_db} | gzip -c > {output.db_yaml} 2> {log}
+        (
+            mehari db dump --path-db {input.tx_db} | gzip -c > {output.db_yaml}
+        ) >{log} 2>&1
         """
 
 
