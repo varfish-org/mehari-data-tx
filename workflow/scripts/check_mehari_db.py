@@ -1,4 +1,6 @@
 import json
+from contextlib import redirect_stderr
+
 import polars as pl
 import gzip
 

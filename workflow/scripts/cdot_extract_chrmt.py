@@ -55,6 +55,6 @@ def main(json_path: str, file=sys.stdout):
     print(file=file, flush=True)
 
 
-with open(snakemake.output.cdot, "w") as out:
-    with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    with open(snakemake.output.cdot, "w") as out:
         main(json_path=snakemake.input.cdot, file=out)

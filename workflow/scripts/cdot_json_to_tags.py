@@ -48,6 +48,6 @@ def main(paths: typing.Iterable[str], file=sys.stdout):
     print("... done finalizing", file=sys.stderr)
 
 
-with open(snakemake.output.mane_txs, "w") as out:
-    with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    with open(snakemake.output.mane_txs, "w") as out:
         main((snakemake.input.cdot,), file=out)

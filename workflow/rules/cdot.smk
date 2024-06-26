@@ -42,6 +42,8 @@ rule fetch_incorrect_entries:
         transcripts=transcripts_to_fix_start_stop_codons_for,
     output:
         xml="results/for-fix/{alias}/nuccore.xml.gz",
+    log:
+        "logs/{alias}/transcripts/fetch_incorrect_entries.log",
     script:
         "../scripts/cdot_fetch_incorrect_entries.py"
 

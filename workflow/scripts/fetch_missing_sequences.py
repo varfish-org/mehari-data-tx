@@ -11,6 +11,6 @@ def main(missing_ids: str, file):
                 print(f">{accession}\n{seq}", file=file)
 
 
-with open(snakemake.output.missing_fasta, "w") as out:
-    with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    with open(snakemake.output.missing_fasta, "w") as out:
         main(snakemake.input.missing_txt, file=out)

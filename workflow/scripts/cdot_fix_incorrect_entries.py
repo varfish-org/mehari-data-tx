@@ -1,18 +1,12 @@
 import json
 import logging
 from collections import defaultdict
+from contextlib import redirect_stderr
+from typing import Any
 from xml.etree.ElementTree import ElementTree
 import gzip
 
 import pandas as pd
-
-genome_build = snakemake.wildcards.alias
-
-with gzip.open(snakemake.input.xml, "r") as f:
-    doc = ElementTree(file=f)
-
-with gzip.open(snakemake.input.cdot, "r") as f:
-    cdot = json.load(f)
 
 
 def update_cdot(cdot, doc):
@@ -77,9 +71,25 @@ def update_cdot(cdot, doc):
     return cdot, report
 
 
-with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+def main(
+    genome_build: str, nuccore_xml_path: str, cdot_path: str
+) -> tuple[dict[str, Any], list]:
+    with gzip.open(nuccore_xml_path, "r") as f:
+        doc = ElementTree(file=f)
+
+    with gzip.open(cdot_path, "r") as f:
+        cdot = json.load(f)
+
     if genome_build == "GRCh38":
         cdot, report = update_cdot(cdot, doc)
+        return cdot, report
+    return cdot, []
+
+
+with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    cdot, report = main(
+        snakemake.wildcards.alias, snakemake.input.xml, snakemake.input.cdot
+    )
 
     with gzip.open(snakemake.output.cdot, "wt") as f:
         json.dump(cdot, f, indent=2)
