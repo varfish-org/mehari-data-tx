@@ -67,7 +67,10 @@ rule cdot_from_hgnc_complete_set:
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
         cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
-        report="results/report/{alias}/cdot_hgnc_update.tsv",
+        report=report(
+            "results/report/{alias}/cdot_hgnc_update.tsv",
+            category="{alias}",
+        ),
     log:
         "logs/{alias}/transcripts/update_cdot_with_hgnc_complete_set.log",
     conda:

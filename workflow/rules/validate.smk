@@ -53,7 +53,11 @@ rule check_mehari_db:
         cdot_tx_ids="results/transcripts/cdot/{alias}.txids.txt",
     output:
         stats="results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
-        report="results/report/{alias}/{seqrepo}/mehari_db_check.txt",
+        report=report(
+            "results/report/{alias}/{seqrepo}/mehari_db_check.txt",
+            category="{alias}",
+            subcategory="{seqrepo}",
+        ),
     log:
         "logs/mehari/{alias}/{seqrepo}/check.log",
     conda:
@@ -66,7 +70,6 @@ rule datavzrd:
     input:
         config=workflow.source_path("../resources/datavzrd/report.datavzrd.yaml"),
         mehari_check_db_stats="results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
-        cdot_hgnc_update="results/report/{alias}/cdot_hgnc_update.tsv",
         fix_incorrect_entries="results/report/{alias}/fix_incorrect_entries.tsv",
         refseq_id_to_ensembl_id="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
     params:

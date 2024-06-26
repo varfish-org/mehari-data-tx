@@ -37,6 +37,7 @@ rule detect_missing_sequences:
         missing_txt=report(
             "results/for-fix/{alias}/missing.txt",
             category="{alias}",
+            subcategory="seqrepo",
         ),
     log:
         "logs/{alias}/seqrepo/detect-missing.log",

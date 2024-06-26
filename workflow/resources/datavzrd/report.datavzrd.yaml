@@ -4,9 +4,6 @@ datasets:
   mehari_check_db_stats:
     path: ?input.mehari_check_db_stats
     separator: "\t"
-  cdot_hgnc_update:
-    path: ?input.cdot_hgnc_update
-    separator: "\t"
   fix_incorrect_entries:
     path: ?input.fix_incorrect_entries
     separator: "\t"
@@ -25,16 +22,6 @@ views:
         reason:
           display-mode: normal
         len:
-          display-mode: normal
-  cdot_hgnc_update:
-    dataset: cdot_hgnc_update
-    render-table:
-      columns:
-        type:
-          display-mode: normal
-        key:
-          display-mode: normal
-        hgnc_id:
           display-mode: normal
   fix_incorrect_entries:
     dataset: fix_incorrect_entries
