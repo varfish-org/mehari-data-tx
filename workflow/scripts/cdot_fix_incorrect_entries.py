@@ -4,6 +4,8 @@ from collections import defaultdict
 from xml.etree.ElementTree import ElementTree
 import gzip
 
+import pandas as pd
+
 genome_build = snakemake.wildcards.alias
 
 with gzip.open(snakemake.input.xml, "r") as f:
@@ -14,6 +16,7 @@ with gzip.open(snakemake.input.cdot, "r") as f:
 
 
 def update_cdot(cdot, doc):
+    report = []
     exons = defaultdict(list)
     cds_positions = defaultdict(set)
     for e in doc.getroot().findall("./GBSeq"):
@@ -52,14 +55,35 @@ def update_cdot(cdot, doc):
                 f"{accession=}:\n{cds_positions[accession]=}"
             )
         # assume start and stop codon are at from and to positions of the CDS
+        report.append(
+            (
+                accession,
+                "before",
+                cdot["transcripts"][accession]["start_codon"],
+                cdot["transcripts"][accession]["stop_codon"],
+            )
+        )
         cds_pos = next(iter(cds_positions[accession]))
         cdot["transcripts"][accession]["start_codon"] = cds_pos[0]
         cdot["transcripts"][accession]["stop_codon"] = cds_pos[1]
-    return cdot
+        report.append(
+            (
+                accession,
+                "after",
+                cdot["transcripts"][accession]["start_codon"],
+                cdot["transcripts"][accession]["stop_codon"],
+            )
+        )
+    return cdot, report
 
 
-if genome_build == "GRCh38":
-    cdot = update_cdot(cdot, doc)
+with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    if genome_build == "GRCh38":
+        cdot, report = update_cdot(cdot, doc)
 
-with gzip.open(snakemake.output.cdot, "wt") as f:
-    json.dump(cdot, f, indent=2)
+    with gzip.open(snakemake.output.cdot, "wt") as f:
+        json.dump(cdot, f, indent=2)
+
+    pd.DataFrame(
+        report, columns=["accession", "change", "start_codon", "stop_codon"]
+    ).to_csv(snakemake.output.report, sep="\t", index=False)

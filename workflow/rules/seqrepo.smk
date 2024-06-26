@@ -34,7 +34,10 @@ rule detect_missing_sequences:
     input:
         txs_db_report="results/mehari/{alias}/seqrepo/txs.bin.zst.report.jsonl",
     output:
-        missing_txt="results/for-fix/{alias}/missing.txt",
+        missing_txt=report(
+            "results/for-fix/{alias}/missing.txt",
+            caption="List of sequences missing from seqrepo",
+        ),
     log:
         "logs/{alias}/seqrepo/detect-missing.log",
     conda:

@@ -6,6 +6,9 @@ import sys
 from collections import defaultdict
 from contextlib import redirect_stderr
 from copy import deepcopy
+from typing import Any
+
+import pandas as pd
 
 
 def load_json(path: str) -> dict:
@@ -45,6 +48,7 @@ def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
     check transcript entries in cdot file for missing hgnc ids
     and add them from the hgnc file
     """
+    report: list[tuple[str, str, str | None]] = []
 
     for key, gene in cdot["genes"].items():
         hgnc_id = gene.get("hgnc", None)
@@ -58,6 +62,7 @@ def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
                     gene["hgnc"] = hgnc_id
                     update_target["genes"].update({key: gene})
                     break
+            report.append(("gene", key, hgnc_id))
 
     for key, tx in cdot["transcripts"].items():
         gene = tx["gene_name"]
@@ -70,12 +75,13 @@ def update_cdot(cdot: dict, update_target: dict, name_to_hgnc: dict):
                     tx["hgnc"] = hgnc_id
                     update_target["transcripts"].update({key: tx})
                     break
+            report.append(("transcript", key, hgnc_id))
 
-    return update_target
+    return update_target, report
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-    cdot = cdot_from_hgnc(
+    cdot, report = cdot_from_hgnc(
         snakemake.input.cdot,
         snakemake.input.hgnc,
     )
@@ -83,3 +89,6 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with gzip.open(snakemake.output.cdot, "wt") as out:
         json.dump(cdot, out, indent=2)
         out.flush()
+    pd.DataFrame(report, columns=["type", "key", "hgnc_id"]).to_csv(
+        snakemake.output.report, sep="\t", index=False
+    )
