@@ -42,11 +42,9 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
 def _mehari_cdot_input(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     cdot_files = {
-        "cdot": f"results/transcripts/cdot/{alias}.json.gz",
+        "cdot": f"results/transcripts/cdot/{alias}.hgnc.json.gz",
         "cdot_mt": "results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
     }
-    if config["hgnc"]["cdot-mode"] == "create":
-        cdot_files["cdot_hgnc"] = f"results/transcripts/cdot/{alias}.hgnc.json.gz"
     if alias == "GRCh38":
         cdot_files["cdot_graft"] = (
             "results/transcripts/cdot/GRCh38-ensembl.grafted.json.gz"

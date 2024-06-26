@@ -62,8 +62,6 @@ rule cdot_from_hgnc_complete_set:
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
         cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
-    params:
-        mode=config["hgnc"]["cdot-mode"],
     log:
         "logs/{alias}/transcripts/update_cdot_with_hgnc_complete_set.log",
     conda:

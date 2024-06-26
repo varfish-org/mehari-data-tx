@@ -94,14 +94,8 @@ properties:
       version:
         type: string
         format: date
-      cdot-mode:
-        type: string
-        enum:
-          - create
-          - update
     required:
       - version
-      - cdot-mode
   namespaces:
     type: object
     properties:
