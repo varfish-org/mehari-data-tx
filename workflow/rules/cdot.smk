@@ -57,6 +57,7 @@ rule fix_incorrect_entries:
         report=report(
             "results/report/{alias}/fix_incorrect_entries.tsv",
             caption="'incorrect' cdot entries fixed with information from nuccore",
+            category="{alias}",
         ),
     log:
         "logs/{alias}/transcripts/fix_incorrect_entries.log",
@@ -73,6 +74,7 @@ rule cdot_from_hgnc_complete_set:
         report=report(
             "results/report/{alias}/cdot_hgnc_update.tsv",
             caption="CDOT entries updated with HGNC complete set",
+            category="{alias}",
         ),
     log:
         "logs/{alias}/transcripts/update_cdot_with_hgnc_complete_set.log",
@@ -102,6 +104,7 @@ rule lookup_ensembl_ids_for_refseq_ids:
         tsv=report(
             "results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
             caption="RefSeq to Ensembl ID mapping",
+            category="GRCh38",
         ),
     log:
         "logs/GRCh38-ensembl/transcripts/lookup_ensembl_ids_for_refseq_ids.log",

@@ -57,6 +57,8 @@ transcripts:
       "NM_012234.6",
       "NM_017940.6",
     ]
+    # for the following refseq transcripts, lookup the ensembl matches and include the respective
+    # sequences in seqrepo and the transcript information from cdot
     add_from_ensembl: [
       # Invalid CDS length in cdot:
       # Most (or all?) of these are marked as CDS join(a..b,c..d) in nuccore
