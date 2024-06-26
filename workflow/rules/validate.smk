@@ -34,13 +34,11 @@ rule check_mehari_db:
     output:
         stats=report(
             "results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
-            caption="mehari DB check statistics",
             category="{alias}",
             subcategory="{seqrepo}",
         ),
         report=report(
             "results/report/{alias}/{seqrepo}/mehari_db_check.txt",
-            caption="mehari DB check information",
             category="{alias}",
             subcategory="{seqrepo}",
         ),
