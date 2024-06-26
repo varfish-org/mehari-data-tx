@@ -32,7 +32,14 @@ rule check_mehari_db:
         db_discarded="results/mehari/{alias}/{seqrepo}/txs.bin.zst.report.jsonl",
         cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
     output:
-        stats="results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats",
+        stats=report(
+            "results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
+            caption="mehari DB check statistics",
+        ),
+        report=report(
+            "results/report/{alias}/{seqrepo}/mehari_db_check.txt",
+            caption="mehari DB check information",
+        ),
     conda:
         "../envs/datastuff.yaml"
     script:
