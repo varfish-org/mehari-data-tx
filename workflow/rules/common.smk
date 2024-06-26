@@ -43,12 +43,9 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     cdot_files = {
         "cdot": f"results/transcripts/cdot/{alias}.hgnc.json.gz",
-        "cdot_mt": "results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
+        "cdot_mt": f"results/transcripts/cdot/{alias}-ensembl.chrMT.json",
+        "cdot_graft": f"results/transcripts/cdot/{alias}-ensembl.grafted.json.gz",
     }
-    if alias == "GRCh38":
-        cdot_files["cdot_graft"] = (
-            "results/transcripts/cdot/GRCh38-ensembl.grafted.json.gz"
-        )
     return cdot_files
 
 
@@ -75,3 +72,8 @@ def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str
 def transcripts_to_fix_start_stop_codons_for(wildcards: Wildcards) -> set[str]:
     alias = wildcards.alias
     return set(config["transcripts"][alias]["fix_cds"])
+
+
+def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> set[str]:
+    alias = wildcards.alias
+    return set(config["transcripts"][alias]["add_from_ensembl"])

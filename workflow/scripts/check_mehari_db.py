@@ -39,10 +39,7 @@ def main():
     cdot_tx_ids = cdot_transcript_ids()
 
     discarded = discarded_transcripts()
-    stats: pl.DataFrame = (
-        discarded.group_by(["source", "kind", "reason"])
-        .len()
-    )
+    stats: pl.DataFrame = discarded.group_by(["source", "kind", "reason"]).len()
 
     discarded_tx_ids = discarded_transcript_ids(discarded)
 

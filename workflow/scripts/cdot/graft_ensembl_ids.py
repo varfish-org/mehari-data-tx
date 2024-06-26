@@ -6,6 +6,8 @@ database.
 
 import gzip
 import json
+import sys
+
 import pandas as pd
 from contextlib import redirect_stderr
 
@@ -32,7 +34,9 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     lookup = pd.read_csv(snakemake.input.lookup, sep="\t").set_index(
         REFSEQ_KEY, drop=False
     )
-    cdot = main(cdot, lookup)
+    if not lookup.empty:
+        print("Empty lookup table, skipping grafting.", file=sys.stderr)
+        cdot = main(cdot, lookup)
 
     with gzip.open(snakemake.output.cdot, "wt") as out:
         json.dump(cdot, out, indent=2)

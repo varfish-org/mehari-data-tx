@@ -88,12 +88,17 @@ transcripts:
       # TODO: transcript retrieval for GRCh37, uses a dummy value atm
       "NM_182705.2",
     ]
+    add_from_ensembl: []
   # the following entry is semi hardcoded for now
   # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:
     cdot:
       release: 0.2.25
       custom: ensembl.grch38
+  GRCh37-ensembl:
+    cdot:
+      release: 0.2.25
+      custom: ensembl.grch37
 
 
 # HGNC complete set file to check missing HGNC ids from cdot against

@@ -9,7 +9,7 @@ validate(config, schema="schemas/config.schema.yaml")
 
 wildcard_constraints:
     seqrepo=r"(seqrepo|seqrepo_fixed)",
-    alias=r"(GRCh37|GRCh38|GRCh38-ensembl)",
+    alias=r"(GRCh37|GRCh38|GRCh38-ensembl|GRCh37-ensembl)",
 
 
 include: "rules/common.smk"

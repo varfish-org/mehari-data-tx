@@ -81,11 +81,11 @@ rule cdot_from_hgnc_complete_set:
 
 rule cdot_chrMT:
     input:
-        cdot="results/transcripts/cdot/GRCh38-ensembl.json.gz",
+        cdot="results/transcripts/cdot/{alias}-ensembl.json.gz",
     output:
-        cdot="results/transcripts/cdot/GRCh38-ensembl.chrMT.json",
+        cdot="results/transcripts/cdot/{alias}-ensembl.chrMT.json",
     log:
-        "logs/GRCh38-ensembl/transcripts/extract_chrMT.log",
+        "logs/{alias}-ensembl/transcripts/extract_chrMT.log",
     conda:
         "../envs/base.yaml"
     script:
@@ -94,22 +94,22 @@ rule cdot_chrMT:
 
 rule lookup_ensembl_ids_for_refseq_ids:
     params:
-        refseq_ids=config["transcripts"]["GRCh38"]["add_from_ensembl"],
+        refseq_ids=transcripts_to_lookup_ensembl_ids_for,
     output:
-        tsv="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
+        tsv="results/for-fix/{alias}/refseq_id_to_ensembl_id.tsv",
     log:
-        "logs/GRCh38-ensembl/transcripts/lookup_ensembl_ids_for_refseq_ids.log",
+        "logs/{alias}-ensembl/transcripts/lookup_ensembl_ids_for_refseq_ids.log",
     script:
         "../scripts/lookup_ensembl_ids_for_refseq_ids.py"
 
 
 rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
     input:
-        cdot="results/transcripts/cdot/GRCh38-ensembl.json.gz",
-        lookup="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
+        cdot="results/transcripts/cdot/{alias}-ensembl.json.gz",
+        lookup="results/for-fix/{alias}/refseq_id_to_ensembl_id.tsv",
     output:
-        cdot="results/transcripts/cdot/GRCh38-ensembl.grafted.json.gz",
+        cdot="results/transcripts/cdot/{alias}-ensembl.grafted.json.gz",
     log:
-        "logs/GRCh38-ensembl/transcripts/graft_ensembl_ids.log",
+        "logs/{alias}-ensembl/transcripts/graft_ensembl_ids.log",
     script:
         "../scripts/cdot/graft_ensembl_ids.py"

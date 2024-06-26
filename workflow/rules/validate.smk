@@ -71,7 +71,7 @@ rule datavzrd:
         config=workflow.source_path("../resources/datavzrd/report.datavzrd.yaml"),
         mehari_check_db_stats="results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
         fix_incorrect_entries="results/report/{alias}/fix_incorrect_entries.tsv",
-        refseq_id_to_ensembl_id="results/for-fix/GRCh38/refseq_id_to_ensembl_id.tsv",
+        refseq_id_to_ensembl_id="results/for-fix/{alias}/refseq_id_to_ensembl_id.tsv",
     params:
         extra="",
     output:
