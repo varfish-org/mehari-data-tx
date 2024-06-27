@@ -2,18 +2,18 @@ rule mehari_build_txs_db:
     input:
         unpack(get_mehari_input),
     output:
-        txs="results/{alias}/mehari/{seqrepo}/txs.bin.zst",
-        report="results/{alias}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+        txs="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst",
+        report="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
     params:
         mane=lambda wildcards, input: (
             f"--path-mane-txs-tsv {input.mane_txs}"
-            if wildcards.alias == "GRCh37"
+            if wildcards.assembly == "GRCh37"
             else ""
         ),
         cdot=get_mehari_cdot_param_string,
-        genome_release=lambda wildcards: wildcards.alias.lower(),
+        genome_release=genome_release,
     log:
-        "logs/{alias}/mehari/{seqrepo}/build_txs_db.log",
+        "logs/{assembly}-{source}/mehari/{seqrepo}/build_txs_db.log",
     # conda:
     #     "../envs/mehari.yaml"
     shell:

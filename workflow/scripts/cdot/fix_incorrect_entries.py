@@ -88,7 +88,7 @@ def main(
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     cdot, report = main(
-        snakemake.wildcards.alias, snakemake.input.xml, snakemake.input.cdot
+        snakemake.wildcards.assembly, snakemake.input.xml, snakemake.input.cdot
     )
 
     with gzip.open(snakemake.output.cdot, "wt") as f:
