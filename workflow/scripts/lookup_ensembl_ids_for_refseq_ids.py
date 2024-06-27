@@ -3,7 +3,7 @@ from contextlib import redirect_stderr
 import requests
 
 
-def main(refseq_ids: list[str]):
+def main(refseq_ids: set[str]):
     refseq_ids = ",".join(s.rsplit(".", 1)[0] for s in refseq_ids)
 
     xml = rf"""<?xml version="1.0" encoding="UTF-8"?>
@@ -27,6 +27,10 @@ def main(refseq_ids: list[str]):
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-    response = main(snakemake.params.refseq_ids)
+    refseq_ids = set(snakemake.params.additional_accessions)
+    with open(snakemake.input.accessions, "rt") as f:
+        for line in f:
+            refseq_ids.add(line.strip())
+    response = main(refseq_ids)
     with open(snakemake.output.tsv, "wt") as f:
         f.write(response.content.decode())

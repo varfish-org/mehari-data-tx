@@ -56,10 +56,11 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
 
 def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = get_alias(wildcards)
+    fix_order = config["fix-order"]
     cdot_files = {
         "cdot": f"results/{alias}/cdot/{alias}.cdot.fixed.hgnc.json.gz",
         "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
-        "cdot_graft": f"results/{alias}/cdot/{alias}-from-ensembl.grafted.json.gz",
+        "cdot_fixed": f"results/{alias}/cdot/{alias}.{fix_order}.json.gz",
     }
     return cdot_files
 
@@ -77,7 +78,7 @@ def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
         **cdot_input_mapping(wildcards),
     }
     if alias == "GRCh37-refseq":
-        result.update({"mane_txs": f"results/{alias}/cdot/{alias}.mane-txs.tsv"})
+        result.update({"tags": f"results/{alias}/cdot/{alias}.tags.tsv"})
     return result
 
 
@@ -89,7 +90,7 @@ def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str
     return " ".join(f"--path-cdot-json {path}" for path in cdot_files.values())
 
 
-def transcripts_to_fix_start_stop_codons_for(wildcards: Wildcards) -> set[str]:
+def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> set[str]:
     alias = get_alias(wildcards)
     return set(config["transcripts"][alias]["fix_cds"])
 

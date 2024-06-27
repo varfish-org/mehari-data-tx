@@ -6,7 +6,7 @@ rule mehari_build_txs_db:
         report="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
     params:
         mane=lambda wildcards, input: (
-            f"--path-mane-txs-tsv {input.mane_txs}"
+            f"--path-mane-txs-tsv {input.tags}"
             if wildcards.assembly == "GRCh37"
             else ""
         ),

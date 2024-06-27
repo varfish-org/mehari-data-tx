@@ -4,8 +4,8 @@ datasets:
   mehari_check_db_stats:
     path: ?input.mehari_check_db_stats
     separator: "\t"
-  fix_incorrect_entries:
-    path: ?input.fix_incorrect_entries
+  fix_incorrect_cds:
+    path: ?input.fix_incorrect_cds
     separator: "\t"
   refseq_id_to_ensembl_id:
     path: ?input.refseq_id_to_ensembl_id
@@ -23,8 +23,8 @@ views:
           display-mode: normal
         len:
           display-mode: normal
-  fix_incorrect_entries:
-    dataset: fix_incorrect_entries
+  fix_incorrect_cds:
+    dataset: fix_incorrect_cds
     render-table:
       columns:
         accession:

@@ -70,18 +70,20 @@ rule datavzrd:
     input:
         config=workflow.source_path("../resources/datavzrd/report.datavzrd.yaml"),
         mehari_check_db_stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
-        fix_incorrect_entries="results/{assembly}-{source}/report/fix_incorrect_entries.tsv",
-        refseq_id_to_ensembl_id="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
+        fix_incorrect_cds="results/{assembly}-{source}/report/{fix_order}.fix_incorrect_cds.tsv",
+        refseq_id_to_ensembl_id="results/{assembly}-{source}/lookup/{fix_order}.refseq_id_to_ensembl_id.tsv",
     params:
         extra="",
     output:
         report(
-            directory("results/{assembly}-{source}/datavzrd-report/{seqrepo}/"),
+            directory(
+                "results/{assembly}-{source}/datavzrd-report/{seqrepo}/{fix_order}"
+            ),
             htmlindex="index.html",
             category="{assembly}-{source}",
             subcategory="{seqrepo}",
         ),
     log:
-        "logs/datavzrd_report/{assembly}-{source}/{seqrepo}/check_mehari_db.log",
+        "logs/datavzrd_report/{assembly}-{source}/{seqrepo}/{fix_order}.check_mehari_db.log",
     wrapper:
         "v3.13.1/utils/datavzrd"

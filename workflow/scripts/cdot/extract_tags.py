@@ -43,11 +43,11 @@ def main(paths: typing.Iterable[str], file=sys.stdout):
     print("finalizing...", file=sys.stderr)
     for tx_id, (tx_version, gene, tags) in sorted(txs.items()):
         lst = ",".join(sorted(tags))
-        print(f"{tx_id}\t{gene}\t{lst}", file=file)
+        print(f"{tx_id}\t{tx_version}\t{gene}\t{lst}", file=file)
     print(file=file, flush=True)
     print("... done finalizing", file=sys.stderr)
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-    with open(snakemake.output.mane_txs, "w") as out:
+    with open(snakemake.output.tags, "w") as out:
         main((snakemake.input.cdot,), file=out)

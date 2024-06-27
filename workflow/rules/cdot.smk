@@ -24,13 +24,13 @@ rule get_hgnc_complete_set:
         """wget --quiet -O {output} {params.url} 2> {log}"""
 
 
-rule mane_txs_for_grch37:
+rule extract_tags:
     input:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
     output:
-        mane_txs="results/{assembly}-{source}/cdot/{assembly}-{source}.mane-txs.tsv",
+        tags="results/{assembly}-{source}/cdot/{assembly}-{source}.tags.tsv",
     log:
-        "logs/{assembly}-{source}/cdot/mane_txs_for_grch37.log",
+        "logs/{assembly}-{source}/cdot/extract_tags.log",
     conda:
         "../envs/base.yaml"
     script:
@@ -39,7 +39,7 @@ rule mane_txs_for_grch37:
 
 rule fetch_incorrect_entries:
     params:
-        transcripts=transcripts_to_fix_start_stop_codons_for,
+        transcripts=transcripts_to_fix_with_nuccore,
     output:
         xml="results/{assembly}-{source}/cdot/nuccore.xml.gz",
     log:
@@ -48,38 +48,38 @@ rule fetch_incorrect_entries:
         "../scripts/cdot/fetch_incorrect_entries.py"
 
 
-rule fix_incorrect_entries:
+rule fix_incorrect_cds:
     input:
         xml="results/{assembly}-{source}/cdot/nuccore.xml.gz",
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.json.gz",
     output:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.fixed.json.gz",
-        report="results/{assembly}-{source}/report/fix_incorrect_entries.tsv",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.cds.json.gz",
+        report="results/{assembly}-{source}/report/{fix_order}.fix_incorrect_cds.tsv",
     log:
-        "logs/{assembly}-{source}/cdot/fix_incorrect_entries.log",
+        "logs/{assembly}-{source}/cdot/{fix_order}.fix_incorrect_cds.log",
     script:
-        "../scripts/cdot/fix_incorrect_entries.py"
+        "../scripts/cdot/fix_incorrect_cds.py"
 
 
-rule cdot_from_hgnc_complete_set:
+rule update_from_hgnc_complete_set:
     input:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.fixed.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.json.gz",
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.fixed.hgnc.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.hgnc.json.gz",
         report=report(
-            "results/report/{assembly}-{source}/cdot_hgnc_update.tsv",
+            "results/report/{assembly}-{source}/{fix_order}.cdot_hgnc_update.tsv",
             category="{assembly}-{source}",
         ),
     log:
-        "logs/{assembly}-{source}/cdot/update_cdot_with_hgnc_complete_set.log",
+        "logs/{assembly}-{source}/cdot/{fix_order}.update_with_hgnc_complete_set.log",
     conda:
         "../envs/base.yaml"
     script:
         "../scripts/cdot/update_from_hgnc.py"
 
 
-rule cdot_chrMT:
+rule extract_chrMT:
     input:
         cdot=ensembl_cdot,
     output:
@@ -92,13 +92,54 @@ rule cdot_chrMT:
         "../scripts/cdot/extract_chrmt.py"
 
 
-rule lookup_ensembl_ids_for_refseq_ids:
-    params:
-        refseq_ids=transcripts_to_lookup_ensembl_ids_for,
+# RefSeq or MANE select transcripts
+rule find_select_transcripts:
+    input:
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.json.gz",
     output:
-        tsv="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
+        accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.select.txt",
     log:
-        "logs/{assembly}-{source}/lookup/lookup_ensembl_ids_for_refseq_ids.log",
+        "logs/{assembly}-{source}/report/{fix_order}.find_select_transcripts.log",
+    shell:
+        """(
+        pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.genome_builds[].tag) | select (. != null) | select( .genome_builds[].tag | contains("Select")).id' | sort > {output.accessions}
+        ) >{log} 2>&1"""
+
+
+rule find_partial_transcripts:
+    input:
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.json.gz",
+    output:
+        accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.partial.txt",
+    log:
+        "logs/{assembly}-{source}/report/{fix_order}.find_partial_transcripts.log",
+    shell:
+        """(
+        pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.partial == 1 ).id' | sort > {output.accessions}
+        ) >{log} 2>&1"""
+
+
+rule determine_partial_but_select_transcripts:
+    input:
+        select="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.select.txt",
+        partial="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.partial.txt",
+    output:
+        accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.partial_but_select.txt",
+    log:
+        "logs/{assembly}-{source}/report/{fix_order}.determine_partial_but_select_transcripts.log",
+    shell:
+        """(comm -12 {input.select} {input.partial} > {output.accessions}) >{log} 2>&1"""
+
+
+rule lookup_ensembl_ids_for_refseq_ids:
+    input:
+        accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.partial_but_select.txt",
+    params:
+        additional_accessions=transcripts_to_lookup_ensembl_ids_for,
+    output:
+        tsv="results/{assembly}-{source}/lookup/{fix_order}.refseq_id_to_ensembl_id.tsv",
+    log:
+        "logs/{assembly}-{source}/lookup/{fix_order}.lookup_ensembl_ids_for_refseq_ids.log",
     script:
         "../scripts/lookup_ensembl_ids_for_refseq_ids.py"
 
@@ -106,10 +147,10 @@ rule lookup_ensembl_ids_for_refseq_ids:
 rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
     input:
         cdot=ensembl_cdot,
-        lookup="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
+        lookup="results/{assembly}-{source}/lookup/{fix_order}.refseq_id_to_ensembl_id.tsv",
     output:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}-from-ensembl.grafted.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.{fix_order}.grafted.json.gz",
     log:
-        "logs/{assembly}-{source}/cdot/graft_ensembl_ids.log",
+        "logs/{assembly}-{source}/cdot/{fix_order}.graft_ensembl_ids.log",
     script:
         "../scripts/cdot/graft_ensembl_ids.py"
