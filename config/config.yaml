@@ -117,5 +117,3 @@ namespaces:
 # mehari version to use (currently ignored)
 mehari:
   version: 0.26.0
-
-fix-order: "cdot.hgnc.cds.grafted"

@@ -115,9 +115,6 @@ properties:
         type: string
     required:
       - version
-  fix-order:
-    type: string
-    default: "cdot.hgnc.cds.grafted"
 required:
   - reference
   - transcripts

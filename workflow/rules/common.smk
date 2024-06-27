@@ -56,11 +56,10 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
 
 def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = get_alias(wildcards)
-    fix_order = config["fix-order"]
     cdot_files = {
-        "cdot": f"results/{alias}/cdot/{alias}.cdot.fixed.hgnc.json.gz",
+        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc.cds.json.gz",
         "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
-        "cdot_fixed": f"results/{alias}/cdot/{alias}.{fix_order}.json.gz",
+        "cdot_grafted": f"results/{alias}/cdot/{alias}.cdot.grafted.json.gz",
     }
     return cdot_files
 

@@ -25,9 +25,8 @@ rule all:
     input:
         expand(
             [
-                "results/{alias}/datavzrd-report/{seqrepo}/{fix_order}",
+                "results/{alias}/datavzrd-report/{seqrepo}",
             ],
             alias=["GRCh37-refseq", "GRCh38-refseq"],
             seqrepo=["seqrepo_fixed"],
-            fix_order=config["fix-order"],
         ),
