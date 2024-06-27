@@ -1,6 +1,6 @@
 rule get_cdot_transcripts:
     output:
-        "results/transcripts/cdot/{alias}.json.gz",
+        "results/{alias}/cdot/{alias}.cdot.json.gz",
     params:
         url=get_cdot_download_url,
     conda:
@@ -26,11 +26,11 @@ rule get_hgnc_complete_set:
 
 rule mane_txs_for_grch37:
     input:
-        cdot="results/transcripts/cdot/GRCh37.json.gz",
+        cdot="results/{alias}/cdot/{alias}.cdot.json.gz",
     output:
-        mane_txs="results/transcripts/cdot/GRCh37/mane-txs.tsv",
+        mane_txs="results/{alias}/cdot/{alias}.mane-txs.tsv",
     log:
-        "logs/GRCh37/transcripts/mane_txs_for_grch37.log",
+        "logs/{alias}/cdot/mane_txs_for_grch37.log",
     conda:
         "../envs/base.yaml"
     script:
@@ -41,38 +41,38 @@ rule fetch_incorrect_entries:
     params:
         transcripts=transcripts_to_fix_start_stop_codons_for,
     output:
-        xml="results/for-fix/{alias}/nuccore.xml.gz",
+        xml="results/{alias}/cdot/nuccore.xml.gz",
     log:
-        "logs/{alias}/transcripts/fetch_incorrect_entries.log",
+        "logs/{alias}/cdot/fetch_incorrect_entries.log",
     script:
         "../scripts/cdot/fetch_incorrect_entries.py"
 
 
 rule fix_incorrect_entries:
     input:
-        xml="results/for-fix/{alias}/nuccore.xml.gz",
-        cdot="results/transcripts/cdot/{alias}.json.gz",
+        xml="results/{alias}/cdot/nuccore.xml.gz",
+        cdot="results/{alias}/cdot/{alias}.cdot.json.gz",
     output:
-        cdot="results/for-fix/{alias}/cdot.json.gz",
-        report="results/report/{alias}/fix_incorrect_entries.tsv",
+        cdot="results/{alias}/cdot/{alias}.cdot.fixed.json.gz",
+        report="results/{alias}/report/fix_incorrect_entries.tsv",
     log:
-        "logs/{alias}/transcripts/fix_incorrect_entries.log",
+        "logs/{alias}/cdot/fix_incorrect_entries.log",
     script:
         "../scripts/cdot/fix_incorrect_entries.py"
 
 
 rule cdot_from_hgnc_complete_set:
     input:
-        cdot="results/for-fix/{alias}/cdot.json.gz",
+        cdot="results/{alias}/cdot/{alias}.cdot.fixed.json.gz",
         hgnc="results/hgnc/hgnc_complete_set.json",
     output:
-        cdot="results/transcripts/cdot/{alias}.hgnc.json.gz",
+        cdot="results/{alias}/cdot/{alias}.cdot.fixed.hgnc.json.gz",
         report=report(
             "results/report/{alias}/cdot_hgnc_update.tsv",
             category="{alias}",
         ),
     log:
-        "logs/{alias}/transcripts/update_cdot_with_hgnc_complete_set.log",
+        "logs/{alias}/cdot/update_cdot_with_hgnc_complete_set.log",
     conda:
         "../envs/base.yaml"
     script:
@@ -81,11 +81,11 @@ rule cdot_from_hgnc_complete_set:
 
 rule cdot_chrMT:
     input:
-        cdot="results/transcripts/cdot/{alias}-ensembl.json.gz",
+        cdot=ensembl_cdot,
     output:
-        cdot="results/transcripts/cdot/{alias}-ensembl.chrMT.json",
+        cdot="results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
     log:
-        "logs/{alias}-ensembl/transcripts/extract_chrMT.log",
+        "logs/{alias}/cdot/extract_chrMT.log",
     conda:
         "../envs/base.yaml"
     script:
@@ -96,20 +96,20 @@ rule lookup_ensembl_ids_for_refseq_ids:
     params:
         refseq_ids=transcripts_to_lookup_ensembl_ids_for,
     output:
-        tsv="results/for-fix/{alias}/refseq_id_to_ensembl_id.tsv",
+        tsv="results/{alias}/lookup/refseq_id_to_ensembl_id.tsv",
     log:
-        "logs/{alias}-ensembl/transcripts/lookup_ensembl_ids_for_refseq_ids.log",
+        "logs/{alias}/lookup/lookup_ensembl_ids_for_refseq_ids.log",
     script:
         "../scripts/lookup_ensembl_ids_for_refseq_ids.py"
 
 
 rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
     input:
-        cdot="results/transcripts/cdot/{alias}-ensembl.json.gz",
-        lookup="results/for-fix/{alias}/refseq_id_to_ensembl_id.tsv",
+        cdot=ensembl_cdot,
+        lookup="results/{alias}/lookup/refseq_id_to_ensembl_id.tsv",
     output:
-        cdot="results/transcripts/cdot/{alias}-ensembl.grafted.json.gz",
+        cdot="results/{alias}/cdot/{alias}-from-ensembl.grafted.json.gz",
     log:
-        "logs/{alias}-ensembl/transcripts/graft_ensembl_ids.log",
+        "logs/{alias}/cdot/graft_ensembl_ids.log",
     script:
         "../scripts/cdot/graft_ensembl_ids.py"

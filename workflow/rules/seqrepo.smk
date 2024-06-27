@@ -3,8 +3,8 @@ rule initialize_seqrepo:
         ensembl="results/references/ensembl/{alias}.fasta",
         refseq="results/references/refseq/{alias}.fasta.gz",
     output:
-        seqrepo_root=directory("results/seqrepo/{alias}"),
-        seqrepo_instance=directory("results/seqrepo/{alias}/master"),
+        seqrepo_root=directory("results/{alias}/seqrepo"),
+        seqrepo_instance=directory("results/{alias}/seqrepo/master"),
     params:
         ensembl_namespace=config["namespaces"]["ensembl"],
         refseq_namespace=config["namespaces"]["refseq"],
@@ -30,12 +30,12 @@ rule initialize_seqrepo:
         """
 
 
-rule detect_missing_sequences:
+checkpoint detect_missing_sequences:
     input:
-        txs_db_report="results/mehari/{alias}/seqrepo/txs.bin.zst.report.jsonl",
+        txs_db_report="results/{alias}/mehari/seqrepo/txs.bin.zst.report.jsonl",
     output:
         missing_txt=report(
-            "results/for-fix/{alias}/missing.txt",
+            "results/{alias}/mehari/seqrepo/missing.txt",
             category="{alias}",
             subcategory="seqrepo",
         ),
@@ -47,27 +47,45 @@ rule detect_missing_sequences:
         """(jq -r 'select(.value.reason == "MissingSequence").value.id.value' {input.txs_db_report} > {output.missing_txt}) >{log} 2>&1"""
 
 
-rule fetch_missing_sequences:
+rule fetch_missing_sequence:
     input:
-        missing_txt="results/for-fix/{alias}/missing.txt",
+        missing_txt="results/{alias}/mehari/seqrepo/missing/{accession}.txt",
     output:
-        missing_fasta="results/for-fix/{alias}/missing.fasta",
+        missing_fasta="results/{alias}/mehari/seqrepo/missing/{accession}.fasta",
+    resources:
+        ratelimit=1,
+    cache: "omit-software"
     log:
-        "logs/{alias}/seqrepo/fetch-missing.log",
+        "logs/{alias}/mehari/seqrepo/fetch-missing/{accession}.log",
     conda:
         "../envs/seqrepo.yaml"
     script:
         "../scripts/fetch_missing_sequences.py"
 
 
+rule fetch_missing_sequences:
+    input:
+        missing_sequence_files,
+    output:
+        missing_fasta="results/{alias}/mehari/seqrepo/missing.fasta",
+    log:
+        "logs/{alias}/mehari/seqrepo/fetch-missing.log",
+    shell:
+        """
+        (
+        cat {input} > {output.missing_fasta}
+        ) >{log} 2>&1
+        """
+
+
 rule fix_missing_sequences_in_seqrepo:
     input:
-        seqrepo_root="results/seqrepo/{alias}",
-        seqrepo_instance="results/seqrepo/{alias}/master",
-        missing_fasta="results/for-fix/{alias}/missing.fasta",
+        seqrepo_root="results/{alias}/seqrepo",
+        seqrepo_instance="results/{alias}/seqrepo/master",
+        missing_fasta="results/{alias}/mehari/seqrepo/missing.fasta",
     output:
-        seqrepo_root_fixed=directory("results/seqrepo_fixed/{alias}"),
-        seqrepo_fixed_instance=directory("results/seqrepo_fixed/{alias}/master"),
+        seqrepo_root_fixed=directory("results/{alias}/seqrepo_fixed"),
+        seqrepo_fixed_instance=directory("results/{alias}/seqrepo_fixed/master"),
     params:
         refseq_namespace=config["namespaces"]["refseq"],
         ensembl_namespace=config["namespaces"]["ensembl"],

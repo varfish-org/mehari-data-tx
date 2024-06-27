@@ -5,7 +5,20 @@ from snakemake.io import InputFiles, Wildcards
 
 def get_ensembl_sequence_param(param: str) -> Callable[[Wildcards], str]:
     def inner(wildcards):
-        return config["reference"][wildcards.alias]["ensembl"][param]
+        alias = (
+            wildcards.alias.split("-")[0] if "-" in wildcards.alias else wildcards.alias
+        )
+        return config["reference"][alias]["ensembl"][param]
+
+    return inner
+
+
+def get_refseq_sequence_param(param: str) -> Callable[[Wildcards], str]:
+    def inner(wildcards):
+        alias = (
+            wildcards.alias.split("-")[0] if "-" in wildcards.alias else wildcards.alias
+        )
+        return config["reference"][alias]["refseq"][param]
 
     return inner
 
@@ -42,22 +55,28 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
 def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     cdot_files = {
-        "cdot": f"results/transcripts/cdot/{alias}.hgnc.json.gz",
-        "cdot_mt": f"results/transcripts/cdot/{alias}-ensembl.chrMT.json",
-        "cdot_graft": f"results/transcripts/cdot/{alias}-ensembl.grafted.json.gz",
+        "cdot": f"results/{alias}/cdot/{alias}.cdot.fixed.hgnc.json.gz",
+        "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
+        "cdot_graft": f"results/{alias}/cdot/{alias}-from-ensembl.grafted.json.gz",
     }
     return cdot_files
+
+
+def ensembl_cdot(wildcards: Wildcards) -> str:
+    alias = wildcards.alias
+    alias_ensembl = alias.split("-")[0] + "-ensembl"
+    return f"results/{alias_ensembl}/cdot/{alias_ensembl}.cdot.json.gz"
 
 
 def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
     alias = wildcards.alias
     seqrepo = wildcards.seqrepo
     result = {
-        "seqrepo_instance": f"results/{seqrepo}/{alias}/master",
+        "seqrepo_instance": f"results/{alias}/{seqrepo}/master",
         **cdot_input_mapping(wildcards),
     }
-    if alias == "GRCh37":
-        result.update({"mane_txs": "results/transcripts/cdot/GRCh37/mane-txs.tsv"})
+    if alias == "GRCh37-refseq":
+        result.update({"mane_txs": f"results/{alias}/cdot/{alias}.mane-txs.tsv"})
     return result
 
 
@@ -77,3 +96,15 @@ def transcripts_to_fix_start_stop_codons_for(wildcards: Wildcards) -> set[str]:
 def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> set[str]:
     alias = wildcards.alias
     return set(config["transcripts"][alias]["add_from_ensembl"])
+
+
+def missing_sequence_files(wildcards: Wildcards) -> list[str]:
+    alias = wildcards.alias
+    with checkpoints.detect_missing_sequences.get(alias=wildcards.alias).output[
+        "missing_txt"
+    ].open() as file:
+        accessions = (s.strip() for s in file)
+    return [
+        f"results/{alias}/mehari/seqrepo//missing/{accession}.txt"
+        for accession in accessions
+    ]

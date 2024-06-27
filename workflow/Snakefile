@@ -9,7 +9,7 @@ validate(config, schema="schemas/config.schema.yaml")
 
 wildcard_constraints:
     seqrepo=r"(seqrepo|seqrepo_fixed)",
-    alias=r"(GRCh37|GRCh38|GRCh38-ensembl|GRCh37-ensembl)",
+    alias=r"(GRCh37-refseq|GRCh38-refseq|GRCh38-ensembl|GRCh37-ensembl)",
 
 
 include: "rules/common.smk"
@@ -24,9 +24,8 @@ rule all:
     input:
         expand(
             [
-                "results/report/{alias}/{seqrepo}/mehari_db_check.txt",
-                "results/datavzrd-report/{alias}/{seqrepo}",
+                "results/{alias}/datavzrd-report/{seqrepo}",
             ],
-            alias=["GRCh37", "GRCh38"],
+            alias=["GRCh37-refseq", "GRCh38-refseq"],
             seqrepo=["seqrepo_fixed"],
         ),

@@ -17,12 +17,8 @@ rule get_refseq_sequence:
     output:
         refseq_seq="results/references/refseq/{alias}.fasta.gz",
     params:
-        species=lambda wildcards: config["reference"][wildcards.alias]["refseq"][
-            "species"
-        ],
-        species_name=lambda wildcards: config["reference"][wildcards.alias]["refseq"][
-            "species_name"
-        ],
+        species=get_refseq_sequence_param("species"),
+        species_name=get_refseq_sequence_param("species_name"),
     log:
         "logs/{alias}/get_refseq_sequence.log",
     conda:

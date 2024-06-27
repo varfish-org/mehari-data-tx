@@ -1,12 +1,12 @@
 rule dump_mehari_db:
     input:
-        tx_db="results/mehari/{alias}/{seqrepo}/txs.bin.zst",
+        tx_db="results/{alias}/mehari/{seqrepo}/txs.bin.zst",
     output:
-        db_yaml="results/mehari/{alias}/{seqrepo}/txs.bin.zst.yaml.gz",
+        db_yaml="results/{alias}/mehari/{seqrepo}/txs.bin.zst.yaml.gz",
     # conda:
     #     "../envs/mehari.yaml"
     log:
-        "logs/mehari/{alias}/{seqrepo}/dump.log",
+        "logs/{alias}/mehari/{seqrepo}/dump.log",
     shell:
         """
         (
@@ -17,11 +17,11 @@ rule dump_mehari_db:
 
 rule mehari_transcript_ids:
     input:
-        db_yaml="results/mehari/{alias}/{seqrepo}/txs.bin.zst.yaml.gz",
+        db_yaml="results/{alias}/mehari/{seqrepo}/txs.bin.zst.yaml.gz",
     output:
-        tx_ids="results/mehari/{alias}/{seqrepo}/txs.bin.zst.transcript_ids.txt",
+        tx_ids="results/{alias}/mehari/{seqrepo}/txs.bin.zst.transcript_ids.txt",
     log:
-        "logs/mehari/{alias}/{seqrepo}/transcript_ids.log",
+        "logs/{alias}/mehari/{seqrepo}/transcript_ids.log",
     conda:
         "../envs/jq.yaml"
     shell:
@@ -32,9 +32,9 @@ rule cdot_tx_ids:
     input:
         unpack(cdot_input_mapping),
     output:
-        tx_ids="results/transcripts/cdot/{alias}.txids.txt",
+        tx_ids="results/{alias}/cdot/{alias}.txids.txt",
     log:
-        "logs/transcripts/cdot/{alias}/txids.log",
+        "logs/{alias}/cdot/txids.log",
     shell:
         """
         (
@@ -48,18 +48,18 @@ rule cdot_tx_ids:
 
 rule check_mehari_db:
     input:
-        kept="results/mehari/{alias}/{seqrepo}/txs.bin.zst.transcript_ids.txt",
-        db_discarded="results/mehari/{alias}/{seqrepo}/txs.bin.zst.report.jsonl",
-        cdot_tx_ids="results/transcripts/cdot/{alias}.txids.txt",
+        kept="results/{alias}/mehari/{seqrepo}/txs.bin.zst.transcript_ids.txt",
+        db_discarded="results/{alias}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+        cdot_tx_ids="results/{alias}/cdot/{alias}.txids.txt",
     output:
-        stats="results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
+        stats="results/{alias}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         report=report(
-            "results/report/{alias}/{seqrepo}/mehari_db_check.txt",
+            "results/{alias}/{seqrepo}/report/mehari_db_check.txt",
             category="{alias}",
             subcategory="{seqrepo}",
         ),
     log:
-        "logs/mehari/{alias}/{seqrepo}/check.log",
+        "logs/{alias}/mehari/{seqrepo}/check.log",
     conda:
         "../envs/datastuff.yaml"
     script:
@@ -69,14 +69,14 @@ rule check_mehari_db:
 rule datavzrd:
     input:
         config=workflow.source_path("../resources/datavzrd/report.datavzrd.yaml"),
-        mehari_check_db_stats="results/mehari/{alias}/{seqrepo}/txs.bin.zst.stats.tsv",
-        fix_incorrect_entries="results/report/{alias}/fix_incorrect_entries.tsv",
-        refseq_id_to_ensembl_id="results/for-fix/{alias}/refseq_id_to_ensembl_id.tsv",
+        mehari_check_db_stats="results/{alias}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
+        fix_incorrect_entries="results/{alias}/report/fix_incorrect_entries.tsv",
+        refseq_id_to_ensembl_id="results/{alias}/lookup/refseq_id_to_ensembl_id.tsv",
     params:
         extra="",
     output:
         report(
-            directory("results/datavzrd-report/{alias}/{seqrepo}"),
+            directory("results/{alias}/datavzrd-report/{seqrepo}/"),
             htmlindex="index.html",
             category="{alias}",
             subcategory="{seqrepo}",

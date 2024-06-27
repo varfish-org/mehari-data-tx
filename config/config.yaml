@@ -22,7 +22,7 @@ reference:
 
 # cdot transcript sources for the references defined above
 transcripts:
-  GRCh38:
+  GRCh38-refseq:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
@@ -80,7 +80,7 @@ transcripts:
       "NM_012234.6",
     ]
 
-  GRCh37:
+  GRCh37-refseq:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff

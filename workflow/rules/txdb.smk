@@ -2,8 +2,8 @@ rule mehari_build_txs_db:
     input:
         unpack(get_mehari_input),
     output:
-        txs="results/mehari/{alias}/{seqrepo}/txs.bin.zst",
-        report="results/mehari/{alias}/{seqrepo}/txs.bin.zst.report.jsonl",
+        txs="results/{alias}/mehari/{seqrepo}/txs.bin.zst",
+        report="results/{alias}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
     params:
         mane=lambda wildcards, input: (
             f"--path-mane-txs-tsv {input.mane_txs}"
