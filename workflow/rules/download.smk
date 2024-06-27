@@ -1,6 +1,6 @@
 rule get_ensembl_sequence:
     output:
-        "results/references/ensembl/{assembly}-{source}.fasta",
+        "results/{assembly}-{source}/reference/{assembly}-{source}.fasta",
     params:
         species=get_ensembl_sequence_param("species"),
         build=get_ensembl_sequence_param("build"),
@@ -15,7 +15,7 @@ rule get_ensembl_sequence:
 
 rule get_refseq_sequence:
     output:
-        refseq_seq="results/references/refseq/{assembly}-{source}.fasta.gz",
+        refseq_seq="results/{assembly}-{source}/reference/{assembly}-{source}.fasta.gz",
     params:
         species=get_refseq_sequence_param("species"),
         species_name=get_refseq_sequence_param("species_name"),

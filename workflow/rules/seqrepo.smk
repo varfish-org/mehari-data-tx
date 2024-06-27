@@ -1,7 +1,7 @@
 rule initialize_seqrepo:
     input:
-        ensembl="results/references/ensembl/{assembly}-{source}.fasta",
-        refseq="results/references/refseq/{assembly}-{source}.fasta.gz",
+        ensembl="results/{assembly}-ensembl/reference/{assembly}-ensembl.fasta",
+        refseq="results/{assembly}-refseq/reference/{assembly}-refseq.fasta.gz",
     output:
         seqrepo_root=directory("results/{assembly}-{source}/seqrepo"),
         seqrepo_instance=directory("results/{assembly}-{source}/seqrepo/master"),
