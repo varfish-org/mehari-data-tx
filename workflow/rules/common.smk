@@ -107,6 +107,6 @@ def missing_sequence_files(wildcards: Wildcards) -> list[str]:
     ).output["missing_txt"].open() as file:
         accessions = [s.strip() for s in file]
     return [
-        f"results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.txt"
+        f"results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta"
         for accession in accessions
     ]

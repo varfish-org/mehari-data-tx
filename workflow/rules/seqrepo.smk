@@ -48,8 +48,6 @@ checkpoint detect_missing_sequences:
 
 
 rule fetch_missing_sequence:
-    input:
-        missing_txt="results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.txt",
     output:
         missing_fasta="results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta",
     resources:
