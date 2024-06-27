@@ -95,9 +95,9 @@ rule extract_chrMT:
 # RefSeq or MANE select transcripts
 rule find_select_transcripts:
     input:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.hgnc.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
     output:
-        accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.hgnc.select.txt",
+        accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.select.txt",
     log:
         "logs/{assembly}-{source}/report/find_select_transcripts.log",
     shell:
@@ -149,7 +149,7 @@ rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
         cdot=ensembl_cdot,
         lookup="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
     output:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.grafted.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.grafted.json.gz",
     log:
         "logs/{assembly}-{source}/cdot/graft_ensembl_ids.log",
     script:
