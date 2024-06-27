@@ -21,4 +21,4 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with open(snakemake.output.missing_fasta, "w") as out:
         fasta = get_fasta(snakemake.params.accession)
         if fasta:
-            print(fasta, file=file)
+            print(fasta, file=out)
