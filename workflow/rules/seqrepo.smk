@@ -50,6 +50,8 @@ checkpoint detect_missing_sequences:
 rule fetch_missing_sequence:
     output:
         missing_fasta="results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta",
+    params:
+        accession=lambda wildcards: wildcards.accession,
     resources:
         ratelimit=1,
     cache: "omit-software"
@@ -58,10 +60,10 @@ rule fetch_missing_sequence:
     conda:
         "../envs/seqrepo.yaml"
     script:
-        "../scripts/fetch_missing_sequences.py"
+        "../scripts/fetch_missing_sequence.py"
 
 
-rule fetch_missing_sequences:
+rule aggregate_missing_sequences:
     input:
         missing_sequence_files,
     output:
