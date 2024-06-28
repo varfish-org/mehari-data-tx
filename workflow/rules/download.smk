@@ -1,16 +1,33 @@
 rule get_ensembl_sequence:
     output:
-        "results/{assembly}-{source}/reference/{assembly}-{source}.fasta",
+        "results/{assembly}-{source}/reference/{assembly}-{source}.{datatype}.fasta",
     params:
         species=get_ensembl_sequence_param("species"),
         build=get_ensembl_sequence_param("build"),
         release=get_ensembl_sequence_param("release"),
-        datatype=get_ensembl_sequence_param("datatype"),
+        datatype=lambda wildcards: wildcards.datatype,
     log:
-        "logs/{assembly}-{source}/get_ensembl_sequence.log",
+        "logs/{assembly}-{source}/get_ensembl_sequence.{datatype}.log",
     cache: "omit-software"  # save space and time with between workflow caching (see docs)
     wrapper:
         "v3.11.0/bio/reference/ensembl-sequence"
+
+
+rule merge_ensembl_sequence:
+    input:
+        "results/{assembly}-{source}/reference/{assembly}-{source}.cdna.fasta",
+        "results/{assembly}-{source}/reference/{assembly}-{source}.ncrna.fasta",
+    output:
+        "results/{assembly}-{source}/reference/{assembly}-{source}.fasta",
+    log:
+        "logs/{assembly}-{source}/merge_sequence.log",
+    cache: "omit-software"  # save space and time with between workflow caching (see docs)
+    shell:
+        """
+        (
+        cat {input} > {output}
+        ) >{log} 2>&1
+        """
 
 
 rule get_refseq_installed_files:

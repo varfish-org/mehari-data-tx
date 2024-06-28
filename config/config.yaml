@@ -5,16 +5,19 @@ reference:
       species: homo_sapiens
       release: 110
       build: GRCh38
-      datatype: cdna
+      datatypes: [cdna, ncrna]
     refseq:
       species: H_sapiens
       species_name: human
+#      build: GCF_000001405.40_GRCh38.p14
+#      version: 110
+#      taxon_id: 9606
   GRCh37:
     ensembl:
       species: homo_sapiens
       release: 105
       build: GRCh37
-      datatype: cdna
+      datatypes: [cdna, ncrna]
     refseq:
       species: H_sapiens
       species_name: human
@@ -94,11 +97,11 @@ transcripts:
   GRCh38-ensembl:
     cdot:
       release: 0.2.25
-      custom: ensembl.grch38
+      custom: ensembl.Homo_sapiens.GRCh38.110.gff3
   GRCh37-ensembl:
     cdot:
       release: 0.2.25
-      custom: ensembl.grch37
+      custom: ensembl.Homo_sapiens.GRCh37.87.gff3
 
 
 # HGNC complete set file to check missing HGNC ids from cdot against

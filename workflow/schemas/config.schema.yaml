@@ -18,19 +18,21 @@ definitions:
             type: integer
           build:
             type: string
-          datatype:
-            type: string
-            enum:
-              - cdna
-              - cds
-              - dna
-              - ncrna
-              - pep
+          datatypes:
+            type: array
+            items:
+              type: string
+              enum:
+                - cdna
+                - cds
+                - dna
+                - ncrna
+                - pep
         required:
           - species
           - release
           - build
-          - datatype
+          - datatypes
   refseq-entry:
     type: object
     properties:
