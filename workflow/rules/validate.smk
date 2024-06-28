@@ -77,8 +77,8 @@ rule generate_table_with_discards_to_review:
         "../envs/datastuff.yaml"
     shell:
         """(
-        echo -e "kind\tidtype\tid\treason" > {output.table}
-        jq 'select( .type == "Discard" and .source == "protobuf" ) | [.value.kind, .value.id.type, .value.id.value, .value.reason] | @tsv' {input.discarded} >> {output.table}
+        echo -e "kind\tidtype\tid\tgene_name\treason" > {output.table}
+        jq -r 'select( .type == "Discard" and .value.source == "protobuf" ) | [.value.kind, .value.id.type, .value.id.value, .value.gene_name, .value.reason] | @tsv' {input.discarded} >> {output.table}
         ) >{log} 2>&1"""
 
 

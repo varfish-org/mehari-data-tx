@@ -31,6 +31,9 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with open(snakemake.input.accessions, "rt") as f:
         for line in f:
             refseq_ids.add(line.strip())
-    response = main(refseq_ids)
+    if snakemake.wildcards.source.lower() == "refseq":
+        response = main(refseq_ids).content.decode()
+    else:
+        response = "RefSeq mRNA ID\tGene stable ID\tGene stable ID version\tTranscript stable ID\tTranscript stable ID version\tHGNC ID\n"
     with open(snakemake.output.tsv, "wt") as f:
-        f.write(response.content.decode())
+        f.write(response)
