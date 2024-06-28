@@ -18,6 +18,9 @@ def main(transcript_ids: list[str]) -> bytes:
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-    ret = main(snakemake.params.transcripts)
+    if len(snakemake.params.transcripts) > 0:
+        ret = main(snakemake.params.transcripts)
+    else:
+        ret = b"<GBSet></GBSet>"
     with gzip.open(snakemake.output.xml, "wb") as f:
         f.write(ret)
