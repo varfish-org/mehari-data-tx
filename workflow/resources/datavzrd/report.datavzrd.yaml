@@ -10,6 +10,9 @@ datasets:
   refseq_id_to_ensembl_id:
     path: ?input.refseq_id_to_ensembl_id
     separator: "\t"
+  discards_of_interest:
+    path: ?input.discards_of_interest
+    separator: "\t"
 views:
   mehari_check_db_stats:
     dataset: mehari_check_db_stats
@@ -50,4 +53,14 @@ views:
         Transcript stable ID version:
           display-mode: normal
         HGNC ID:
+          display-mode: normal
+  discards_of_interest:
+    dataset: discards_of_interest
+    render-table:
+      columns:
+        kind:
+          display-mode: normal
+        idtype:
+          display-mode: normal
+        id:
           display-mode: normal

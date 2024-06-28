@@ -66,12 +66,29 @@ rule check_mehari_db:
         "../scripts/check_mehari_db.py"
 
 
+rule generate_table_with_discards_to_review:
+    input:
+        discarded="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+    output:
+        table="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.discards.tsv",
+    log:
+        "logs/{assembly}-{source}/mehari/{seqrepo}/discards_table.log",
+    conda:
+        "../envs/datastuff.yaml"
+    shell:
+        """(
+        echo -e "kind\tidtype\tid" > {output.table}
+        jq 'select( .type == "Discard" and .source == "protobuf" ) | [.value.kind, .value.id.type, .value.id.value] | @tsv' {input.discarded} >> {output.table}
+        ) >{log} 2>&1"""
+
+
 rule datavzrd:
     input:
         config=workflow.source_path("../resources/datavzrd/report.datavzrd.yaml"),
         mehari_check_db_stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         fix_incorrect_cds="results/{assembly}-{source}/report/fix_incorrect_cds.tsv",
         refseq_id_to_ensembl_id="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
+        discards_of_interest="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.discards.tsv",
     params:
         extra="",
     output:
