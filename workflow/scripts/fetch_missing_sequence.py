@@ -14,6 +14,7 @@ def get_fasta(accession: str) -> str | None:
             return f">{accession}\n{seq}"
     except Exception as e:
         print(f"Failed to fetch {accession}: {e}", file=sys.stderr)
+        raise e
     return None
 
 
