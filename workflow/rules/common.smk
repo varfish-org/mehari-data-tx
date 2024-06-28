@@ -56,11 +56,20 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
 
 def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = get_alias(wildcards)
+    if len(transcripts_to_fix_with_nuccore(wildcards)) > 0:
+        cds = ".cds"
+    else:
+        cds = ""
     cdot_files = {
-        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc.cds.json.gz",
-        "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
-        "cdot_grafted": f"results/{alias}/cdot/{alias}.cdot.grafted.json.gz",
+        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc{cds}.json.gz",
     }
+    if wildcards.source.lower() == "refseq":
+        cdot_files.update(
+            **{
+                "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
+                "cdot_grafted": f"results/{alias}/cdot/{alias}.cdot.grafted.json.gz",
+            }
+        )
     return cdot_files
 
 
@@ -76,7 +85,7 @@ def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
         "seqrepo_instance": f"results/{alias}/{seqrepo}/master",
         **cdot_input_mapping(wildcards),
     }
-    if alias == "GRCh37-refseq":
+    if wildcards.assembly == "GRCh37":
         result.update({"tags": f"results/{alias}/cdot/{alias}.tags.tsv"})
     return result
 
