@@ -6,7 +6,7 @@ from ratelimit import limits, sleep_and_retry
 
 
 @sleep_and_retry
-@limits(calls=10, period=timedelta(seconds=1).total_seconds())
+@limits(calls=1, period=timedelta(seconds=1).total_seconds())
 def get_fasta(accession: str) -> str | None:
     try:
         seq = bioutils.seqfetcher.fetch_seq(accession)
