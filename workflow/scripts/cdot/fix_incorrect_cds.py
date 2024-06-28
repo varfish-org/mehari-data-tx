@@ -71,25 +71,19 @@ def update_cdot(cdot, doc):
     return cdot, report
 
 
-def main(
-    genome_build: str, nuccore_xml_path: str, cdot_path: str
-) -> tuple[dict[str, Any], list]:
+def main(nuccore_xml_path: str, cdot_path: str) -> tuple[dict[str, Any], list]:
     with gzip.open(nuccore_xml_path, "r") as f:
         doc = ElementTree(file=f)
 
     with gzip.open(cdot_path, "r") as f:
         cdot = json.load(f)
 
-    if genome_build == "GRCh38":
-        cdot, report = update_cdot(cdot, doc)
-        return cdot, report
-    return cdot, []
+    cdot, report = update_cdot(cdot, doc)
+    return cdot, report
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
-    cdot, report = main(
-        snakemake.wildcards.assembly, snakemake.input.xml, snakemake.input.cdot
-    )
+    cdot, report = main(snakemake.input.xml, snakemake.input.cdot)
 
     with gzip.open(snakemake.output.cdot, "wt") as f:
         json.dump(cdot, f, indent=2)

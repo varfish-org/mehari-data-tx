@@ -3,7 +3,11 @@ rule mehari_build_txs_db:
         unpack(get_mehari_input),
     output:
         txs="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst",
-        report="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+        report=report(
+            "results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+            category="{assembly}-{source}",
+            subcategory="{seqrepo}",
+        ),
     params:
         mane=lambda wildcards, input: (
             f"--path-mane-txs-tsv {input.tags}"
