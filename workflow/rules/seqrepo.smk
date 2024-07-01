@@ -73,7 +73,11 @@ rule aggregate_missing_sequences:
     shell:
         """
         (
-        cat {input} > {output.missing_fasta}
+        if [ -z {input} ]; then
+            touch {output}
+        else
+            cat {input} > {output.missing_fasta}
+        fi
         ) >{log} 2>&1
         """
 
