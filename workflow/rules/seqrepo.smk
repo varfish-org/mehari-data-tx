@@ -44,12 +44,17 @@ checkpoint detect_missing_sequences:
     conda:
         "../envs/jq.yaml"
     shell:
+        # or `.value.reason | contains("MissingSequence")`, but if there are more reasons a transcript has been discarded,
+        # it makes no sense to fetch transcripts with missing sequence if they get discarded for a different reason anyway
         """(jq -r 'select(.value.reason == "MissingSequence").value.id.value' {input.txs_db_report} > {output.missing_txt}) >{log} 2>&1"""
 
 
 rule fetch_missing_sequence:
     output:
-        missing_fasta="results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta",
+        missing_fasta=ensure(
+            "results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta",
+            non_empty=True,
+        ),
     params:
         accession=lambda wildcards: wildcards.accession,
     resources:

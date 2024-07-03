@@ -10,21 +10,39 @@ def cdot_transcript_ids() -> set[str]:
 
 
 def discarded_transcripts() -> pl.DataFrame:
-    return (
-        pl.scan_ndjson(snakemake.input.db_discarded, ignore_errors=True)
+    df = (
+        pl.read_ndjson(
+            snakemake.input.db_discarded,
+            ignore_errors=True,
+            schema={
+                "type": pl.String,
+                "value": pl.Struct(
+                    {
+                        "source": pl.String,
+                        "reason": pl.String,
+                        "id": pl.Struct(
+                            {
+                                "type": pl.String,
+                                "value": pl.String,
+                            }
+                        ),
+                        "gene_name": pl.String,
+                        "tags": pl.String,
+                    }
+                ),
+            },
+        )
         .filter(pl.col("type") == "Discard")
         .unnest("value")
-        .collect()
     )
+    df = df.hstack(df.select(pl.col("id")).unnest("id").rename({"type": "value_type"}))
+    return df
 
 
 def discarded_transcript_ids(discarded: pl.DataFrame) -> set[str]:
-    discarded_transcript_ids = (
-        discarded.select(pl.col("id"))
-        .unnest("id")
-        .filter(pl.col("type").is_in(["TxId"]))
-        .select(pl.col("value"))
-    )
+    discarded_transcript_ids = discarded.filter(
+        pl.col("value_type").is_in(["TxId"])
+    ).select(pl.col("value"))
     return set(discarded_transcript_ids.to_series().to_list())
 
 
@@ -39,7 +57,7 @@ def main():
     cdot_tx_ids = cdot_transcript_ids()
 
     discarded = discarded_transcripts()
-    stats: pl.DataFrame = discarded.group_by(["source", "kind", "reason"]).len()
+    stats: pl.DataFrame = discarded.group_by(["value_type", "reason"]).len()
 
     discarded_tx_ids = discarded_transcript_ids(discarded)
 

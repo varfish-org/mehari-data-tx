@@ -18,10 +18,6 @@ views:
     dataset: mehari_check_db_stats
     render-table:
       columns:
-        source:
-          display-mode: normal
-        kind:
-          display-mode: normal
         reason:
           display-mode: normal
         len:
@@ -58,8 +54,6 @@ views:
     dataset: discards_of_interest
     render-table:
       columns:
-        kind:
-          display-mode: normal
         idtype:
           display-mode: normal
         id:

@@ -27,6 +27,11 @@ rule all:
             [
                 "results/{alias}/datavzrd-report/{seqrepo}",
             ],
-            alias=["GRCh37-refseq", "GRCh38-refseq", "GRCh38-ensembl", "GRCh37-ensembl"],
+            alias=[
+                "GRCh37-refseq",
+                "GRCh38-refseq",
+                "GRCh38-ensembl",
+                "GRCh37-ensembl",
+            ],
             seqrepo=["seqrepo_fixed"],
         ),
