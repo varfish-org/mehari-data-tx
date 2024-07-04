@@ -6,4 +6,6 @@ dependencies:
   - wget ==1.21.4
   - grep ==3.11
   - python =3.12
+  - requests ==2.32.3
   - gzip ==1.13
+  - coreutils ==8.32

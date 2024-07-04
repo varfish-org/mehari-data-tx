@@ -25,7 +25,8 @@ rule all:
     input:
         expand(
             [
-                "results/{alias}/datavzrd-report/{seqrepo}",
+                "results/{alias}/mehari/{seqrepo}/txs.bin.zst.discards.tsv",
+                "results/{alias}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
             ],
             alias=[
                 "GRCh37-refseq",

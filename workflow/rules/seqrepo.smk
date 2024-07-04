@@ -55,8 +55,6 @@ rule fetch_missing_sequence:
             "results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta",
             non_empty=True,
         ),
-    params:
-        accession=lambda wildcards: wildcards.accession,
     resources:
         ratelimit=1,
     cache: "omit-software"
@@ -73,15 +71,36 @@ rule aggregate_missing_sequences:
         missing_sequence_files,
     output:
         missing_fasta="results/{assembly}-{source}/mehari/seqrepo/missing.fasta",
+        checksum="results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5",
+        old_checksum=temp(
+            "results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5.old.tmp"
+        ),
+        new_checksum=temp(
+            "results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5.new.tmp"
+        ),
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/fetch-missing.log",
     shell:
         """
         (
-        if [ -z {input} ]; then
-            touch {output}
-        else
+        if [ ! -s {output.missing_fasta} ]; then
+            md5sum {output.missing_fasta} > {output.old_checksum}
+        fi
+
+        if [ ! -z {input} ]; then
             cat {input} > {output.missing_fasta}
+        fi
+
+        md5sum {output.missing_fasta} > {output.new_checksum}
+
+        if [ ! -s {output.old_checksum} ]; then
+            if [ ! -z "`diff -q {output.old_checksum} {output.new_checksum}`" ]; then
+                cp {output.new_checksum} {output.checksum}
+            fi
+        else
+            cp {output.new_checksum} {output.checksum}
         fi
         ) >{log} 2>&1
         """
@@ -91,13 +110,16 @@ rule fix_missing_sequences_in_seqrepo:
     input:
         seqrepo_root="results/{assembly}-{source}/seqrepo",
         seqrepo_instance="results/{assembly}-{source}/seqrepo/master",
-        missing_fasta="results/{assembly}-{source}/mehari/seqrepo/missing.fasta",
+        missing_fasta_checksum="results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5",
     output:
         seqrepo_root_fixed=directory("results/{assembly}-{source}/seqrepo_fixed"),
         seqrepo_fixed_instance=directory(
             "results/{assembly}-{source}/seqrepo_fixed/master"
         ),
     params:
+        missing_fasta=lambda wildcards, input: input.missing_fasta_checksum.rstrip(
+            ".md5"
+        ),
         refseq_namespace=config["namespaces"]["refseq"],
         ensembl_namespace=config["namespaces"]["ensembl"],
     conda:
@@ -108,7 +130,7 @@ rule fix_missing_sequences_in_seqrepo:
         """
         cp -r {input.seqrepo_root}/* {output.seqrepo_root_fixed}
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root_fixed} \
-          load --instance-name master --namespace {params.refseq_namespace} {input.missing_fasta} | tail
+          load --instance-name master --namespace {params.refseq_namespace} {params.missing_fasta} | tail
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root_fixed} \
-          load --instance-name master --namespace {params.ensembl_namespace} {input.missing_fasta} | tail
+          load --instance-name master --namespace {params.ensembl_namespace} {params.missing_fasta} | tail
         """

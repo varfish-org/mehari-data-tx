@@ -22,6 +22,8 @@ rule merge_ensembl_sequence:
     log:
         "logs/{assembly}-{source}/merge_sequence.log",
     cache: "omit-software"  # save space and time with between workflow caching (see docs)
+    conda:
+        "../envs/base.yaml"
     shell:
         """
         (

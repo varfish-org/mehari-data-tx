@@ -20,6 +20,6 @@ def get_fasta(accession: str) -> str | None:
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with open(snakemake.output.missing_fasta, "w") as out:
-        fasta = get_fasta(snakemake.params.accession)
+        fasta = get_fasta(snakemake.wildcards.accession)
         if fasta:
             print(fasta, file=out)

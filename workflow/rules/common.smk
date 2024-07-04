@@ -74,7 +74,7 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
 
 
 def ensembl_cdot(wildcards: Wildcards) -> str:
-    alias_ensembl = wildcards.assembly + "-ensembl"
+    alias_ensembl = f"{wildcards.assembly}-ensembl"
     return f"results/{alias_ensembl}/cdot/{alias_ensembl}.cdot.json.gz"
 
 
@@ -98,14 +98,14 @@ def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str
     return " ".join(f"--path-cdot-json {path}" for path in cdot_files.values())
 
 
-def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> set[str]:
+def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
-    return set(config["transcripts"][alias].get("fix_cds", []))
+    return list(sorted(set(config["transcripts"][alias].get("fix_cds", []))))
 
 
-def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> set[str]:
+def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
-    return set(config["transcripts"][alias].get("add_from_ensembl", []))
+    return list(sorted(set(config["transcripts"][alias].get("add_from_ensembl", []))))
 
 
 def missing_sequence_files(wildcards: Wildcards) -> list[str]:
@@ -115,6 +115,7 @@ def missing_sequence_files(wildcards: Wildcards) -> list[str]:
         assembly=assembly, source=source
     ).output["missing_txt"].open() as file:
         accessions = [s.strip() for s in file]
+        accessions = list(sorted(set(accessions)))
     return [
         f"results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta"
         for accession in accessions

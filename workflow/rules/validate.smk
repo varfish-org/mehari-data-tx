@@ -35,6 +35,8 @@ rule cdot_tx_ids:
         tx_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.txids.txt",
     log:
         "logs/{assembly}-{source}/cdot/txids.log",
+    conda:
+        "../envs/jq.yaml"
     shell:
         """
         (
@@ -54,7 +56,7 @@ rule check_mehari_db:
     output:
         stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         report=report(
-            "results/{assembly}-{source}/{seqrepo}/report/mehari_db_check.txt",
+            "results/{assembly}-{source}/mehari/{seqrepo}/report/mehari_db_check.txt",
             category="{assembly}-{source}",
             subcategory="{seqrepo}",
         ),
@@ -86,7 +88,7 @@ rule datavzrd:
     input:
         config=workflow.source_path("../resources/datavzrd/report.datavzrd.yaml"),
         mehari_check_db_stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
-        fix_incorrect_cds="results/{assembly}-{source}/report/fix_incorrect_cds.tsv",
+        fix_incorrect_cds="results/{assembly}-{source}/cdot/fix_incorrect_cds.tsv",
         refseq_id_to_ensembl_id="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
         discards_of_interest="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.discards.tsv",
     params:

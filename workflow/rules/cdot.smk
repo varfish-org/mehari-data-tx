@@ -44,6 +44,8 @@ rule fetch_incorrect_entries:
         xml="results/{assembly}-{source}/cdot/nuccore.xml.gz",
     log:
         "logs/{assembly}-{source}/cdot/fetch_incorrect_entries.log",
+    conda:
+        "../envs/base.yaml"
     script:
         "../scripts/cdot/fetch_incorrect_entries.py"
 
@@ -54,7 +56,9 @@ rule fix_incorrect_cds:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.hgnc.json.gz",
     output:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.hgnc.cds.json.gz",
-        report="results/{assembly}-{source}/report/fix_incorrect_cds.tsv",
+        report="results/{assembly}-{source}/cdot/fix_incorrect_cds.tsv",
+    conda:
+        "../envs/datastuff.yaml"
     log:
         "logs/{assembly}-{source}/cdot/fix_incorrect_cds.log",
     script:
@@ -100,6 +104,8 @@ rule find_select_transcripts:
         accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.select.txt",
     log:
         "logs/{assembly}-{source}/report/find_select_transcripts.log",
+    conda:
+        "../envs/jq.yaml"
     shell:
         """(
         pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.genome_builds[].tag) | select (. != null) | select( .genome_builds[].tag | contains("Select")).id' | sort > {output.accessions}
@@ -113,6 +119,8 @@ rule find_partial_transcripts:
         accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.partial.txt",
     log:
         "logs/{assembly}-{source}/report/find_partial_transcripts.log",
+    conda:
+        "../envs/jq.yaml"
     shell:
         """(
         pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.partial == 1 ).id' | sort > {output.accessions}
@@ -125,6 +133,8 @@ rule determine_partial_but_select_transcripts:
         partial="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.partial.txt",
     output:
         accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.partial_but_select.txt",
+    conda:
+        "../envs/base.yaml"
     log:
         "logs/{assembly}-{source}/report/determine_partial_but_select_transcripts.log",
     shell:
@@ -140,6 +150,8 @@ rule lookup_ensembl_ids_for_refseq_ids:
         tsv="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
     log:
         "logs/{assembly}-{source}/lookup/lookup_ensembl_ids_for_refseq_ids.log",
+    conda:
+        "../envs/base.yaml"
     script:
         "../scripts/lookup_ensembl_ids_for_refseq_ids.py"
 
@@ -150,6 +162,8 @@ rule cdot_graft_ensembl_ids_for_certain_refseq_ids:
         lookup="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
     output:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.grafted.json.gz",
+    conda:
+        "../envs/datastuff.yaml"
     log:
         "logs/{assembly}-{source}/cdot/graft_ensembl_ids.log",
     script:
