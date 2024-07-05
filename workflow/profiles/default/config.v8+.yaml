@@ -1,4 +1,5 @@
 software-deployment-method: conda
 cache: True
 resources:
-  ratelimit: 5
+  ratelimit: 3
+

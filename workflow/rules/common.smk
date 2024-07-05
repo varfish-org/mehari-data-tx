@@ -108,15 +108,7 @@ def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> list[str]:
     return list(sorted(set(config["transcripts"][alias].get("add_from_ensembl", []))))
 
 
-def missing_sequence_files(wildcards: Wildcards) -> list[str]:
-    assembly = wildcards.assembly
-    source = wildcards.source
-    with checkpoints.detect_missing_sequences.get(
-        assembly=assembly, source=source
-    ).output["missing_txt"].open() as file:
-        accessions = [s.strip() for s in file]
-        accessions = list(sorted(set(accessions)))
-    return [
-        f"results/{assembly}-{source}/mehari/seqrepo/missing/{accession}.fasta"
-        for accession in accessions
-    ]
+def parse_missing_accessions(_wildcards, input) -> set[str]:
+    with open(input.missing_accessions) as file:
+        accessions = {s.strip() for s in file}
+    return accessions
