@@ -1,3 +1,6 @@
+import os
+
+
 rule initialize_seqrepo:
     input:
         ensembl="results/{assembly}-ensembl/reference/{assembly}-ensembl.fasta",
@@ -57,6 +60,8 @@ rule fetch_missing_sequence:
         ),
     resources:
         ratelimit=1,
+    params:
+        accession=lambda wildcards: wildcards.accession,
     cache: "omit-software"
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/fetch-missing/{accession}.log",
@@ -72,38 +77,27 @@ rule aggregate_missing_sequences:
     output:
         missing_fasta="results/{assembly}-{source}/mehari/seqrepo/missing.fasta",
         checksum="results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5",
-        old_checksum=temp(
-            "results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5.old.tmp"
-        ),
         new_checksum=temp(
             "results/{assembly}-{source}/mehari/seqrepo/missing.fasta.md5.new.tmp"
         ),
-    conda:
-        "../envs/base.yaml"
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/fetch-missing.log",
-    shell:
-        """
-        (
-        if [ ! -s {output.missing_fasta} ]; then
-            md5sum {output.missing_fasta} > {output.old_checksum}
-        fi
-
-        if [ ! -z {input} ]; then
-            cat {input} > {output.missing_fasta}
-        fi
-
-        md5sum {output.missing_fasta} > {output.new_checksum}
-
-        if [ ! -s {output.old_checksum} ]; then
-            if [ ! -z "`diff -q {output.old_checksum} {output.new_checksum}`" ]; then
-                cp {output.new_checksum} {output.checksum}
-            fi
-        else
-            cp {output.new_checksum} {output.checksum}
-        fi
-        ) >{log} 2>&1
-        """
+    run:
+        if os.path.exists(output.checksum):
+            old_checksum = open(output.checksum).readline().strip().split()[0]
+        else:
+            old_checksum = None
+        if len(input) > 0:
+            shell("cat {input} > {output.missing_fasta}")
+            shell("md5sum {output.missing_fasta} > {output.new_checksum}")
+            new_checksum = open(output.new_checksum).readline().strip().split()[0]
+        else:
+            shell("touch {output.missing_fasta}")
+            shell("md5sum {output.missing_fasta} > {output.checksum}")
+            shell("touch {output.new_checksum}")
+            new_checksum = None
+        if old_checksum != new_checksum:
+            shell("cp -up {output.new_checksum} {output.checksum}")
 
 
 rule fix_missing_sequences_in_seqrepo:
