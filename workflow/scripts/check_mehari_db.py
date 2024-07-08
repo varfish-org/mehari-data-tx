@@ -83,6 +83,12 @@ def main():
         if not tx_discarded and not tx_kept:
             report.append(f"Neither kept nor discarded:\t{transcript_id}")
             valid = False
+    discarded_mane = discarded.filter(
+        pl.col("tags").str.contains("^.*Mane.*$"), pl.col("value_type").str == "Hgnc"
+    ).select(pl.col("value_type"), pl.col("value"))
+    for row in discarded_mane.rows():
+        report.append(f"Discarded MANE transcript:\t{row}")
+        valid = False
     report.append(f"Status:\t{'OK' if valid else 'ERROR'}")
 
     return stats, report
