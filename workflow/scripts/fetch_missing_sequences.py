@@ -5,6 +5,8 @@ import sys
 from contextlib import redirect_stderr
 from io import BytesIO
 from itertools import batched
+from math import ceil
+from time import sleep
 from typing import Collection
 
 import requests
@@ -56,13 +58,33 @@ def fetch_ensembl(accessions: Collection[str]):
     ext = "/sequence/id"
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     max_ids = 50
-    for batch in batched(accessions, max_ids):
+    batches = list(batched(accessions, max_ids))
+    retry = False
+    while len(batches) > 0:
+        if not retry:
+            batch = batches.pop(0)
         ids, versions = zip(*(accession.rsplit(".", 1) for accession in batch))
         data = {"ids": ids, "type": "cdna"}
+        # To be on the safe side, we sleep for 1/15 seconds to have *at most* 15 requests per second.
+        # For more thorough rate limiting behaviour, we should check the headers of the response.
+        sleep(1.0 / 15.0)
         r = requests.post(server + ext, headers=headers, data=json.dumps(data))
 
         if not r.ok:
-            raise ValueError(r)
+            if seconds := r.headers.get("Retry-After"):
+                # n_requests = int(r.headers.get("X-RateLimit-Limit") or "0")
+                # n_remaining = int(r.headers.get("X-RateLimit-Remaining") or "0")
+                # period = int(r.headers.get("X-RateLimit-Period") or "0")
+                # reset = int(r.headers.get("X-RateLimit-Reset") or "0")
+                seconds = float(seconds)
+                print(f"Waiting {seconds} seconds.", file=sys.stderr)
+                retry = True
+                sleep(int(ceil(seconds)))
+                continue
+            else:
+                raise ValueError(r)
+
+        retry = False
         decoded = r.json()
         for accession, version in zip(ids, versions):
             if entry := decoded.get(accession):
