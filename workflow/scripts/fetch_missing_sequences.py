@@ -4,6 +4,7 @@ import re
 import sys
 from contextlib import redirect_stderr
 from io import BytesIO
+from itertools import batched
 from typing import Collection
 
 import requests
@@ -55,8 +56,8 @@ def fetch_ensembl(accessions: Collection[str]):
     ext = "/sequence/id"
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
     max_ids = 50
-    for i in range(0, len(accessions), max_ids):
-        ids, versions = zip(*(accession.rsplit(".", 1) for accession in accessions))
+    for batch in batched(accessions, max_ids):
+        ids, versions = zip(*(accession.rsplit(".", 1) for accession in batch))
         data = {"ids": ids, "type": "cdna"}
         r = requests.post(server + ext, headers=headers, data=json.dumps(data))
 
