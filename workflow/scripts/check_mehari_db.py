@@ -83,12 +83,31 @@ def main():
         if not tx_discarded and not tx_kept:
             report.append(f"Neither kept nor discarded:\t{transcript_id}")
             valid = False
+
     discarded_mane = discarded.filter(
-        pl.col("tags").str.contains("^.*Mane.*$"), pl.col("value_type").str == "Hgnc"
-    ).select(pl.col("value_type"), pl.col("value"))
-    for row in discarded_mane.rows():
-        report.append(f"Discarded MANE transcript:\t{row}")
+        pl.col("tags").str.contains("^.*Mane.*$"), pl.col("value_type").is_in(["Hgnc"])
+    ).select(pl.col("value_type"), pl.col("value"), pl.col("gene_name"))
+    for t, v, g in discarded_mane.rows():
+        report.append(f"Discarded MANE transcript:\t{t}:{v}\t{g}")
         valid = False
+
+    NO_TRANSCRIPT_LEFT = ["NoTranscriptLeft"]
+    investigate = discarded.filter(
+        pl.col("value_type").is_in(["Hgnc"]),
+        pl.col("reason").str.contains("NoTranscriptLeft"),
+    ).select(
+        pl.col("value_type"),
+        pl.col("value"),
+        pl.col("gene_name"),
+        pl.col("reason")
+        .str.split(" | ")
+        .list.set_difference(NO_TRANSCRIPT_LEFT)
+        .list.join(", "),
+    )
+    for t, v, g, r in investigate.rows():
+        report.append(f"No Transcript left:\t{t}:{v}\t{g}\t{r}")
+        # TODO check if this is a known issue, otherwise set valid = False
+
     report.append(f"Status:\t{'OK' if valid else 'ERROR'}")
 
     return stats, report

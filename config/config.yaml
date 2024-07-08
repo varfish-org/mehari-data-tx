@@ -88,10 +88,20 @@ transcripts:
       release: 0.2.25
       custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
     fix_cds: [
-      # TODO: transcript retrieval for GRCh37, uses a dummy value atm
-      "NM_182705.2",
+      "NM_004892.6",
     ]
-    add_from_ensembl: []
+    add_from_ensembl: [
+      # All of these are marked as CDS join(a..b,c..d) in nuccore:
+      # OAZ1
+      "NM_004152.3",
+      "NM_001301020.1",
+      # OAZ2
+      "NM_002537.3",
+      "NM_001301302.1",
+      # OAZ3
+      "NM_001301371.1",
+      "NM_001134939.1",
+    ]
   # the following entry is semi hardcoded for now
   # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:

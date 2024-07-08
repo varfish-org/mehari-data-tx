@@ -49,6 +49,10 @@ def update_cdot(cdot, doc):
                 f"{accession=}:\n{cds_positions[accession]=}"
             )
         # assume start and stop codon are at from and to positions of the CDS
+        if not cdot["transcripts"][accession].get("start_codon"):
+            cdot["transcripts"][accession]["start_codon"] = None
+        if not cdot["transcripts"][accession].get("stop_codon"):
+            cdot["transcripts"][accession]["stop_codon"] = None
         report.append(
             (
                 accession,
