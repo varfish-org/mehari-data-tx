@@ -126,6 +126,9 @@ namespaces:
   ensembl: Ensembl
   refseq: NCBI
 
+human-phenotype-ontology:
+  genes_to_disease:
+    release: v2024-07-01
 
 # mehari version to use (currently ignored)
 mehari:

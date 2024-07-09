@@ -99,6 +99,18 @@ properties:
         format: date
     required:
       - version
+  human-phenotype-ontology:
+    type: object
+    properties:
+      genes_to_disease:
+        type: object
+        properties:
+          release:
+            type: string
+        required:
+          - release
+    required:
+      - genes_to_disease
   namespaces:
     type: object
     properties:
@@ -121,6 +133,7 @@ required:
   - reference
   - transcripts
   - hgnc
+  - human-phenotype-ontology
   - namespaces
   - mehari
 

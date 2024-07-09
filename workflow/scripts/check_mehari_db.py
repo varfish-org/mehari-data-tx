@@ -3,13 +3,19 @@ from contextlib import redirect_stderr
 import polars as pl
 
 
-def cdot_transcript_ids() -> set[str]:
-    with open(snakemake.input.cdot_tx_ids, "r") as f:
+def read_cdot_transcript_ids() -> set[str]:
+    with open(snakemake.input.cdot_transcript_ids, "r") as f:
         cdot_transcript_ids = set(line.rstrip() for line in f)
         return cdot_transcript_ids
 
 
-def discarded_transcripts() -> pl.DataFrame:
+def read_cdot_hgnc_ids() -> set[str]:
+    with open(snakemake.input.cdot_hgnc_ids, "r") as f:
+        cdot_hgnc_ids = set(line.rstrip() for line in f)
+        return cdot_hgnc_ids
+
+
+def read_discarded_transcripts() -> pl.DataFrame:
     df = (
         pl.read_ndjson(
             snakemake.input.db_discarded,
@@ -39,29 +45,43 @@ def discarded_transcripts() -> pl.DataFrame:
     return df
 
 
-def discarded_transcript_ids(discarded: pl.DataFrame) -> set[str]:
-    discarded_transcript_ids = discarded.filter(
-        pl.col("value_type").is_in(["TxId"])
-    ).select(pl.col("value"))
-    return set(discarded_transcript_ids.to_series().to_list())
+def get_discarded_transcript_ids(discarded: pl.DataFrame) -> set[str]:
+    discarded_tx_ids = discarded.filter(pl.col("value_type").is_in(["TxId"])).select(
+        pl.col("value")
+    )
+    return set(discarded_tx_ids.to_series().to_list())
 
 
-def kept_transcript_ids() -> set[str]:
-    with open(snakemake.input.kept, "r") as f:
-        return set(l.strip() for l in f)
+def read_kept_transcript_ids() -> set[str]:
+    with open(snakemake.input.kept_transcript_ids, "r") as f:
+        return set(line.strip() for line in f)
+
+
+def read_kept_gene_ids() -> set[str]:
+    with open(snakemake.input.kept_hgnc_ids, "r") as f:
+        return set(line.strip() for line in f)
+
+
+def read_disease_genes() -> pl.DataFrame:
+    df = pl.read_csv(snakemake.input.genes_to_disease, separator="\t")
+    return df
 
 
 def main():
     report = []
 
-    cdot_tx_ids = cdot_transcript_ids()
+    cdot_tx_ids = read_cdot_transcript_ids()
+    cdot_hgnc_ids = read_cdot_hgnc_ids()
 
-    discarded = discarded_transcripts()
+    disease_gene_df = read_disease_genes()
+
+    discarded = read_discarded_transcripts()
     stats: pl.DataFrame = discarded.group_by(["value_type", "reason"]).len()
 
-    discarded_tx_ids = discarded_transcript_ids(discarded)
+    discarded_tx_ids = get_discarded_transcript_ids(discarded)
 
-    kept_tx_ids = kept_transcript_ids()
+    kept_tx_ids = read_kept_transcript_ids()
+    kept_hgnc_ids = read_kept_gene_ids()
 
     report.append(f"Number of transcripts in cdot:\t{len(cdot_tx_ids)}")
     report.append(f"Number of discarded transcripts:\t{len(discarded_tx_ids)}")
@@ -74,6 +94,22 @@ def main():
     report.append(f"Number of discarded transcripts in cdot:\t{num_discarded}")
 
     valid = num_kept + num_discarded == len(cdot_tx_ids)
+
+    for gene in disease_gene_df.iter_rows(named=True):
+        hgnc_id = gene["hgnc_id"]
+        if hgnc_id in kept_hgnc_ids:
+            continue
+        if hgnc_id not in cdot_hgnc_ids:
+            report.append(f"Gene not in cdot:\t{hgnc_id}")
+            continue
+        hgnc_id = hgnc_id.lstrip("HGNC:")
+        reason = discarded.filter(pl.col("value_type").is_in(["Hgnc"])).row(
+            by_predicate=(pl.col("value") == hgnc_id),
+            named=True,
+        )["reason"]
+        report.append(f"Discarded disease gene:\t{hgnc_id}\t{reason}")
+        valid = False
+
     for transcript_id in cdot_tx_ids:
         tx_discarded = transcript_id in discarded_tx_ids
         tx_kept = transcript_id in kept_tx_ids
@@ -87,7 +123,7 @@ def main():
     discarded_mane = discarded.filter(
         pl.col("tags").str.contains("^.*Mane.*$"), pl.col("value_type").is_in(["Hgnc"])
     ).select(pl.col("value_type"), pl.col("value"), pl.col("gene_name"))
-    for t, v, g in discarded_mane.rows():
+    for t, v, g in discarded_mane.iter_rows():
         report.append(f"Discarded MANE transcript:\t{t}:{v}\t{g}")
         valid = False
 

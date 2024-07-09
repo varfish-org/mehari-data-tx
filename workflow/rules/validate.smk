@@ -28,31 +28,71 @@ rule mehari_transcript_ids:
         """yq -r '.txDb.transcripts[].id' <(pigz -dc {input.db_yaml}) > {output.tx_ids} 2> {log}"""
 
 
+rule mehari_hgnc_ids:
+    input:
+        db_yaml="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.yaml.gz",
+    output:
+        hgnc_ids="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.hgnc_ids.txt",
+    log:
+        "logs/{assembly}-{source}/mehari/{seqrepo}/hgnc_ids.log",
+    conda:
+        "../envs/jq.yaml"
+    shell:
+        """yq -r '.txDb.geneToTx[].geneId' <(pigz -dc {input.db_yaml}) > {output.hgnc_ids} 2> {log}"""
+
+
 rule cdot_tx_ids:
     input:
         unpack(cdot_input_mapping),
     output:
-        tx_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.txids.txt",
+        transcript_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.transcript_ids.txt",
     log:
-        "logs/{assembly}-{source}/cdot/txids.log",
+        "logs/{assembly}-{source}/cdot/transcript_ids.log",
     conda:
         "../envs/jq.yaml"
     shell:
         """
         (
-        touch {output.tx_ids}
+        touch {output.transcript_ids}
         for f in {input}; do
-            pigz -dcf ${{f}} | jq -r '.transcripts | keys[]' >> {output.tx_ids}
+            pigz -dcf ${{f}} | jq -r '.transcripts | keys[]' >> {output.transcript_ids}
         done
+        ) >{log} 2>&1
+        """
+
+
+rule cdot_hgnc_ids:
+    input:
+        unpack(cdot_input_mapping),
+    output:
+        hgnc_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.hgnc_ids.txt",
+        tmp=temp(
+            "results/{assembly}-{source}/cdot/{assembly}-{source}.hgnc_ids.txt.tmp"
+        ),
+    log:
+        "logs/{assembly}-{source}/cdot/hgnc_ids.log",
+    conda:
+        "../envs/jq.yaml"
+    shell:
+        """
+        (
+        touch {output.hgnc_ids}; touch {output.tmp}
+        for f in {input}; do
+            pigz -dcf ${{f}} | jq -r '.genes[].hgnc | select(. != null)' >> {output.tmp}
+        done
+        cat {output.tmp} | sort -n | uniq > {output.hgnc_ids}
         ) >{log} 2>&1
         """
 
 
 rule check_mehari_db:
     input:
-        kept="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.transcript_ids.txt",
+        kept_transcript_ids="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.transcript_ids.txt",
+        kept_hgnc_ids="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.hgnc_ids.txt",
         db_discarded="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
-        cdot_tx_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.txids.txt",
+        cdot_transcript_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.transcript_ids.txt",
+        cdot_hgnc_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.hgnc_ids.txt",
+        genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
     output:
         stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         report=report(

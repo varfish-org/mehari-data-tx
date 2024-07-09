@@ -112,3 +112,9 @@ def parse_missing_accessions(_wildcards, input) -> set[str]:
     with open(input.missing_accessions) as file:
         accessions = {s.strip() for s in file}
     return accessions
+
+
+def get_genes_to_disease_download_url() -> str:
+    url = "https://github.com/obophenotype/human-phenotype-ontology/releases/download/{release}/genes_to_disease.txt"
+    release = config["human-phenotype-ontology"]["genes_to_disease"]["release"]
+    return url.format(release=release)

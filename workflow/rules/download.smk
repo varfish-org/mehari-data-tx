@@ -63,3 +63,30 @@ rule get_refseq_sequence:
         "../envs/base.yaml"
     script:
         "../scripts/download_refseq.py"
+
+
+rule get_genes_to_disease:
+    output:
+        "results/human-phenotype-ontology/genes_to_disease.tsv",
+    params:
+        url=get_genes_to_disease_download_url(),
+    conda:
+        "../envs/base.yaml"
+    log:
+        "logs/human-phenotype-ontology/get_genes_to_disease.log",
+    shell:
+        """wget --quiet -O {output} {params.url} 2> {log}"""
+
+
+rule add_hgnc_id_to_genes_to_disease:
+    input:
+        genes_to_disease="results/human-phenotype-ontology/genes_to_disease.tsv",
+        hgnc_complete_set="results/hgnc/hgnc_complete_set.json",
+    output:
+        genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
+    conda:
+        "../envs/datastuff.yaml"
+    log:
+        "logs/human-phenotype-ontology/add_hgnc_id_to_genes_to_disease.log",
+    script:
+        "../scripts/human_phenotype_ontology/add_hgnc_id_to_genes_to_disease.py"
