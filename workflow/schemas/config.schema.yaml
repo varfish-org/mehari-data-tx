@@ -67,10 +67,21 @@ definitions:
               - custom
           - required:
               - source
-      fix_cds:
-        type: array
-        items:
-          type: string
+      fixes:
+        type: object
+        properties:
+          fix_cds:
+            type: array
+            items:
+              type: string
+          add_from_ensembl:
+            type: array
+            items:
+              type: string
+          polyA:
+            type: array
+            items:
+              type: string
     required:
       - cdot
 

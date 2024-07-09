@@ -100,7 +100,7 @@ def main():
         if hgnc_id in kept_hgnc_ids:
             continue
         if hgnc_id not in cdot_hgnc_ids:
-            report.append(f"Gene not in cdot:\t{hgnc_id}")
+            report.append(f"Disease gene not in cdot:\t{hgnc_id}")
             continue
         hgnc_id = hgnc_id.lstrip("HGNC:")
         reason = discarded.filter(pl.col("value_type").is_in(["Hgnc"])).row(

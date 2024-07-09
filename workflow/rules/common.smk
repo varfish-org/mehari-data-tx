@@ -100,12 +100,29 @@ def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str
 
 def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
-    return list(sorted(set(config["transcripts"][alias].get("fix_cds", []))))
+    return list(
+        sorted(set(config["transcripts"][alias].get("fixes", {}).get("fix_cds", [])))
+    )
 
 
 def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
-    return list(sorted(set(config["transcripts"][alias].get("add_from_ensembl", []))))
+    return list(
+        sorted(
+            set(
+                config["transcripts"][alias]
+                .get("fixes", {})
+                .get("add_from_ensembl", [])
+            )
+        )
+    )
+
+
+def transcripts_to_fix_polyA(wildcards: Wildcards) -> list[str]:
+    alias = get_alias(wildcards)
+    return list(
+        sorted(set(config["transcripts"][alias].get("fixes", {}).get("polyA", [])))
+    )
 
 
 def parse_missing_accessions(_wildcards, input) -> set[str]:
