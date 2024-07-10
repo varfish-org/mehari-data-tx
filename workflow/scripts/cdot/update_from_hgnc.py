@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import enum
 import gzip
 import json
 import sys
@@ -17,11 +16,6 @@ def load_json(path: str) -> dict:
     else:
         with open(path, "rt") as inputf:
             return json.load(inputf)
-
-
-class Mode(enum.StrEnum):
-    create = "create"
-    update = "update"
 
 
 LOCUS_TYPE_TO_BIOTYPE = {
@@ -57,13 +51,36 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
     name_to_hgnc = defaultdict(lambda: defaultdict(str))
     id_to_hgnc = defaultdict(dict)
     hgnc_to_biotype = defaultdict(set)
+    sources = [
+        "entrez_id",
+        "ensembl_gene_id",
+        "symbol",
+        "refseq_accession",
+        "mane_select",
+    ]
     for record in hgnc["docs"]:
         hgnc_id = record["hgnc_id"][5:]  # strip "HGNC:" prefix
-        for source in ["ensembl_gene_id", "symbol", "entrez_id"]:
+        for source in sources:
             if r := record.get(source):
-                name_to_hgnc[source][r] = hgnc_id
+                if source == "mane_select":
+                    ensembl = list(filter(lambda x: x.startswith("ENST"), r)) or []
+                    refseq = list(filter(lambda x: x.startswith("NM_"), r)) or []
+                    if ensembl:
+                        for entry in ensembl:
+                            name_to_hgnc["mane_select_ensembl"][entry] = hgnc_id
+                    if refseq:
+                        for entry in refseq:
+                            name_to_hgnc["mane_select_refseq"][entry] = hgnc_id
+                else:
+                    if not isinstance(r, list):
+                        r = [r]
+                    for r_ in r:
+                        name_to_hgnc[source][r_] = hgnc_id
                 if source == "entrez_id":
-                    id_to_hgnc[r] = record
+                    if not isinstance(r, list):
+                        r = [r]
+                    for r_ in r:
+                        id_to_hgnc[r_] = record
         if r := record.get("locus_type"):
             if b := LOCUS_TYPE_TO_BIOTYPE.get(r):
                 if b != "other":
@@ -81,42 +98,99 @@ def update_cdot(
     check transcript entries in cdot file for missing hgnc ids
     and add them from the hgnc file
     """
-    report: list[tuple[str, str, str | None]] = []
+    report: list[tuple[str, str, str, str | None, str]] = []
 
     for key, gene in cdot["genes"].items():
-        hgnc_id = gene.get("hgnc", None)
-        if not hgnc_id:
+        gene_hgnc_id = gene.get("hgnc", None)
+        if not gene_hgnc_id:
             print("Gene without HGNC ID:", key, file=sys.stderr)
             for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                if hgnc_id := name_to_hgnc[source].get(
-                    key, name_to_hgnc[source].get(gene["gene_symbol"], None)
-                ):
+                if hgnc_id := name_to_hgnc[source].get(key, None):
                     print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
                     gene["hgnc"] = hgnc_id
                     update_target["genes"].update({key: gene})
                     break
-            report.append(("gene", key, hgnc_id))
-        biotype = gene.get("biotype", [])
-        biotype = set(biotype) | hgnc_to_biotype.get(hgnc_id, set())
-        gene["biotype"] = list(biotype)
-        update_target["genes"].update({key: gene})
+            report.append(("gene", "hgnc", key, None, hgnc_id))
+        else:
+            for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
+                if hgnc_id := name_to_hgnc[source].get(key, None):
+                    if hgnc_id == gene_hgnc_id:
+                        continue
+                    print("Gene with outdated HGNC ID:", key, file=sys.stderr)
+                    print(
+                        f"→ Updated HGNC ID from {gene_hgnc_id} to {hgnc_id}",
+                        file=sys.stderr,
+                    )
+                    gene["hgnc"] = hgnc_id
+                    update_target["genes"].update({key: gene})
+                    report.append(("gene", "hgnc", key, gene_hgnc_id, hgnc_id))
+                    break
+
+        biotype_orig = list(sorted(gene.get("biotype", [])))
+        biotype = list(
+            sorted(set(biotype_orig) | hgnc_to_biotype.get(gene_hgnc_id, set()))
+        )
+        if biotype_orig != biotype:
+            gene["biotype"] = biotype
+            update_target["genes"].update({key: gene})
+            report.append(
+                ("genes", "biotype", key, ",".join(biotype_orig), ",".join(biotype))
+            )
 
     for key, tx in cdot["transcripts"].items():
-        gene = tx["gene_name"]
-        hgnc_id = tx.get("hgnc", None)
-        if not hgnc_id:
-            print("Transcript without HGNC ID:", gene, file=sys.stderr)
-            for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                if hgnc_id := name_to_hgnc[source].get(gene, None):
-                    print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
-                    tx["hgnc"] = hgnc_id
-                    update_target["transcripts"].update({key: tx})
-                    break
-            report.append(("transcript", key, hgnc_id))
-        biotype = tx.get("biotype", [])
-        biotype = set(biotype) | hgnc_to_biotype.get(hgnc_id, set())
-        tx["biotype"] = list(biotype)
-        update_target["transcripts"].update({key: tx})
+        keys = (key, tx["id"], tx["gene_name"])
+        transcript_hgnc_id = tx.get("hgnc", None)
+        sources = [
+            "entrez_id",
+            "ensembl_gene_id",
+            "refseq_accession",
+            "mane_select_ensembl",
+            "mane_select_refseq",
+            "symbol",
+        ]
+        if not transcript_hgnc_id:
+            print("Transcript without HGNC ID:", keys, file=sys.stderr)
+            for source in sources:
+                for k in keys:
+                    if hgnc_id := name_to_hgnc[source].get(k, None):
+                        print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
+                        tx["hgnc"] = hgnc_id
+                        update_target["transcripts"].update({key: tx})
+                        break
+            report.append(("transcript", "hgnc", key, None, hgnc_id))
+        else:
+            for source in sources:
+                for k in keys:
+                    if hgnc_id := name_to_hgnc[source].get(k, None):
+                        if hgnc_id == transcript_hgnc_id:
+                            continue
+                        print("Transcript with outdated HGNC ID:", k, file=sys.stderr)
+                        print(
+                            f"→ Updated HGNC ID from {transcript_hgnc_id} to {hgnc_id}",
+                            file=sys.stderr,
+                        )
+                        tx["hgnc"] = hgnc_id
+                        update_target["transcripts"].update({key: tx})
+                        report.append(
+                            ("transcript", "hgnc", key, transcript_hgnc_id, hgnc_id)
+                        )
+                        break
+        biotype_orig = list(sorted(tx.get("biotype", [])))
+        biotype = list(
+            sorted(set(biotype_orig) | hgnc_to_biotype.get(transcript_hgnc_id, set()))
+        )
+        if biotype_orig != biotype:
+            tx["biotype"] = biotype
+            update_target["transcripts"].update({key: tx})
+            report.append(
+                (
+                    "transcript",
+                    "biotype",
+                    key,
+                    ",".join(biotype_orig),
+                    ",".join(biotype),
+                )
+            )
 
     return update_target, report
 
@@ -130,6 +204,17 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with gzip.open(snakemake.output.cdot, "wt") as out:
         json.dump(cdot, out, indent=2)
         out.flush()
-    pd.DataFrame(report, columns=["type", "key", "hgnc_id"]).to_csv(
-        snakemake.output.report, sep="\t", index=False
+    df = pd.DataFrame(
+        report, columns=["type", "what", "key", "hgnc_id_orig", "hgnc_id_new"]
     )
+    df["kind"] = None
+    df.loc[
+        df["hgnc_id_orig"].notnull() & (df["hgnc_id_orig"] != df["hgnc_id_new"]), "kind"
+    ] = "updated"
+    df.loc[df["hgnc_id_orig"].isnull() & df["hgnc_id_new"].notnull(), "kind"] = (
+        "fixed_missing"
+    )
+    df.loc[df["hgnc_id_orig"].isnull() & df["hgnc_id_new"].isnull(), "kind"] = (
+        "still_missing"
+    )
+    df.to_csv(snakemake.output.report, sep="\t", index=False)
