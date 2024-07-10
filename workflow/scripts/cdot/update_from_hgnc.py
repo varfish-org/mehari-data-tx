@@ -62,6 +62,9 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
         hgnc_id = record["hgnc_id"][5:]  # strip "HGNC:" prefix
         for source in sources:
             if r := record.get(source):
+                if source == "ensembl_gene_id" and "." in r:
+                    acc = r.rsplit(".", 1)[0]
+                    name_to_hgnc[source][acc] = hgnc_id
                 if source == "mane_select":
                     ensembl = list(filter(lambda x: x.startswith("ENST"), r)) or []
                     refseq = list(filter(lambda x: x.startswith("NM_"), r)) or []
@@ -81,6 +84,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
                         r = [r]
                     for r_ in r:
                         id_to_hgnc[r_] = record
+
         if r := record.get("locus_type"):
             if b := LOCUS_TYPE_TO_BIOTYPE.get(r):
                 if b != "other":
@@ -102,10 +106,16 @@ def update_cdot(
 
     for key, gene in cdot["genes"].items():
         gene_hgnc_id = gene.get("hgnc", None)
+        if "." in key:
+            acc = key.rsplit(".", 1)[0]
+        else:
+            acc = key
         if not gene_hgnc_id:
             print("Gene without HGNC ID:", key, file=sys.stderr)
             for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                if hgnc_id := name_to_hgnc[source].get(key, None):
+                if hgnc_id := name_to_hgnc[source].get(
+                    key, name_to_hgnc[source].get(acc, None)
+                ):
                     print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
                     gene["hgnc"] = hgnc_id
                     update_target["genes"].update({key: gene})
@@ -113,7 +123,9 @@ def update_cdot(
             report.append(("gene", "hgnc", key, None, hgnc_id))
         else:
             for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-                if hgnc_id := name_to_hgnc[source].get(key, None):
+                if hgnc_id := name_to_hgnc[source].get(
+                    key, name_to_hgnc[source].get(acc, None)
+                ):
                     if hgnc_id == gene_hgnc_id:
                         continue
                     print("Gene with outdated HGNC ID:", key, file=sys.stderr)
@@ -134,11 +146,13 @@ def update_cdot(
             gene["biotype"] = biotype
             update_target["genes"].update({key: gene})
             report.append(
-                ("genes", "biotype", key, ",".join(biotype_orig), ",".join(biotype))
+                ("gene", "biotype", key, ",".join(biotype_orig), ",".join(biotype))
             )
 
     for key, tx in cdot["transcripts"].items():
         keys = (key, tx["id"], tx["gene_name"])
+        if "." in key:
+            keys += (key.rsplit(".", 1)[0],)
         transcript_hgnc_id = tx.get("hgnc", None)
         sources = [
             "entrez_id",
@@ -156,7 +170,6 @@ def update_cdot(
                         print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
                         tx["hgnc"] = hgnc_id
                         update_target["transcripts"].update({key: tx})
-                        break
             report.append(("transcript", "hgnc", key, None, hgnc_id))
         else:
             for source in sources:
@@ -174,7 +187,6 @@ def update_cdot(
                         report.append(
                             ("transcript", "hgnc", key, transcript_hgnc_id, hgnc_id)
                         )
-                        break
         biotype_orig = list(sorted(tx.get("biotype", [])))
         biotype = list(
             sorted(set(biotype_orig) | hgnc_to_biotype.get(transcript_hgnc_id, set()))
