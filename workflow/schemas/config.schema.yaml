@@ -47,7 +47,7 @@ definitions:
         required:
           - species
           - species_name
-  cdot-entry:
+  source-entry:
     type: object
     properties:
       cdot:
@@ -67,6 +67,14 @@ definitions:
               - custom
           - required:
               - source
+      hgnc:
+        type: object
+        properties:
+          version:
+            type: string
+            format: date
+        required:
+          - version
       fixes:
         type: object
         properties:
@@ -84,6 +92,7 @@ definitions:
               type: string
     required:
       - cdot
+      - hgnc
 
 properties:
   reference:
@@ -93,23 +102,15 @@ properties:
       anyOf:
         - $ref: "#/definitions/ensembl-entry"
         - $ref: "#/definitions/refseq-entry"
-  transcripts:
+  sources:
     type: object
     minProperties: 1
     additionalProperties:
       anyOf:
-        - $ref: "#/definitions/cdot-entry"
+        - $ref: "#/definitions/source-entry"
     required:
       - GRCh38-ensembl
       - GRCh37-ensembl
-  hgnc:
-    type: object
-    properties:
-      version:
-        type: string
-        format: date
-    required:
-      - version
   human-phenotype-ontology:
     type: object
     properties:
@@ -142,8 +143,7 @@ properties:
       - version
 required:
   - reference
-  - transcripts
-  - hgnc
+  - sources
   - human-phenotype-ontology
   - namespaces
   - mehari
