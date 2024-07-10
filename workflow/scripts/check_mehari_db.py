@@ -99,10 +99,14 @@ def main():
         hgnc_id = gene["hgnc_id"]
         if hgnc_id in kept_hgnc_ids:
             continue
-        if hgnc_id not in cdot_hgnc_ids:
-            report.append(f"Disease gene not in cdot:\t{hgnc_id}")
-            continue
+
         hgnc_id = hgnc_id.lstrip("HGNC:")
+        if hgnc_id not in cdot_hgnc_ids:
+            report.append(
+                f"Disease gene not in cdot:\t{hgnc_id}\t{gene['gene_symbol']}"
+            )
+            continue
+
         reason = discarded.filter(pl.col("value_type").is_in(["Hgnc"])).row(
             by_predicate=(pl.col("value") == hgnc_id),
             named=True,
