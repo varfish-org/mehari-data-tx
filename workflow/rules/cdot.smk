@@ -99,7 +99,7 @@ rule extract_chrMT:
 # RefSeq or MANE select transcripts
 rule find_select_transcripts:
     input:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.hgnc.json.gz",
     output:
         accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.select.txt",
     log:
@@ -114,7 +114,7 @@ rule find_select_transcripts:
 
 rule find_partial_transcripts:
     input:
-        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.hgnc.json.gz",
     output:
         accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.partial.txt",
     log:

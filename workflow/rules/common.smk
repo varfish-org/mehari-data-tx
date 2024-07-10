@@ -75,7 +75,7 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
 
 def ensembl_cdot(wildcards: Wildcards) -> str:
     alias_ensembl = f"{wildcards.assembly}-ensembl"
-    return f"results/{alias_ensembl}/cdot/{alias_ensembl}.cdot.json.gz"
+    return f"results/{alias_ensembl}/cdot/{alias_ensembl}.cdot.hgnc.json.gz"
 
 
 def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
