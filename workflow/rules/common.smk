@@ -119,10 +119,10 @@ def transcripts_to_fix_polyA(wildcards: Wildcards) -> list[str]:
     return list(sorted(set(config["sources"][alias].get("fixes", {}).get("polyA", []))))
 
 
-def parse_missing_accessions(_wildcards, input) -> set[str]:
+def parse_missing_accessions(_wildcards, input) -> list[str]:
     with open(input.missing_accessions) as file:
         accessions = {s.strip() for s in file}
-    return accessions
+    return list(sorted(accessions))
 
 
 def get_genes_to_disease_download_url() -> str:
