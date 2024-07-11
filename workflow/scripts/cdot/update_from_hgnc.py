@@ -105,6 +105,7 @@ def update_cdot(
     report: list[tuple[str, str, str, str | None, str]] = []
 
     for key, gene in cdot["genes"].items():
+        _hgnc_id = None
         gene_hgnc_id = gene.get("hgnc", None)
         if "." in key:
             acc = key.rsplit(".", 1)[0]
@@ -118,6 +119,7 @@ def update_cdot(
                 ):
                     print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
                     gene["hgnc"] = hgnc_id
+                    _hgnc_id = hgnc_id
                     update_target["genes"].update({key: gene})
                     break
             report.append(("gene", "hgnc", key, None, hgnc_id))
@@ -140,7 +142,7 @@ def update_cdot(
 
         biotype_orig = list(sorted(gene.get("biotype", [])))
         biotype = list(
-            sorted(set(biotype_orig) | hgnc_to_biotype.get(gene_hgnc_id, set()))
+            sorted(set(biotype_orig) | hgnc_to_biotype.get(_hgnc_id, set()))
         )
         if biotype_orig != biotype:
             gene["biotype"] = biotype
@@ -162,6 +164,7 @@ def update_cdot(
             "mane_select_refseq",
             "symbol",
         ]
+        _hgnc_id = None
         if not transcript_hgnc_id:
             print("Transcript without HGNC ID:", keys, file=sys.stderr)
             for source in sources:
@@ -169,6 +172,7 @@ def update_cdot(
                     if hgnc_id := name_to_hgnc[source].get(k, None):
                         print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
                         tx["hgnc"] = hgnc_id
+                        _hgnc_id = hgnc_id
                         update_target["transcripts"].update({key: tx})
             report.append(("transcript", "hgnc", key, None, hgnc_id))
         # else:
@@ -189,7 +193,7 @@ def update_cdot(
         #                 )
         biotype_orig = list(sorted(tx.get("biotype", [])))
         biotype = list(
-            sorted(set(biotype_orig) | hgnc_to_biotype.get(transcript_hgnc_id, set()))
+            sorted(set(biotype_orig) | hgnc_to_biotype.get(_hgnc_id, set()))
         )
         if biotype_orig != biotype:
             tx["biotype"] = biotype
