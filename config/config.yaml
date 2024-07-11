@@ -24,7 +24,7 @@ reference:
 
 
 # cdot transcript sources for the references defined above
-transcripts:
+sources:
   GRCh38-refseq:
     cdot:
       release: 0.2.25

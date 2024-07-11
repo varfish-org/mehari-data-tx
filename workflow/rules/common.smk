@@ -27,7 +27,7 @@ def get_refseq_sequence_param(param: str) -> Callable[[Wildcards], str]:
 
 def get_cdot_download_url(wildcards: Wildcards) -> str:
     alias = get_alias(wildcards)
-    params = config["transcripts"][alias]["cdot"]
+    params = config["sources"][alias]["cdot"]
     release = params["release"]
     custom = params.get("custom", None)
     source = params.get("source", "ensembl")
@@ -101,7 +101,7 @@ def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str
 def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
     return list(
-        sorted(set(config["transcripts"][alias].get("fixes", {}).get("fix_cds", [])))
+        sorted(set(config["sources"][alias].get("fixes", {}).get("fix_cds", [])))
     )
 
 
@@ -109,20 +109,14 @@ def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
     return list(
         sorted(
-            set(
-                config["transcripts"][alias]
-                .get("fixes", {})
-                .get("add_from_ensembl", [])
-            )
+            set(config["sources"][alias].get("fixes", {}).get("add_from_ensembl", []))
         )
     )
 
 
 def transcripts_to_fix_polyA(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
-    return list(
-        sorted(set(config["transcripts"][alias].get("fixes", {}).get("polyA", [])))
-    )
+    return list(sorted(set(config["sources"][alias].get("fixes", {}).get("polyA", []))))
 
 
 def parse_missing_accessions(_wildcards, input) -> set[str]:
