@@ -8,7 +8,7 @@ rule mehari_build_txs_db:
             category="{assembly}-{source}",
             subcategory="{seqrepo}",
         ),
-    threads: workflow.cores / 4
+    threads: workflow.cores / 2
     params:
         mane=lambda wildcards, input: (
             f"--path-mane-txs-tsv {input.tags}"
