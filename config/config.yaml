@@ -29,7 +29,7 @@ sources:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
-    known_issues: ["ATXN8", "HGNC:32925"]
+    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
     fixes:
       # for the following set of transcripts, check against nuccore whether the CDS region is correct
       fix_cds: [
@@ -94,7 +94,7 @@ sources:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
-    known_issues: ["ATXN8", "HGNC:32925"]
+    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
     fixes:
       fix_cds: [
         "NM_004892.6",
@@ -118,12 +118,12 @@ sources:
     cdot:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh38.110.gff3
-    known_issues: ["ATXN8", "HGNC:32925"]
+    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
   GRCh37-ensembl:
     cdot:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh37.87.gff3
-    known_issues: ["ATXN8", "HGNC:32925"]
+    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
 
 
 # HGNC complete set file to check missing HGNC ids from cdot against
