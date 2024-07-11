@@ -1,4 +1,5 @@
 from contextlib import redirect_stderr
+from io import StringIO
 
 import pandas as pd
 import requests
@@ -36,7 +37,7 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     if snakemake.wildcards.source.lower() == "refseq":
         response = main(refseq_ids).content.decode()
         try:
-            pd.read_csv(response, sep="\t")
+            pd.read_csv(StringIO(response), sep="\t")
         except Exception as e:
             raise ValueError(
                 f"Expected TSV response from biomart, got:\n{response}"
