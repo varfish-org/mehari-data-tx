@@ -22,7 +22,9 @@ def main(genes_to_disease_path: str, hgnc_path: str) -> pd.DataFrame:
     print("Discarded genes without HGNC ID:", file=sys.stderr)
     print(discarded_genes[["ncbi_gene_id", "gene_symbol"]], file=sys.stderr)
 
-    return genes_to_disease.dropna(subset=["hgnc_id"])
+    return genes_to_disease.dropna(subset=["hgnc_id"]).drop_duplicates(
+        subset=["ncbi_gene_id", "hgnc_id"]
+    )
 
 
 with redirect_stderr(open(snakemake.log[0], "w")):
