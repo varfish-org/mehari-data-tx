@@ -112,7 +112,9 @@ def main():
             by_predicate=(pl.col("value") == hgnc_id),
             named=True,
         )["reason"]
-        report.append(f"Discarded disease gene:\t{hgnc_id}\t{reason}")
+        report.append(
+            f"Discarded disease gene  :\t{hgnc_id}\t{gene['gene_symbol']}\t{reason}"
+        )
         valid = False
 
     for transcript_id in cdot_tx_ids:
