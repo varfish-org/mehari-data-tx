@@ -1,16 +1,3 @@
-rule get_cdot_transcripts:
-    output:
-        "results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
-    params:
-        url=get_cdot_download_url,
-    conda:
-        "../envs/base.yaml"
-    log:
-        "logs/{assembly}-{source}/get_cdot_transcripts.log",
-    shell:
-        """wget --quiet -O {output} {params.url} 2> {log}"""
-
-
 rule extract_tags:
     input:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",

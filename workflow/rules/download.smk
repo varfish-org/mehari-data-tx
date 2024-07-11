@@ -65,6 +65,19 @@ rule get_refseq_sequence:
         "../scripts/download_refseq.py"
 
 
+rule get_cdot_data:
+    output:
+        "results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",
+    params:
+        url=get_cdot_download_url,
+    conda:
+        "../envs/base.yaml"
+    log:
+        "logs/{assembly}-{source}/get_cdot_transcripts.log",
+    shell:
+        """curl --silent {params.url} | gzip -dc | jq '.' | gzip -c > {output} 2> {log}"""
+
+
 rule get_hgnc_complete_set:
     output:
         "results/hgnc/hgnc_complete_set.json",
@@ -75,7 +88,7 @@ rule get_hgnc_complete_set:
     log:
         "logs/hgnc/get_hgnc_complete_set.log",
     shell:
-        """wget --quiet -O {output} {params.url} 2> {log}"""
+        """curl --silent {params.url} | jq '.' > {output} 2> {log}"""
 
 
 rule get_genes_to_disease:
