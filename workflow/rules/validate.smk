@@ -85,6 +85,30 @@ rule cdot_hgnc_ids:
         """
 
 
+rule cdot_gene_symbols:
+    input:
+        unpack(cdot_input_mapping),
+    output:
+        hgnc_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.gene_symbols.txt",
+        tmp=temp(
+            "results/{assembly}-{source}/cdot/{assembly}-{source}.gene_symbols.txt.tmp"
+        ),
+    log:
+        "logs/{assembly}-{source}/cdot/gene_symbols.log",
+    conda:
+        "../envs/jq.yaml"
+    shell:
+        """
+        (
+        touch {output.hgnc_ids}; touch {output.tmp}
+        for f in {input}; do
+            pigz -dcf ${{f}} | jq -r '.genes[].gene_symbol | select(. != null)' >> {output.tmp}
+        done
+        cat {output.tmp} | sort | uniq > {output.hgnc_ids}
+        ) >{log} 2>&1
+        """
+
+
 rule check_mehari_db:
     input:
         kept_transcript_ids="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.transcript_ids.txt",
@@ -92,6 +116,7 @@ rule check_mehari_db:
         db_discarded="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
         cdot_transcript_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.transcript_ids.txt",
         cdot_hgnc_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.hgnc_ids.txt",
+        cdot_gene_symbols="results/{assembly}-{source}/cdot/{assembly}-{source}.gene_symbols.txt",
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
     output:
         stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",

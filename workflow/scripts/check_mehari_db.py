@@ -19,6 +19,12 @@ def read_cdot_hgnc_ids() -> set[str]:
         return cdot_hgnc_ids
 
 
+def read_cdot_gene_symbols() -> set[str]:
+    with open(snakemake.input.cdot_gene_symbols, "r") as f:
+        cdot_gene_symbols = set(line.rstrip() for line in f)
+        return cdot_gene_symbols
+
+
 def read_discarded_transcripts() -> pl.DataFrame:
     df = (
         pl.read_ndjson(
@@ -127,6 +133,7 @@ def check_transcripts(
 
 def check_disease_genes(
     cdot_hgnc_ids: set[str],
+    cdot_gene_symbols: set[str],
     discarded: DataFrame,
     disease_gene_df: DataFrame,
     kept_hgnc_ids: set[str],
@@ -140,10 +147,14 @@ def check_disease_genes(
             continue
 
         hgnc_id_no_prefix = hgnc_id.lstrip("HGNC:")
-        if hgnc_id_no_prefix not in cdot_hgnc_ids:
+        gene_symbol = gene["gene_symbol"]
+        if (
+            hgnc_id_no_prefix not in cdot_hgnc_ids
+            and gene_symbol not in cdot_gene_symbols
+        ):
             known_issue = "known_issue" if hgnc_id in known_issues else ""
             report.append(
-                f"Disease gene not in cdot:\t{hgnc_id}\t{gene['gene_symbol']}\t{known_issue}"
+                f"Disease gene not in cdot:\t{hgnc_id}\t{gene_symbol}\t{known_issue}"
             )
             continue
 
@@ -153,13 +164,13 @@ def check_disease_genes(
         )["reason"]
         if "NoTranscripts" in reason:
             print(
-                f"Discarded disease gene  :\t{hgnc_id}\t{gene['gene_symbol']} (No Transcripts to begin with)",
+                f"Discarded disease gene  :\t{hgnc_id}\t{gene_symbol} (No Transcripts to begin with)",
                 file=sys.stderr,
             )
         else:
             known_issue = hgnc_id in known_issues
             report.append(
-                f"Discarded disease gene  :\t{hgnc_id}\t{gene['gene_symbol']}\t{reason}\t{'known_issue' if known_issue else ''}"
+                f"Discarded disease gene  :\t{hgnc_id}\t{gene_symbol}\t{reason}\t{'known_issue' if known_issue else ''}"
             )
             if not known_issue:
                 valid = False
@@ -171,6 +182,7 @@ def main(known_issues: set[str]):
 
     cdot_tx_ids: set[str] = read_cdot_transcript_ids()
     cdot_hgnc_ids: set[str] = read_cdot_hgnc_ids()
+    cdot_gene_symbols: set[str] = read_cdot_gene_symbols()
 
     disease_gene_df: DataFrame = read_disease_genes()
 
@@ -196,6 +208,7 @@ def main(known_issues: set[str]):
 
     valid = check_disease_genes(
         cdot_hgnc_ids,
+        cdot_gene_symbols,
         discarded,
         disease_gene_df,
         kept_hgnc_ids,
