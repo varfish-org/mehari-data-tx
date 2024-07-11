@@ -9,4 +9,3 @@ dependencies:
   - requests ==2.32.3
   - gzip ==1.13
   - coreutils ==9.5
-  - jq ==1.7.1

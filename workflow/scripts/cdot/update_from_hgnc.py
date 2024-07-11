@@ -123,22 +123,22 @@ def update_cdot(
                     update_target["genes"].update({key: gene})
                     break
             report.append(("gene", "hgnc", key, None, hgnc_id))
-        # else:
-        #     for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
-        #         if hgnc_id := name_to_hgnc[source].get(
-        #             key, name_to_hgnc[source].get(acc, None)
-        #         ):
-        #             if hgnc_id == gene_hgnc_id:
-        #                 continue
-        #             print("Gene with outdated HGNC ID:", key, file=sys.stderr)
-        #             print(
-        #                 f"→ Updated HGNC ID from {gene_hgnc_id} to {hgnc_id}",
-        #                 file=sys.stderr,
-        #             )
-        #             gene["hgnc"] = hgnc_id
-        #             update_target["genes"].update({key: gene})
-        #             report.append(("gene", "hgnc", key, gene_hgnc_id, hgnc_id))
-        #             break
+        else:
+            for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
+                if hgnc_id := name_to_hgnc[source].get(
+                    key, name_to_hgnc[source].get(acc, None)
+                ):
+                    if hgnc_id == gene_hgnc_id:
+                        continue
+                    print("Gene with outdated HGNC ID:", key, file=sys.stderr)
+                    print(
+                        f"→ Updated HGNC ID from {gene_hgnc_id} to {hgnc_id}",
+                        file=sys.stderr,
+                    )
+                    gene["hgnc"] = hgnc_id
+                    update_target["genes"].update({key: gene})
+                    report.append(("gene", "hgnc", key, gene_hgnc_id, hgnc_id))
+                    break
 
         biotype_orig = list(sorted(gene.get("biotype", [])))
         biotype = list(
@@ -175,22 +175,22 @@ def update_cdot(
                         _hgnc_id = hgnc_id
                         update_target["transcripts"].update({key: tx})
             report.append(("transcript", "hgnc", key, None, hgnc_id))
-        # else:
-        #     for source in sources:
-        #         for k in keys:
-        #             if hgnc_id := name_to_hgnc[source].get(k, None):
-        #                 if hgnc_id == transcript_hgnc_id:
-        #                     continue
-        #                 print("Transcript with outdated HGNC ID:", k, file=sys.stderr)
-        #                 print(
-        #                     f"→ Updated HGNC ID from {transcript_hgnc_id} to {hgnc_id}",
-        #                     file=sys.stderr,
-        #                 )
-        #                 tx["hgnc"] = hgnc_id
-        #                 update_target["transcripts"].update({key: tx})
-        #                 report.append(
-        #                     ("transcript", "hgnc", key, transcript_hgnc_id, hgnc_id)
-        #                 )
+        else:
+            for source in sources:
+                for k in keys:
+                    if hgnc_id := name_to_hgnc[source].get(k, None):
+                        if hgnc_id == transcript_hgnc_id:
+                            continue
+                        print("Transcript with outdated HGNC ID:", k, file=sys.stderr)
+                        print(
+                            f"→ Updated HGNC ID from {transcript_hgnc_id} to {hgnc_id}",
+                            file=sys.stderr,
+                        )
+                        tx["hgnc"] = hgnc_id
+                        update_target["transcripts"].update({key: tx})
+                        report.append(
+                            ("transcript", "hgnc", key, transcript_hgnc_id, hgnc_id)
+                        )
         biotype_orig = list(sorted(tx.get("biotype", [])))
         biotype = list(
             sorted(set(biotype_orig) | hgnc_to_biotype.get(_hgnc_id, set()))

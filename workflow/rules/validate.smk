@@ -92,7 +92,7 @@ rule check_mehari_db:
         db_discarded="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
         cdot_transcript_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.transcript_ids.txt",
         cdot_hgnc_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.hgnc_ids.txt",
-        genes_to_disease="results/{assembly}-{source}/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
+        genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
     output:
         stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         report=report(

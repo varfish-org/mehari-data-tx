@@ -81,25 +81,12 @@ rule get_genes_to_disease:
 rule add_hgnc_id_to_genes_to_disease:
     input:
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease.tsv",
-        hgnc_complete_set="results/{assembly}-{source}/hgnc/hgnc_complete_set.json",
+        hgnc_complete_set="results/hgnc/hgnc_complete_set.json",
     output:
-        genes_to_disease="results/{assembly}-{source}/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
+        genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
     conda:
         "../envs/datastuff.yaml"
     log:
-        "logs/{assembly}-{source}/human-phenotype-ontology/add_hgnc_id_to_genes_to_disease.log",
+        "logs/human-phenotype-ontology/add_hgnc_id_to_genes_to_disease.log",
     script:
         "../scripts/human_phenotype_ontology/add_hgnc_id_to_genes_to_disease.py"
-
-
-rule get_hgnc_complete_set:
-    output:
-        "results/{assembly}-{source}/hgnc/hgnc_complete_set.json",
-    params:
-        url=get_hgnc_complete_set_download_url,
-    conda:
-        "../envs/base.yaml"
-    log:
-        "logs/{assembly}-{source}/hgnc/get_hgnc_complete_set.log",
-    shell:
-        """(curl --silent {params.url} | jq '.' > {output}) 2> {log}"""

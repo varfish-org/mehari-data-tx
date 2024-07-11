@@ -24,18 +24,11 @@ reference:
 
 
 # cdot transcript sources for the references defined above
-sources:
+transcripts:
   GRCh38-refseq:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
-    # HGNC complete set file to check missing HGNC ids from cdot against
-    # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
-    # format: yyyy-mm-dd
-    # quarterly versions: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-    hgnc:
-      # GRCH38-refseq annotation is from 2022-04-12, so pick
-      version: "2022-04-01"
     fixes:
       # for the following set of transcripts, check against nuccore whether the CDS region is correct
       fix_cds: [
@@ -100,9 +93,6 @@ sources:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
-    hgnc:
-      # GRCH37-refseq annotation is from 2022-03-12, so pick
-      version: "2022-04-01"
     fixes:
       fix_cds: [
         "NM_004892.6",
@@ -125,16 +115,18 @@ sources:
     cdot:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh38.110.gff3
-    hgnc:
-      # GRCH38-ensembl annotation is from 2023-05-02, so pick
-      version: "2023-04-01"
   GRCh37-ensembl:
     cdot:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh37.87.gff3
-    hgnc:
-      # GRCH38-ensembl annotation is from 2016-12-08, so pick earliest file, which is
-      version: "2020-07-01"
+
+
+# HGNC complete set file to check missing HGNC ids from cdot against
+hgnc:
+  # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
+  # format: yyyy-mm-dd
+  # quarterly versions: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
+  version: "2024-04-01"
 
 # namespaces to use for seqrepo
 namespaces:
