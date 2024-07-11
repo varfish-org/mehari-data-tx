@@ -8,7 +8,7 @@ rule mehari_build_txs_db:
             category="{assembly}-{source}",
             subcategory="{seqrepo}",
         ),
-    threads: workflow.cores
+    threads: workflow.cores / 4
     params:
         mane=lambda wildcards, input: (
             f"--path-mane-txs-tsv {input.tags}"
@@ -28,6 +28,7 @@ rule mehari_build_txs_db:
         --path-seqrepo-instance {input.seqrepo_instance} \
         {params.cdot} \
         --genome-release {params.genome_release} \
+        --threads {threads} \
         {params.mane} 2> {log}
         """
 
