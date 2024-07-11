@@ -189,20 +189,20 @@ def update_cdot(
         #                 report.append(
         #                     ("transcript", "hgnc", key, transcript_hgnc_id, hgnc_id)
         #                 )
-        biotype_orig = list(sorted(tx.get("biotype", [])))
-        biotype = list(sorted(set(biotype_orig) | hgnc_to_biotype.get(_hgnc_id, set())))
-        if biotype_orig != biotype:
-            tx["biotype"] = biotype
-            update_target["transcripts"].update({key: tx})
-            report.append(
-                (
-                    "transcript",
-                    "biotype",
-                    key,
-                    ",".join(biotype_orig),
-                    ",".join(biotype),
-                )
-            )
+        # biotype_orig = list(sorted(tx.get("biotype", [])))
+        # biotype = list(sorted(set(biotype_orig) | hgnc_to_biotype.get(_hgnc_id, set())))
+        # if biotype_orig != biotype:
+        #     tx["biotype"] = biotype
+        #     update_target["transcripts"].update({key: tx})
+        #     report.append(
+        #         (
+        #             "transcript",
+        #             "biotype",
+        #             key,
+        #             ",".join(biotype_orig),
+        #             ",".join(biotype),
+        #         )
+        #     )
 
     return update_target, report
 
