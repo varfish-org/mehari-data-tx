@@ -11,19 +11,6 @@ rule get_cdot_transcripts:
         """wget --quiet -O {output} {params.url} 2> {log}"""
 
 
-rule get_hgnc_complete_set:
-    output:
-        "results/hgnc/hgnc_complete_set.json",
-    params:
-        url=get_hgnc_complete_set_download_url,
-    conda:
-        "../envs/base.yaml"
-    log:
-        "logs/hgnc/get_hgnc_complete_set.log",
-    shell:
-        """wget --quiet -O {output} {params.url} 2> {log}"""
-
-
 rule extract_tags:
     input:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.json.gz",

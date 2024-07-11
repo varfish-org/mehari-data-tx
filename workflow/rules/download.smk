@@ -65,6 +65,19 @@ rule get_refseq_sequence:
         "../scripts/download_refseq.py"
 
 
+rule get_hgnc_complete_set:
+    output:
+        "results/hgnc/hgnc_complete_set.json",
+    params:
+        url=get_hgnc_complete_set_download_url,
+    conda:
+        "../envs/base.yaml"
+    log:
+        "logs/hgnc/get_hgnc_complete_set.log",
+    shell:
+        """wget --quiet -O {output} {params.url} 2> {log}"""
+
+
 rule get_genes_to_disease:
     output:
         "results/human-phenotype-ontology/genes_to_disease.tsv",
