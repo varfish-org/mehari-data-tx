@@ -20,7 +20,7 @@ def main(genes_to_disease_path: str, hgnc_path: str) -> pd.DataFrame:
 
     discarded_genes = genes_to_disease[genes_to_disease["hgnc_id"].isnull()]
     print("Discarded genes without HGNC ID:", file=sys.stderr)
-    print(discarded_genes["ncbi_gene_id"], file=sys.stderr)
+    print(discarded_genes[["ncbi_gene_id", "gene_symbol"]], file=sys.stderr)
 
     return genes_to_disease.dropna(subset=["hgnc_id"])
 
