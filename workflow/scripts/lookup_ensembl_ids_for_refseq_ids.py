@@ -1,4 +1,5 @@
 from contextlib import redirect_stderr
+from snakemake.script import snakemake
 
 import requests
 

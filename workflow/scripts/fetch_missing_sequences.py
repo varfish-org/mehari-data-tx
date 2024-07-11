@@ -11,6 +11,7 @@ from typing import Collection
 
 import requests
 from dinopy import FastaReader, FastaWriter
+from snakemake.script import snakemake
 from snakemake import shell
 
 

@@ -1,5 +1,6 @@
 from contextlib import redirect_stderr
 from datetime import timedelta
+from snakemake.script import snakemake
 
 import bioutils.seqfetcher
 from ratelimit import limits, sleep_and_retry

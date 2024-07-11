@@ -9,6 +9,7 @@ import gzip
 import json
 import sys
 from contextlib import redirect_stderr
+from snakemake.script import snakemake
 
 #: Contig name for chrMT
 CHRMT_CONTIG = "NC_012920.1"

@@ -10,6 +10,7 @@ import sys
 
 import pandas as pd
 from contextlib import redirect_stderr
+from snakemake.script import snakemake
 
 REFSEQ_KEY = "RefSeq mRNA ID"
 ENSEMBL_GENE_KEY = "Gene stable ID version"

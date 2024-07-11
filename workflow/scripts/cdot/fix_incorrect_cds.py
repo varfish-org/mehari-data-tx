@@ -4,6 +4,7 @@ from collections import defaultdict
 from contextlib import redirect_stderr
 from typing import Any
 from xml.etree.ElementTree import ElementTree
+from snakemake.script import snakemake
 import gzip
 
 import pandas as pd

@@ -1,6 +1,7 @@
 import json
 import sys
 from contextlib import redirect_stderr
+from snakemake.script import snakemake
 
 import pandas as pd
 

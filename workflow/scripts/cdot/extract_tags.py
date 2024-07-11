@@ -11,6 +11,7 @@ import json
 import sys
 import typing
 from contextlib import redirect_stderr
+from snakemake.script import snakemake
 
 
 def main(paths: typing.Iterable[str], file=sys.stdout):
