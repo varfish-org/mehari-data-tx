@@ -129,3 +129,8 @@ def get_genes_to_disease_download_url() -> str:
     url = "https://github.com/obophenotype/human-phenotype-ontology/releases/download/{release}/genes_to_disease.txt"
     release = config["human-phenotype-ontology"]["genes_to_disease"]["release"]
     return url.format(release=release)
+
+
+def get_known_issues(wildcards: Wildcards) -> list[str]:
+    alias = get_alias(wildcards)
+    return config["sources"][alias].get("known_issues", [])

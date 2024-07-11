@@ -100,6 +100,8 @@ rule check_mehari_db:
             category="{assembly}-{source}",
             subcategory="{seqrepo}",
         ),
+    params:
+        known_issues=get_known_issues,
     log:
         "logs/{assembly}-{source}/mehari/{seqrepo}/check.log",
     conda:

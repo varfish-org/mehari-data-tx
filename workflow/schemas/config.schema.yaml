@@ -47,7 +47,7 @@ definitions:
         required:
           - species
           - species_name
-  cdot-entry:
+  source-entry:
     type: object
     properties:
       cdot:
@@ -67,6 +67,10 @@ definitions:
               - custom
           - required:
               - source
+      known_issues:
+        type: array
+        items:
+          type: string
       fixes:
         type: object
         properties:
@@ -98,7 +102,7 @@ properties:
     minProperties: 1
     additionalProperties:
       anyOf:
-        - $ref: "#/definitions/cdot-entry"
+        - $ref: "#/definitions/source-entry"
     required:
       - GRCh38-ensembl
       - GRCh37-ensembl
