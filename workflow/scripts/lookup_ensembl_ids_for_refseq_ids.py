@@ -1,7 +1,8 @@
 from contextlib import redirect_stderr
-from snakemake.script import snakemake
 
+import pandas as pd
 import requests
+from snakemake.script import snakemake
 
 
 def main(refseq_ids: set[str]):
@@ -34,6 +35,12 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
             refseq_ids.add(line.strip())
     if snakemake.wildcards.source.lower() == "refseq":
         response = main(refseq_ids).content.decode()
+        try:
+            pd.read_csv(response, sep="\t")
+        except Exception as e:
+            raise ValueError(
+                f"Expected TSV response from biomart, got:\n{response}"
+            ) from e
     else:
         response = "RefSeq mRNA ID\tGene stable ID\tGene stable ID version\tTranscript stable ID\tTranscript stable ID version\tHGNC ID\n"
     with open(snakemake.output.tsv, "wt") as f:
