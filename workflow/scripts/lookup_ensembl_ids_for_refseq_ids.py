@@ -67,15 +67,18 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with open(snakemake.input.accessions, "rt") as f:
         for line in f:
             refseq_ids.add(line.strip())
+    columns = list(HEADER.values())
     if snakemake.wildcards.source.lower() == "refseq":
         response = main(refseq_ids).content.decode()
         try:
-            pd.read_csv(StringIO(response), sep="\t", names=list(HEADER.values()))
+            df = pd.read_csv(StringIO(response), sep="\t", header=0, usecols=columns)
         except Exception as e:
             raise ValueError(
                 f"Expected TSV response from biomart, got:\n{response}"
             ) from e
     else:
-        response = "\t".join(HEADER.values()) + "\n"
-    with open(snakemake.output.tsv, "wt") as f:
-        f.write(response)
+        # Built an empty file for the case of Ensembl / non-refseq
+        response = "\t".join(columns) + "\n"
+        df = pd.read_csv(StringIO(response), sep="\t", header=0, usecols=columns)
+
+    df.to_csv(snakemake.output.tsv, sep="\t", index=False)
