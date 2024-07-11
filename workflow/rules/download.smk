@@ -75,7 +75,7 @@ rule get_cdot_data:
     log:
         "logs/{assembly}-{source}/get_cdot_transcripts.log",
     shell:
-        """curl --silent {params.url} | gzip -dc | jq '.' | gzip -c > {output} 2> {log}"""
+        """(wget --quiet -O - {params.url} | gzip -dcf | jq '.' | gzip -c > {output}) 2> {log}"""
 
 
 rule get_hgnc_complete_set:
@@ -88,7 +88,7 @@ rule get_hgnc_complete_set:
     log:
         "logs/hgnc/get_hgnc_complete_set.log",
     shell:
-        """curl --silent {params.url} | jq '.' > {output} 2> {log}"""
+        """(wget --quiet -O -  {params.url} | jq '.' > {output}) 2> {log}"""
 
 
 rule get_genes_to_disease:
