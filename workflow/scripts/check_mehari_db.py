@@ -87,13 +87,11 @@ def check_known_issues(
         .list.set_difference(NO_TRANSCRIPT_LEFT)
         .list.join(", "),
     )
-    for type_, type_id, gene_name, reason in investigate.rows():
-        if type_id in known_issues:
+    for type_, id_, gene_name, reason in investigate.rows():
+        if id_ in known_issues:
             pass
         else:
-            report.append(
-                f"No Transcript left:\t{type_}:{type_id}\t{gene_name}\t{reason}"
-            )
+            report.append(f"No Transcript left:\t{type_}:{id_}\t{gene_name}\t{reason}")
             valid = False
     return valid
 
@@ -132,6 +130,7 @@ def check_disease_genes(
     discarded: DataFrame,
     disease_gene_df: DataFrame,
     kept_hgnc_ids: set[str],
+    known_issues: set[str],
     report: list[str],
     valid: bool,
 ):
@@ -140,27 +139,30 @@ def check_disease_genes(
         if hgnc_id in kept_hgnc_ids:
             continue
 
-        hgnc_id = hgnc_id.lstrip("HGNC:")
-        if hgnc_id not in cdot_hgnc_ids:
+        hgnc_id_no_prefix = hgnc_id.lstrip("HGNC:")
+        if hgnc_id_no_prefix not in cdot_hgnc_ids:
+            known_issue = "known_issue" if hgnc_id in known_issues else ""
             report.append(
-                f"Disease gene not in cdot:\tHGNC:{hgnc_id}\t{gene['gene_symbol']}"
+                f"Disease gene not in cdot:\t{hgnc_id}\t{gene['gene_symbol']}\t{known_issue}"
             )
             continue
 
         reason = discarded.filter(pl.col("value_type").is_in(["Hgnc"])).row(
-            by_predicate=(pl.col("value") == hgnc_id),
+            by_predicate=(pl.col("value") == hgnc_id_no_prefix),
             named=True,
         )["reason"]
         if "NoTranscripts" in reason:
             print(
-                f"Discarded disease gene  :\tHGNC:{hgnc_id}\t{gene['gene_symbol']} (No Transcripts to begin with)",
+                f"Discarded disease gene  :\t{hgnc_id}\t{gene['gene_symbol']} (No Transcripts to begin with)",
                 file=sys.stderr,
             )
         else:
+            known_issue = hgnc_id in known_issues
             report.append(
-                f"Discarded disease gene  :\tHGNC:{hgnc_id}\t{gene['gene_symbol']}\t{reason}"
+                f"Discarded disease gene  :\t{hgnc_id}\t{gene['gene_symbol']}\t{reason}\t{'known_issue' if known_issue else ''}"
             )
-            valid = False
+            if not known_issue:
+                valid = False
     return valid
 
 
@@ -193,7 +195,13 @@ def main(known_issues: set[str]):
     valid: bool = num_kept + num_discarded == len(cdot_tx_ids)
 
     valid = check_disease_genes(
-        cdot_hgnc_ids, discarded, disease_gene_df, kept_hgnc_ids, report, valid
+        cdot_hgnc_ids,
+        discarded,
+        disease_gene_df,
+        kept_hgnc_ids,
+        known_issues,
+        report,
+        valid,
     )
     valid = check_transcripts(cdot_tx_ids, discarded_tx_ids, kept_tx_ids, report, valid)
     valid = check_mane(discarded, report, valid)
