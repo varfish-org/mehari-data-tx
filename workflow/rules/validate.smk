@@ -25,7 +25,7 @@ rule mehari_transcript_ids:
     conda:
         "../envs/jq.yaml"
     shell:
-        """yq -r '.txDb.transcripts[].id' <(pigz -dc {input.db_yaml}) > {output.tx_ids} 2> {log}"""
+        """yq -r '.txDb.transcripts[] | select(.filtered == false) | .id' <(pigz -dc {input.db_yaml}) > {output.tx_ids} 2> {log}"""
 
 
 rule mehari_hgnc_ids:
@@ -38,7 +38,7 @@ rule mehari_hgnc_ids:
     conda:
         "../envs/jq.yaml"
     shell:
-        """yq -r '.txDb.geneToTx[].geneId' <(pigz -dc {input.db_yaml}) > {output.hgnc_ids} 2> {log}"""
+        """yq -r '.txDb.geneToTx[] | select(.filtered == false) | .geneId' <(pigz -dc {input.db_yaml}) > {output.hgnc_ids} 2> {log}"""
 
 
 rule cdot_tx_ids:

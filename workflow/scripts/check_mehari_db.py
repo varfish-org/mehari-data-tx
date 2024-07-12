@@ -84,6 +84,8 @@ def check_known_issues(
     investigate = discarded.filter(
         pl.col("value_type").is_in(["Hgnc"]),
         pl.col("reason").str.contains("NoTranscriptLeft"),
+        pl.col("reason").str.contains("NoTranscripts").not_(),
+        pl.col("reason").str.contains("PredictedTranscriptsOnly").not_(),
     ).select(
         pl.col("value_type"),
         pl.col("value"),
@@ -158,22 +160,25 @@ def check_disease_genes(
             )
             continue
 
-        reason = discarded.filter(pl.col("value_type").is_in(["Hgnc"])).row(
-            by_predicate=(pl.col("value") == hgnc_id_no_prefix),
-            named=True,
-        )["reason"]
-        if "NoTranscripts" in reason:
-            print(
-                f"Discarded disease gene  :\t{hgnc_id}\t{gene_symbol} (No Transcripts to begin with)",
-                file=sys.stderr,
-            )
-        else:
-            known_issue = hgnc_id in known_issues
-            report.append(
-                f"Discarded disease gene  :\t{hgnc_id}\t{gene_symbol}\t{reason}\t{'known_issue' if known_issue else ''}"
-            )
-            if not known_issue:
-                valid = False
+        targets = discarded.filter(
+            (pl.col("value") == hgnc_id_no_prefix)
+            | (pl.col("gene_name") == gene_symbol)
+        )
+        valid_ = True
+        for row in targets.iter_rows(named=True):
+            reason = row["reason"]
+            if "NoTranscripts" in reason:
+                report.append(
+                    f"Discarded disease gene  :\t{hgnc_id}\t{gene_symbol}\tNoTranscripts\t",
+                )
+            else:
+                known_issue = hgnc_id in known_issues
+                report.append(
+                    f"Discarded disease gene  :\t{hgnc_id}\t{gene_symbol}\t{reason}\t{'known_issue' if known_issue else ''}"
+                )
+                if not known_issue:
+                    valid_ = False
+        valid = valid and valid_
     return valid
 
 
