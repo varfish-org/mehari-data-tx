@@ -33,8 +33,12 @@ sources:
     fixes:
       # for the following set of transcripts, check against nuccore whether the CDS region is correct
       fix_cds: [
+        # SHANK3
+        "NM_001372044.2",
+        # CAPN8
+        "NM_001143962.2",
         # CASP8AP2
-        # "NM_001137667.2",  # partial, MANE Select
+        "NM_001137667.2",  # partial, MANE Select
         # "NM_001137668.2",  # partial
         # "NM_012115.4",     # partial
         # DAG1
@@ -84,11 +88,13 @@ sources:
         "NM_001405666.3",
         "NM_012234.6",
       ]
-      # for the following transcripts, append a polyA tail to fix the stop codon
-      polyA: [
-        "NM_001424184.1",
-        "NM_001145051.2",
-      ]
+#      swap_version:
+#        - { "from": "NM_012234.6", "to": "NM_012234.7"}
+#      # for the following transcripts, append a polyA tail to fix the stop codon
+#      polyA: [
+#        "NM_001424184.1",
+#        "NM_001145051.2",
+#      ]
 
   GRCh37-refseq:
     cdot:
@@ -97,6 +103,11 @@ sources:
     known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
     fixes:
       fix_cds: [
+        # SHANK3
+        "NM_001372044.2",
+        # CAPN8
+        "NM_001143962.2",
+        # SECC22B
         "NM_004892.6",
       ]
       add_from_ensembl: [

@@ -10,7 +10,7 @@ rule dump_mehari_db:
     shell:
         """
         (
-            mehari db dump --path-db {input.tx_db} | gzip -c > {output.db_yaml}
+            mehari db dump --path-db {input.tx_db} | pigz -c > {output.db_yaml}
         ) >{log} 2>&1
         """
 
