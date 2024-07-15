@@ -152,6 +152,7 @@ def update_cdot(
         if not gene_symbol:
             print("Gene without gene symbol:", key, file=sys.stderr)
             if symbol := hgnc_to_symbol.get(_hgnc_id, None):
+                symbol = symbol[0]
                 print("→ Corresponding gene symbol:", symbol, file=sys.stderr)
                 gene["gene_symbol"] = symbol
                 update_target["genes"].update({key: gene})
@@ -224,6 +225,7 @@ def update_cdot(
         if not gene_symbol:
             print("Transcript without gene symbol:", key, file=sys.stderr)
             if symbol := hgnc_to_symbol.get(_hgnc_id, None):
+                symbol = symbol[0]
                 print("→ Corresponding gene symbol:", symbol, file=sys.stderr)
                 gene_symbol = symbol
                 tx["gene_symbol"] = symbol
