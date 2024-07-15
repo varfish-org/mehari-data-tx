@@ -45,6 +45,12 @@ def fetch_ncbi(accessions: Collection[str]):
         efetch_url += f"&query_key={key}&retstart={retstart}"
         efetch_url += f"&retmax={retmax}&rettype=fasta&retmode=text"
         efetch_out = requests.get(efetch_url).text.strip().rstrip()
+        if (
+            "retstart" in efetch_out
+            and "is+greater+than+number+of+records+available+in+history" in efetch_out
+        ):
+            break
+
         entries = efetch_out.replace("\n\n", "\n")
         # parse the output to make sure this really is FASTA data …
         far = FastaReader(BytesIO(entries.encode()))
@@ -87,16 +93,19 @@ def fetch_ensembl(accessions: Collection[str]):
 
         retry = False
         decoded = r.json()
+        if isinstance(decoded, list):
+            decoded = {entry["id"]: entry for entry in decoded}
         for accession, version in zip(ids, versions):
             if entry := decoded.get(accession):
-                sequence = entry["seq"]
-                if version != entry["version"]:
+                sequence: str = entry["seq"]
+                if int(version) != entry["version"]:
                     raise ValueError(
                         f"Version mismatch for {accession}: expected {version}, got {entry['version']}"
                     )
-                yield sequence, f"{accession}.{version}"
+                yield sequence.encode(), f"{accession}.{version}".encode()
             else:
-                raise ValueError(f"Accession {accession} not found in response.")
+                print(f"Accession {accession} not found in response.", file=sys.stderr)
+                # raise ValueError(f"Accession {accession} not found in response")
 
 
 def main(accessions: Collection[str], fasta_path: str, fai_path: str):
@@ -119,10 +128,12 @@ def main(accessions: Collection[str], fasta_path: str, fai_path: str):
     ncbi_accessions = accessions - ensembl_accessions
 
     with FastaWriter(fasta_path, append=True) as faw:
-        for entry in fetch_ncbi(ncbi_accessions):
-            faw.write_entry(entry)
-        for entry in fetch_ensembl(ensembl_accessions):
-            faw.write_entry(entry)
+        if ncbi_accessions:
+            for entry in fetch_ncbi(ncbi_accessions):
+                faw.write_entry(entry)
+        if ensembl_accessions:
+            for entry in fetch_ensembl(ensembl_accessions):
+                faw.write_entry(entry)
 
     # Create the index file, even if the FASTA file is empty
     if os.path.getsize(fasta_path) == 0:

@@ -111,15 +111,13 @@ rule cdot_gene_symbols:
 
 rule check_mehari_db:
     input:
-        kept_transcript_ids="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.transcript_ids.txt",
-        kept_hgnc_ids="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.hgnc_ids.txt",
-        db_discarded="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
-        cdot_transcript_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.transcript_ids.txt",
-        cdot_hgnc_ids="results/{assembly}-{source}/cdot/{assembly}-{source}.hgnc_ids.txt",
-        cdot_gene_symbols="results/{assembly}-{source}/cdot/{assembly}-{source}.gene_symbols.txt",
+        unpack(cdot_input_mapping),
+        tx_db="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst",
+        tx_db_report="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+        hgnc="results/hgnc/hgnc_complete_set.json",
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
     output:
-        stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
+        # stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         report=report(
             "results/{assembly}-{source}/mehari/{seqrepo}/report/mehari_db_check.txt",
             category="{assembly}-{source}",
@@ -127,12 +125,20 @@ rule check_mehari_db:
         ),
     params:
         known_issues=get_known_issues,
+        cdot=get_mehari_cdot_param_string,
     log:
         "logs/{assembly}-{source}/mehari/{seqrepo}/check.log",
-    conda:
-        "../envs/datastuff.yaml"
-    script:
-        "../scripts/check_mehari_db.py"
+    # conda:
+    #     "../envs/mehari.yaml"
+    shell:
+        """(
+        mehari db check \
+        --path-db {input.tx_db} \
+        --path-hgnc-json {input.hgnc} \
+        --path-disease-gene-tsv {input.genes_to_disease} \
+        {params.cdot} \
+        --output {output.report} \
+        ) >{log} 2>&1"""
 
 
 rule generate_table_with_discards_to_review:
