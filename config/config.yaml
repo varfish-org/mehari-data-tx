@@ -29,7 +29,19 @@ sources:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
-    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
     fixes:
       # for the following set of transcripts, check against nuccore whether the CDS region is correct
       fix_cds: [
@@ -100,7 +112,19 @@ sources:
     cdot:
       release: 0.2.25
       custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
-    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
     fixes:
       fix_cds: [
         # SHANK3
@@ -129,12 +153,36 @@ sources:
     cdot:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh38.110.gff3
-    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
   GRCh37-ensembl:
     cdot:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh37.87.gff3
-    known_issues: ["ATXN8", "HGNC:32925", "FRA16E", "HGNC:3861"]
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
 
 
 # HGNC complete set file to check missing HGNC ids from cdot against

@@ -109,6 +109,16 @@ rule cdot_gene_symbols:
         """
 
 
+rule known_issues_tsv:
+    output:
+        known_issues="results/{assembly}-{source}/fixes/known_issues.tsv",
+    run:
+        with open(output.known_issues, "w") as file:
+            print("id_type\tid\tdescription", file = file)
+            for issue in get_known_issues(wildcards):
+                print(f"{issue['id_type']}\t{issue['id']}\t{issue['description']}", file=file)
+
+
 rule check_mehari_db:
     input:
         unpack(cdot_input_mapping),
@@ -116,6 +126,7 @@ rule check_mehari_db:
         tx_db_report="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
         hgnc="results/hgnc/hgnc_complete_set.json",
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
+        known_issues="results/{assembly}-{source}/fixes/known_issues.tsv",
     output:
         # stats="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.stats.tsv",
         report=report(
@@ -125,7 +136,7 @@ rule check_mehari_db:
         ),
     params:
         known_issues=get_known_issues,
-        cdot=get_mehari_cdot_param_string,
+        cdot=get_mehari_check_cdot_param_string,
     log:
         "logs/{assembly}-{source}/mehari/{seqrepo}/check.log",
     # conda:
@@ -133,9 +144,9 @@ rule check_mehari_db:
     shell:
         """(
         mehari db check \
-        --path-db {input.tx_db} \
-        --path-hgnc-json {input.hgnc} \
-        --path-disease-gene-tsv {input.genes_to_disease} \
+        --db {input.tx_db} \
+        --hgnc {input.hgnc} \
+        --disease-genes {input.genes_to_disease} \
         {params.cdot} \
         --output {output.report} \
         ) >{log} 2>&1"""

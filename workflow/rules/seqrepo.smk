@@ -29,6 +29,8 @@ rule initialize_seqrepo:
             {input.refseq} \
         | tail
 
+        # include missing records in both namespaces,
+        # as seqrepo fetch somehow does not always seem to be working correctly (regarding the namespace)
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root} \
           load --instance-name master --namespace {params.refseq_namespace} {input.missing_fasta} | tail
         >{log} 2>&1 seqrepo --root-directory {output.seqrepo_root} \

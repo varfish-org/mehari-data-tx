@@ -70,7 +70,23 @@ definitions:
       known_issues:
         type: array
         items:
-          type: string
+          type: object
+          properties:
+            id_type:
+              type: string
+              enum:
+                - hgnc_id
+                - gene_symbol
+                - ensembl_id
+                - refseq_id
+            id:
+              type: string
+            description:
+              type: string
+          required:
+            - id_type
+            - id
+            - description
       fixes:
         type: object
         properties:
