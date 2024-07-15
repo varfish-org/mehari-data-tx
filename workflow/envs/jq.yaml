@@ -3,5 +3,4 @@ channels:
   - defaults
 dependencies:
   - jq ==1.7.1
-  - yq ==3.4.3  # 3.x is outdated; 4.x is recent, but not yet available via conda
   - pigz ==2.8
