@@ -51,6 +51,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
     name_to_hgnc = defaultdict(lambda: defaultdict(str))
     id_to_hgnc = defaultdict(dict)
     hgnc_to_biotype = defaultdict(set)
+    hgnc_to_symbol = defaultdict(str)
     sources = [
         "entrez_id",
         "ensembl_gene_id",
@@ -84,6 +85,8 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
                         r = [r]
                     for r_ in r:
                         id_to_hgnc[r_] = record
+                if source == "symbol":
+                    hgnc_to_symbol[hgnc_id] = r
 
         if r := record.get("locus_type"):
             if b := LOCUS_TYPE_TO_BIOTYPE.get(r):
@@ -91,12 +94,18 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
                     hgnc_to_biotype[hgnc_id].add(b)
 
     cdot_fixed = deepcopy(cdot)
-    cdot_fixed = update_cdot(cdot, cdot_fixed, name_to_hgnc, hgnc_to_biotype)
+    cdot_fixed = update_cdot(
+        cdot, cdot_fixed, name_to_hgnc, hgnc_to_biotype, hgnc_to_symbol
+    )
     return cdot_fixed
 
 
 def update_cdot(
-    cdot: dict, update_target: dict, name_to_hgnc: dict, hgnc_to_biotype: dict
+    cdot: dict,
+    update_target: dict,
+    name_to_hgnc: dict,
+    hgnc_to_biotype: dict,
+    hgnc_to_symbol: dict,
 ):
     """
     check transcript entries in cdot file for missing hgnc ids
@@ -122,7 +131,7 @@ def update_cdot(
                     _hgnc_id = hgnc_id
                     update_target["genes"].update({key: gene})
                     break
-            report.append(("gene", "hgnc", key, None, hgnc_id))
+            report.append(("gene", "hgnc", key, None, _hgnc_id))
         # else:
         #     for source in ["entrez_id", "ensembl_gene_id", "symbol"]:
         #         if hgnc_id := name_to_hgnc[source].get(
@@ -139,6 +148,14 @@ def update_cdot(
         #             update_target["genes"].update({key: gene})
         #             report.append(("gene", "hgnc", key, gene_hgnc_id, hgnc_id))
         #             break
+        gene_symbol = gene.get("gene_symbol", None)
+        if not gene_symbol:
+            print("Gene without gene symbol:", key, file=sys.stderr)
+            if symbol := hgnc_to_symbol.get(_hgnc_id, None):
+                print("→ Corresponding gene symbol:", symbol, file=sys.stderr)
+                gene["gene_symbol"] = symbol
+                update_target["genes"].update({key: gene})
+            report.append(("gene", "gene_symbol", key, None, symbol))
 
         biotype_orig = list(sorted(gene.get("biotype", [])))
         biotype = list(sorted(set(biotype_orig) | hgnc_to_biotype.get(_hgnc_id, set())))
@@ -172,7 +189,7 @@ def update_cdot(
                         tx["hgnc"] = hgnc_id
                         _hgnc_id = hgnc_id
                         update_target["transcripts"].update({key: tx})
-            report.append(("transcript", "hgnc", key, None, hgnc_id))
+            report.append(("transcript", "hgnc", key, None, _hgnc_id))
         # else:
         #     for source in sources:
         #         for k in keys:
@@ -203,6 +220,15 @@ def update_cdot(
         #             ",".join(biotype),
         #         )
         #     )
+        gene_symbol = tx.get("gene_symbol", None)
+        if not gene_symbol:
+            print("Transcript without gene symbol:", key, file=sys.stderr)
+            if symbol := hgnc_to_symbol.get(_hgnc_id, None):
+                print("→ Corresponding gene symbol:", symbol, file=sys.stderr)
+                gene_symbol = symbol
+                tx["gene_symbol"] = symbol
+                update_target["transcripts"].update({key: tx})
+            report.append(("transcript", "gene_symbol", key, None, gene_symbol))
 
     return update_target, report
 
