@@ -19,6 +19,8 @@ rule mehari_build_txs_db:
         genome_release=genome_release,
     log:
         "logs/{assembly}-{source}/mehari/{seqrepo}/build_txs_db.log",
+    benchmark:
+        "benchmarks/{assembly}-{source}/mehari/{seqrepo}/build_txs_db.tsv"
     # conda:
     #     "../envs/mehari.yaml"
     shell:

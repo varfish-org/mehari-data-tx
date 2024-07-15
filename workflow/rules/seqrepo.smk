@@ -11,6 +11,8 @@ rule initialize_seqrepo:
         refseq_namespace=config["namespaces"]["refseq"],
     log:
         "logs/{assembly}-{source}/seqrepo/initialize.log",
+    benchmark:
+        "benchmarks/{assembly}-{source}/seqrepo/initialize.tsv"
     conda:
         "../envs/seqrepo.yaml"
     shell:
@@ -104,6 +106,8 @@ rule aggregate_missing_sequences:
         ratelimit=1,
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/fetch-missing.log",
+    benchmark:
+        "benchmarks/{assembly}-{source}/mehari/seqrepo/fetch-missing.tsv"
     conda:
         "../envs/efetch.yaml"
     script:
