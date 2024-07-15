@@ -106,7 +106,6 @@ def get_mehari_check_cdot_param_string(wildcards: Wildcards, input: InputFiles) 
     return " ".join(f"--cdot {path}" for path in cdot_files.values())
 
 
-
 def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
     return list(

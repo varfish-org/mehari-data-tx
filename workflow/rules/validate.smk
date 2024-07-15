@@ -114,9 +114,12 @@ rule known_issues_tsv:
         known_issues="results/{assembly}-{source}/fixes/known_issues.tsv",
     run:
         with open(output.known_issues, "w") as file:
-            print("id_type\tid\tdescription", file = file)
+            print("id_type\tid\tdescription", file=file)
             for issue in get_known_issues(wildcards):
-                print(f"{issue['id_type']}\t{issue['id']}\t{issue['description']}", file=file)
+                print(
+                    f"{issue['id_type']}\t{issue['id']}\t{issue['description']}",
+                    file=file,
+                )
 
 
 rule check_mehari_db:
@@ -148,6 +151,7 @@ rule check_mehari_db:
         --hgnc {input.hgnc} \
         --disease-genes {input.genes_to_disease} \
         {params.cdot} \
+        --known-issues {input.known_issues} \
         --output {output.report} \
         ) >{log} 2>&1"""
 
