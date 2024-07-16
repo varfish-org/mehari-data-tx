@@ -154,18 +154,43 @@ sources:
       release: 0.2.25
       custom: ensembl.Homo_sapiens.GRCh38.110.gff3
     known_issues:
-      - id_type: gene_symbol
-        id: "ATXN8"
-        description: foobar
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
-      - id_type: gene_symbol
-        id: "FRA16E"
-        description: foobar
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12348"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12027"
+        description: tcell receptor alpha; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:6109"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:2889"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12155"
+        description: tcell receptor beta; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12271"
+        description: tcell receptor gamma; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:5477"
+        description: immunoglobulin heavy locus; consistent with missing ensg in hgnc
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: fragile site, distamycin A type, rare, fra(16)(p12.1); consistent with ensg missing from hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12252"
+        description: tcell receptor delta; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:10628"
+        description: has ensg in ncbi; however only listed in ensembl 37 and not 38
+
   GRCh37-ensembl:
     cdot:
       release: 0.2.25
