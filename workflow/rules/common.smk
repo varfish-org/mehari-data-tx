@@ -86,7 +86,8 @@ def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
         **cdot_input_mapping(wildcards),
     }
     if wildcards.assembly == "GRCh37":
-        result.update({"tags": f"results/{alias}/cdot/{alias}.tags.tsv"})
+        other = f"GRCh38-{wildcards.source}"
+        result.update({"tags": f"results/{other}/cdot/{other}.tags.tsv"})
     return result
 
 
