@@ -49,7 +49,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
     cdot = load_json(cdot)
     hgnc = load_json(hgnc)["response"]
     name_to_hgnc = defaultdict(lambda: defaultdict(str))
-    id_to_hgnc = defaultdict(dict)
+    id_to_hgnc_record = defaultdict(dict)
     hgnc_to_biotype = defaultdict(set)
     hgnc_to_symbol = defaultdict(str)
     sources = [
@@ -61,6 +61,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
     ]
     for record in hgnc["docs"]:
         hgnc_id = record["hgnc_id"][5:]  # strip "HGNC:" prefix
+        id_to_hgnc_record[hgnc_id] = record
         for source in sources:
             if r := record.get(source):
                 if source == "ensembl_gene_id" and "." in r:
@@ -80,11 +81,6 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
                         r = [r]
                     for r_ in r:
                         name_to_hgnc[source][r_] = hgnc_id
-                if source == "entrez_id":
-                    if not isinstance(r, list):
-                        r = [r]
-                    for r_ in r:
-                        id_to_hgnc[r_] = record
                 if source == "symbol":
                     hgnc_to_symbol[hgnc_id] = r
 
@@ -95,7 +91,12 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
 
     cdot_fixed = deepcopy(cdot)
     cdot_fixed = update_cdot(
-        cdot, cdot_fixed, name_to_hgnc, hgnc_to_biotype, hgnc_to_symbol
+        cdot,
+        cdot_fixed,
+        name_to_hgnc,
+        hgnc_to_biotype,
+        hgnc_to_symbol,
+        id_to_hgnc_record,
     )
     return cdot_fixed
 
@@ -106,6 +107,7 @@ def update_cdot(
     name_to_hgnc: dict,
     hgnc_to_biotype: dict,
     hgnc_to_symbol: dict,
+    id_to_hgnc_record: dict,
 ):
     """
     check transcript entries in cdot file for missing hgnc ids
@@ -231,6 +233,10 @@ def update_cdot(
                 tx["gene_symbol"] = symbol
                 update_target["transcripts"].update({key: tx})
             report.append(("transcript", "gene_symbol", key, None, gene_symbol))
+
+        if "Selenoprotein" in id_to_hgnc_record.get(_hgnc_id, {}).get("gene_group", []):
+            biotype = list(sorted(set(tx.get("biotype", []) | {"selenoprotein"})))
+            update_target["transcripts"][key]["biotype"] = biotype
 
     return update_target, report
 
