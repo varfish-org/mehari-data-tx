@@ -182,7 +182,7 @@ def update_cdot(
             "mane_select_refseq",
             "symbol",
         ]
-        _hgnc_id = None
+        _hgnc_id = transcript_hgnc_id
         if not transcript_hgnc_id:
             print("Transcript without HGNC ID:", keys, file=sys.stderr)
             for source in sources:
@@ -234,9 +234,22 @@ def update_cdot(
                 update_target["transcripts"].update({key: tx})
             report.append(("transcript", "gene_symbol", key, None, gene_symbol))
 
-        if "Selenoprotein" in id_to_hgnc_record.get(_hgnc_id, {}).get("gene_group", []):
-            biotype = list(sorted(set(tx.get("biotype", []) | {"selenoprotein"})))
-            update_target["transcripts"][key]["biotype"] = biotype
+        record = id_to_hgnc_record.get(_hgnc_id, {})
+        if "Selenoproteins" in record.get("gene_group", []):
+            print("Transcript is selenoprotein:", key, file=sys.stderr)
+            biotype_orig = set(tx.get("biotype", []))
+            biotype = list(sorted(biotype_orig | {"selenoprotein"}))
+            tx["biotype"] = biotype
+            update_target["transcripts"].update({key: tx})
+            report.append(
+                (
+                    "transcript",
+                    "biotype",
+                    key,
+                    ",".join(biotype_orig),
+                    ",".join(biotype),
+                )
+            )
 
     return update_target, report
 
