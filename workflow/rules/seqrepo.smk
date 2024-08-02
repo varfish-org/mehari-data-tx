@@ -62,7 +62,6 @@ rule detect_missing_sequences:
         missing_txt=report(
             "results/{assembly}-{source}/mehari/seqrepo/missing.txt",
             category="{assembly}-{source}",
-            subcategory="seqrepo",
         ),
         cdot_contigs_tmp=temp(
             "results/{assembly}-{source}/mehari/seqrepo/missing.txt.tmp"

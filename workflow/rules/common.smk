@@ -80,9 +80,8 @@ def ensembl_cdot(wildcards: Wildcards) -> str:
 
 def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
     alias = get_alias(wildcards)
-    seqrepo = wildcards.seqrepo
     result = {
-        "seqrepo_instance": f"results/{alias}/{seqrepo}/master",
+        "seqrepo_instance": f"results/{alias}/seqrepo/master",
         **cdot_input_mapping(wildcards),
     }
     if wildcards.assembly == "GRCh37":

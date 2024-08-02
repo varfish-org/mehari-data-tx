@@ -10,7 +10,6 @@ validate(config, schema="schemas/config.schema.yaml")
 
 
 wildcard_constraints:
-    seqrepo=r"(seqrepo)",
     assembly=r"(GRCh37|GRCh38)",
     source=r"(refseq|ensembl)",
 
@@ -27,8 +26,8 @@ rule all:
     input:
         expand(
             [
-                "results/{alias}/mehari/{seqrepo}/txs.bin.zst.discards.tsv",
-                "results/{alias}/mehari/{seqrepo}/report/mehari_db_check.txt",
+                "results/{alias}/mehari/seqrepo/txs.bin.zst.discards.tsv",
+                "results/{alias}/mehari/seqrepo/report/mehari_db_check.txt",
             ],
             alias=[
                 "GRCh37-refseq",
@@ -36,5 +35,4 @@ rule all:
                 "GRCh38-ensembl",
                 "GRCh37-ensembl",
             ],
-            seqrepo=["seqrepo"],
         ),

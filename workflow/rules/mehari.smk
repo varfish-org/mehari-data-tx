@@ -2,11 +2,10 @@ rule mehari_build_txs_db:
     input:
         unpack(get_mehari_input),
     output:
-        txs="results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst",
+        txs="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst",
         report=report(
-            "results/{assembly}-{source}/mehari/{seqrepo}/txs.bin.zst.report.jsonl",
+            "results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.report.jsonl",
             category="{assembly}-{source}",
-            subcategory="{seqrepo}",
         ),
     threads: workflow.cores / 2
     params:
@@ -18,9 +17,9 @@ rule mehari_build_txs_db:
         cdot=get_mehari_cdot_param_string,
         genome_release=genome_release,
     log:
-        "logs/{assembly}-{source}/mehari/{seqrepo}/build_txs_db.log",
+        "logs/{assembly}-{source}/mehari/seqrepo/build_txs_db.log",
     benchmark:
-        "benchmarks/{assembly}-{source}/mehari/{seqrepo}/build_txs_db.tsv"
+        "benchmarks/{assembly}-{source}/mehari/seqrepo/build_txs_db.tsv"
     conda:
         "../envs/mehari.yaml"
     shell:
