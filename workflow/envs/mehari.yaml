@@ -1,5 +1,5 @@
 channels:
   - conda-forge
-  - defaults
+  - bioconda
 dependencies:
   - mehari ==0.26.0
