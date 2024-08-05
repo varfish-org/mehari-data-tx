@@ -71,7 +71,7 @@ def fetch_ensembl(accessions: Collection[str]):
         if not retry:
             batch = batches.pop(0)
         ids, versions = zip(*(accession.rsplit(".", 1) for accession in batch))
-        data = {"ids": ids, "type": "cdna"}
+        data = {"ids": ids, "type": "cdna", "object_type": "transcript"}
         # To be on the safe side, we sleep for 1/15 seconds to have *at most* 15 requests per second.
         # For more thorough rate limiting behaviour, we should check the headers of the response.
         sleep(1.0 / 15.0)
