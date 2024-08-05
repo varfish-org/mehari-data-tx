@@ -98,10 +98,16 @@ def fetch_ensembl(accessions: Collection[str]):
         for accession, version in zip(ids, versions):
             if entry := decoded.get(accession):
                 sequence: str = entry["seq"]
-                if int(version) != entry["version"]:
-                    raise ValueError(
-                        f"Version mismatch for {accession}: expected {version}, got {entry['version']}"
+                if int(version) != (remote_version := entry["version"]):
+                    # TODO switch to biomart, filter on ensembl_transcript_id_version
+                    # raise ValueError(
+                    #    f"Version mismatch for {accession}: expected {version}, got {entry['version']}"
+                    # )
+                    print(
+                        f"Version mismatch for {accession}: expected {version}, got {entry['version']}",
+                        file=sys.stderr,
                     )
+                    yield sequence.encode(), f"{accession}.{remote_version}".encode()
                 yield sequence.encode(), f"{accession}.{version}".encode()
             else:
                 print(f"Accession {accession} not found in response.", file=sys.stderr)
