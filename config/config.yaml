@@ -3,7 +3,7 @@ reference:
   GRCh38:
     ensembl:
       species: homo_sapiens
-      release: 110
+      release: 112
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
@@ -228,4 +228,4 @@ human-phenotype-ontology:
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.26.0
+  version: 0.26.6
