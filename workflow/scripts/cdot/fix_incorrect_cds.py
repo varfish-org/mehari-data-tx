@@ -135,6 +135,7 @@ def fix_exons(
                 tx_exons = [e for e in tx_exons[::-1]]
                 for i, e in enumerate(tx_exons):
                     e = e._replace(ord=i)
+                    tx_exons[i] = e
 
             report.append(
                 (
