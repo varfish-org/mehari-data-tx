@@ -27,7 +27,7 @@ reference:
 sources:
   GRCh38-refseq:
     cdot:
-      release: 0.2.25
+      release: 0.2.26
       custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
     known_issues:
       - id_type: gene_symbol
@@ -110,7 +110,7 @@ sources:
 
   GRCh37-refseq:
     cdot:
-      release: 0.2.25
+      release: 0.2.26
       custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
     known_issues:
       - id_type: gene_symbol
@@ -151,7 +151,7 @@ sources:
   # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:
     cdot:
-      release: 0.2.25
+      release: 0.2.26
       custom: ensembl.Homo_sapiens.GRCh38.110.gff3
     known_issues:
       - id_type: hgnc_id
@@ -193,7 +193,7 @@ sources:
 
   GRCh37-ensembl:
     cdot:
-      release: 0.2.25
+      release: 0.2.26
       custom: ensembl.Homo_sapiens.GRCh37.87.gff3
     known_issues:
       - id_type: gene_symbol
