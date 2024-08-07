@@ -72,6 +72,7 @@ rule get_cdot_data:
         url=get_cdot_download_url,
     conda:
         "../envs/base.yaml"
+    cache: "omit-software"
     log:
         "logs/{assembly}-{source}/get_cdot_transcripts.log",
     shell:
@@ -85,6 +86,7 @@ rule get_hgnc_complete_set:
         url=get_hgnc_complete_set_download_url,
     conda:
         "../envs/base.yaml"
+    cache: "omit-software"
     log:
         "logs/hgnc/get_hgnc_complete_set.log",
     shell:
@@ -98,6 +100,7 @@ rule get_genes_to_disease:
         url=get_genes_to_disease_download_url(),
     conda:
         "../envs/base.yaml"
+    cache: "omit-software"
     log:
         "logs/human-phenotype-ontology/get_genes_to_disease.log",
     shell:
