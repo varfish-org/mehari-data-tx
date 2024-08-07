@@ -47,7 +47,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
-          key: ${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
+          key: ${{ matrix.genome_release }}-${{ matrix.source }}
 
       - name: Run data build workflow
         uses: snakemake/snakemake-github-action@v1
