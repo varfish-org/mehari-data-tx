@@ -33,11 +33,11 @@ jobs:
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Cache data directory
         id: cache-mehari-data-tx
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: mehari-data-tx
           key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
