@@ -35,10 +35,6 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-      - name: Create cache directory
-        run: |
-          mkdir -p ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
-
       - name: Cache data directory
         id: cache-mehari-data-tx
         uses: actions/cache@v4
@@ -58,6 +54,8 @@ jobs:
         with:
           directory: mehari-data-tx
           snakefile: workflow/Snakefile
+          stagein: |
+            mkdir -p ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
           args: "--configfile config/config.yaml --cache --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
 
