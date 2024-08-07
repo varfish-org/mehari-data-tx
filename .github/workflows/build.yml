@@ -14,16 +14,20 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.26.0"
+  MEHARI_VERSION: "0.26.1"
+  SNAKEMAKE_OUTPUT_CACHE: "snakemake_cache"
 
 jobs:
-  Build:
+  build_data_release:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         genome_release:
-          - grch37
-          - grch38
-    runs-on: ubuntu-latest
+          - GRCh37
+          - GRCh38
+        source:
+          - refseq
+          - ensembl
     steps:
       - uses: actions/checkout@v4
 
@@ -32,16 +36,32 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       - name: Cache data directory
-        id: cache-primes
+        id: cache-mehari-data-tx
         uses: actions/cache@v3
         with:
           path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
+
+      - name: Cache snakemake cache directory
+        id: cache-snakemake
+        uses: actions/cache@v4
+        with:
+          path: snakemake_cache
+          key: ${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Run data build workflow
         uses: snakemake/snakemake-github-action@v1
         with:
-          directory: data
+          directory: mehari-data-tx
           snakefile: workflow/Snakefile
-          args: "--configfile config/config.yaml --sdm conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache"
+          args: "--configfile config/config.yaml --cache --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
+
+      - name: Save txdb
+        uses: actions/upload-artifact@v4
+        with:
+          name: mehari-${{ MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
+          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
+          if-no-files-found: error
+          overwrite: true
+          compression-level: 0
