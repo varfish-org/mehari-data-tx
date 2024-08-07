@@ -12,7 +12,7 @@ defaults:
 
 env:
   MEHARI_VERSION: "0.26.1"
-  SNAKEMAKE_OUTPUT_CACHE: "snakemake_cache"
+  SNAKEMAKE_OUTPUT_CACHE: "/github/workspace/snakemake_cache"
 
 jobs:
   release-please:
@@ -66,7 +66,7 @@ jobs:
         id: cache-snakemake
         uses: actions/cache@v4
         with:
-          path: snakemake_cache
+          path: ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
           key: ${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Run data build workflow
