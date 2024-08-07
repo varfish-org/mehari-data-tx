@@ -12,7 +12,7 @@ defaults:
 
 env:
   MEHARI_VERSION: "0.26.1"
-  SNAKEMAKE_OUTPUT_CACHE: "/github/workspace/snakemake_cache"
+  SNAKEMAKE_OUTPUT_CACHE: "${{ GITHUB_WORKSPACE }}/snakemake_cache"
 
 jobs:
   release-please:
