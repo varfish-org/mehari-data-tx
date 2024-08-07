@@ -1,5 +1,5 @@
 software-deployment-method: conda
-cache: False
+cache: True
 resources:
   ratelimit: 3
 
