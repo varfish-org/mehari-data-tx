@@ -4,7 +4,7 @@ import re
 import sys
 from contextlib import redirect_stderr
 from io import BytesIO
-from itertools import batched
+from itertools import islice
 from math import ceil
 from time import sleep
 from typing import Collection
@@ -13,6 +13,16 @@ import requests
 from dinopy import FastaReader, FastaWriter
 from snakemake.script import snakemake
 from snakemake import shell
+
+
+def batched(iterable, n):
+    "Batch data into tuples of length n. The last batch may be shorter."
+    # batched('ABCDEFG', 3) --> ABC DEF G
+    if n < 1:
+        raise ValueError('n must be at least one')
+    it = iter(iterable)
+    while batch := tuple(islice(it, n)):
+        yield batch
 
 
 def fetch_ncbi(accessions: Collection[str]):
