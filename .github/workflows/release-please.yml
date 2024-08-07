@@ -11,7 +11,8 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.25.4"
+  MEHARI_VERSION: "0.26.1"
+  SNAKEMAKE_OUTPUT_CACHE: "snakemake_cache"
 
 jobs:
   release-please:
@@ -34,12 +35,15 @@ jobs:
   Build-Release-Assets:
     if: github.repository_owner == 'varfish-org'
     needs: release-please
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         genome_release:
-          - grch37
-          - grch38
-    runs-on: ubuntu-latest
+          - GRCh37
+          - GRCh38
+        source:
+          - refseq
+          - ensembl
     steps:
       - uses: actions/checkout@v4
         if: ${{ needs.release-please.outputs.release_created }}
@@ -51,29 +55,47 @@ jobs:
 
       - name: Cache data directory
         if: ${{ needs.release-please.outputs.release_created }}
-        id: cache-primes
+        id: cache-mehari-data-tx
         uses: actions/cache@v3
         with:
           path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
+
+      - name: Cache snakemake cache directory
+        if: ${{ needs.release-please.outputs.release_created }}
+        id: cache-snakemake
+        uses: actions/cache@v4
+        with:
+          path: snakemake_cache
+          key: ${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Run data build workflow
         if: ${{ needs.release-please.outputs.release_created }}
         uses: snakemake/snakemake-github-action@v1
         with:
-          directory: data
+          directory: mehari-data-tx
           snakefile: workflow/Snakefile
-          args: "--configfile config/config.yaml --sdm conda --show-failed-logs -j 10 --conda-cleanup-pkgs cache"
+          args: "--configfile config/config.yaml --cache --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
+
+#      - name: save txdb
+#        if: ${{ needs.release-please.outputs.release_created }}
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: mehari-${{ MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
+#          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
+#          if-no-files-found: error
+#          overwrite: true
+#          compression-level: 0
 
       - name: upload release assets
         if: ${{ needs.release-please.outputs.release_created }}
         id: upload-release-assets
         run: |
           set -x
-          dir=/home/runner/mehari-data-tx/results/mehari/GRCh38/seqrepo
+          dir=/home/runner/mehari-data-tx/results/mehari/${{ matrix.genome_release }}-${{ matrix.source }}/seqrepo
           src_prefix=$dir/txs.bin
-          dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
+          dst_prefix=$dir/mehari-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.${{ matrix.genome_release }}-${{ matrix.source }}.bin
           for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
             mv $src_prefix$ext $dst_prefix$ext
           done
