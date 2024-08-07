@@ -16,6 +16,8 @@ rule check_mehari_db:
         unpack(cdot_input_mapping),
         tx_db="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst",
         tx_db_report="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.report.jsonl",
+        tx_db_sha256="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.sha256",
+        tx_db_report_sha256="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.report.jsonl.sha256",
         hgnc="results/hgnc/hgnc_complete_set.json",
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
         known_issues="results/{assembly}-{source}/fixes/known_issues.tsv",
