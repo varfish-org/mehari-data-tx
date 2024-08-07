@@ -152,7 +152,7 @@ sources:
   GRCh38-ensembl:
     cdot:
       release: 0.2.26
-      custom: ensembl.Homo_sapiens.GRCh38.110.gff3
+      custom: ensembl.Homo_sapiens.GRCh38.112.gff3
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:32925"
@@ -190,7 +190,27 @@ sources:
       - id_type: hgnc_id
         id: "HGNC:10628"
         description: has ensg in ncbi; however only listed in ensembl 37 and not 38
-
+      - id_type: ensembl_id
+        id: "ENST00000649912.2"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000711617.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713548.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713549.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713558.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713584.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000715520.1"
+        description: novel gene/transcript without HGNC id
   GRCh37-ensembl:
     cdot:
       release: 0.2.26

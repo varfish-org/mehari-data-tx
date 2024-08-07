@@ -2,4 +2,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - mehari ==0.26.0
+  - mehari ==0.26.1
