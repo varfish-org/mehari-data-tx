@@ -3,11 +3,7 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python =3.12
+  - python =3.10
   - requests ==2.32.3
   - samtools >=1.16
-  - cython ==3.0.10
-  - gcc
-  - pip
-  - pip:
-      - dinopy>=2.2.0
+  - dinopy ==3.0.0
