@@ -77,7 +77,7 @@ jobs:
           snakefile: workflow/Snakefile
           stagein: |
             mkdir -p ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
-          args: "--configfile config/config.yaml --cache --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
+          args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
 
 #      - name: save txdb
