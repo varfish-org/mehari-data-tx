@@ -97,7 +97,7 @@ jobs:
           set -x
           dir=/home/runner/mehari-data-tx/results/mehari/${{ matrix.genome_release }}-${{ matrix.source }}/seqrepo
           src_prefix=$dir/txs.bin
-          dst_prefix=$dir/mehari-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.${{ matrix.genome_release }}-${{ matrix.source }}.bin
+          dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
           for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
             mv $src_prefix$ext $dst_prefix$ext
           done
