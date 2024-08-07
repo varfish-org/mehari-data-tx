@@ -82,7 +82,7 @@ jobs:
 #        if: ${{ needs.release-please.outputs.release_created }}
 #        uses: actions/upload-artifact@v4
 #        with:
-#          name: mehari-${{ MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
+#          name: mehari-${{ env.MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
 #          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
 #          if-no-files-found: error
 #          overwrite: true

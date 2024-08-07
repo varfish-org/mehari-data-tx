@@ -57,11 +57,11 @@ jobs:
           args: "--configfile config/config.yaml --cache --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
 
-      - name: Save txdb
-        uses: actions/upload-artifact@v4
-        with:
-          name: mehari-${{ MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
-          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
-          if-no-files-found: error
-          overwrite: true
-          compression-level: 0
+#      - name: Save txdb
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: mehari-${{ env.MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
+#          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
+#          if-no-files-found: error
+#          overwrite: true
+#          compression-level: 0
