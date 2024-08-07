@@ -6,6 +6,8 @@ dependencies:
   - python =3.12
   - requests ==2.32.3
   - samtools >=1.16
+  - cython ==3.0.10
+  - gcc
   - pip
   - pip:
       - dinopy>=2.2.0
