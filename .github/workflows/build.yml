@@ -15,7 +15,7 @@ defaults:
 
 env:
   MEHARI_VERSION: "0.26.1"
-  SNAKEMAKE_OUTPUT_CACHE: "/github/workspace/snakemake_cache"
+  SNAKEMAKE_OUTPUT_CACHE: "mehari-data-tx/cache"
 
 jobs:
   build_data_release:
