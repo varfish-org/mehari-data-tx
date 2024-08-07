@@ -35,6 +35,10 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
+      - name: Create cache directory
+        run: |
+          mkdir -p ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
+
       - name: Cache data directory
         id: cache-mehari-data-tx
         uses: actions/cache@v4

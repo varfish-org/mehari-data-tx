@@ -53,6 +53,10 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
+      - name: Create cache directory
+        run: |
+          mkdir -p ${{ env.SNAKEMAKE_OUTPUT_CACHE }}
+
       - name: Cache data directory
         if: ${{ needs.release-please.outputs.release_created }}
         id: cache-mehari-data-tx
