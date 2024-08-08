@@ -39,7 +39,7 @@ jobs:
         id: cache-mehari-data-tx
         uses: actions/cache@v4
         with:
-          path: mehari-data-tx/results
+          path: mehari-data-tx
           key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Cache snakemake cache directory
