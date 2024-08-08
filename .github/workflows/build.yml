@@ -66,4 +66,4 @@ jobs:
 
       - name: List files
         run: |
-          tree -a -L 4 ~
+          tree -a -L 4 ~/work
