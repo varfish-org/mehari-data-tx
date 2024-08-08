@@ -61,8 +61,12 @@ jobs:
             mkdir -p /github/workspace/snakemake_cache
             mkdir -p ~/snakemake_cache
             mkdir -p ${{ github.workspace }}/snakemake_cache
-          args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
+          args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
+
+      - name: List files
+        run: |
+          tree /home/runner/work/mehari-data-tx
 
 #      - name: Save txdb
 #        uses: actions/upload-artifact@v4
