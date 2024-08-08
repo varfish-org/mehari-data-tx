@@ -58,7 +58,7 @@ jobs:
         id: cache-mehari-data-tx
         uses: actions/cache@v4
         with:
-          path: mehari-data-tx/results
+          path: mehari-data-tx
           key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Cache snakemake cache directory
@@ -66,7 +66,10 @@ jobs:
         id: cache-snakemake
         uses: actions/cache@v4
         with:
-          path: /github/workspace/snakemake_cache
+          path: |
+            /github/workspace/snakemake_cache
+            ~/snakemake_cache
+            ${{ github.workspace }}/snakemake_cache
           key: ${{ matrix.genome_release }}-${{ matrix.source }}
 
       - name: Run data build workflow
@@ -79,16 +82,6 @@ jobs:
             mkdir -p /github/workspace/snakemake_cache
           args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 --conda-cleanup-pkgs cache results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
-
-#      - name: save txdb
-#        if: ${{ needs.release-please.outputs.release_created }}
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: mehari-${{ env.MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
-#          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
-#          if-no-files-found: error
-#          overwrite: true
-#          compression-level: 0
 
       - name: upload release assets
         if: ${{ needs.release-please.outputs.release_created }}
