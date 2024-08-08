@@ -66,4 +66,4 @@ jobs:
 
       - name: List files
         run: |
-          tree -a -L 3 /home/runner/work/mehari-data-tx
+          tree -a -L 4 ~

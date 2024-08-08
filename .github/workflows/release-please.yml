@@ -54,15 +54,13 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Cache data directory
-        if: ${{ needs.release-please.outputs.release_created }}
         id: cache-mehari-data-tx
         uses: actions/cache@v4
         with:
-          path: mehari-data-tx
+          path: ~/mehari-data-tx-workflow
           key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Cache snakemake cache directory
-        if: ${{ needs.release-please.outputs.release_created }}
         id: cache-snakemake
         uses: actions/cache@v4
         with:
@@ -76,10 +74,12 @@ jobs:
         if: ${{ needs.release-please.outputs.release_created }}
         uses: snakemake/snakemake-github-action@v1
         with:
-          directory: mehari-data-tx
+          directory: mehari-data-tx-workflow
           snakefile: workflow/Snakefile
           stagein: |
             mkdir -p /github/workspace/snakemake_cache
+            mkdir -p ~/snakemake_cache
+            mkdir -p ${{ github.workspace }}/snakemake_cache
           args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
 
@@ -88,7 +88,7 @@ jobs:
         id: upload-release-assets
         run: |
           set -x
-          dir=/home/runner/mehari-data-tx/results/mehari/${{ matrix.genome_release }}-${{ matrix.source }}/seqrepo
+          dir=/home/runner/mehari-data-tx/mehari-data-tx-workflow/results/mehari/${{ matrix.genome_release }}-${{ matrix.source }}/seqrepo
           src_prefix=$dir/txs.bin
           dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
           for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
