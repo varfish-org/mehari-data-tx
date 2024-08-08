@@ -66,13 +66,4 @@ jobs:
 
       - name: List files
         run: |
-          tree /home/runner/work/mehari-data-tx
-
-#      - name: Save txdb
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: mehari-${{ env.MEHARI_VERSION }}.${{ matrix.genome_release }}-${{ matrix.source }}.txs.bin.zst
-#          path: results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/txs.bin.zst
-#          if-no-files-found: error
-#          overwrite: true
-#          compression-level: 0
+          tree -a -L 3 /home/runner/work/mehari-data-tx
