@@ -39,7 +39,7 @@ jobs:
         id: cache-mehari-data-tx
         uses: actions/cache@v4
         with:
-          path: mehari-data-tx
+          path: ~/mehari-data-tx-workflow
           key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Cache snakemake cache directory
@@ -55,7 +55,7 @@ jobs:
       - name: Run data build workflow
         uses: snakemake/snakemake-github-action@v1
         with:
-          directory: mehari-data-tx
+          directory: mehari-data-tx-workflow
           snakefile: workflow/Snakefile
           stagein: |
             mkdir -p /github/workspace/snakemake_cache
