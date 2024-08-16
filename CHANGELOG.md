@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.5](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.4...v0.7.5) (2024-08-16)
+
+
+### Bug Fixes
+
+* try without explicit shell and cp instead of mv ([6a963a3](https://github.com/varfish-org/mehari-data-tx/commit/6a963a38bdfa7fa9ac8e3e289d58fd41f84f5080))
+
 ## [0.7.4](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.3...v0.7.4) (2024-08-16)
 
 
