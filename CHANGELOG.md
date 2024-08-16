@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.1...v0.7.2) (2024-08-16)
+
+
+### Bug Fixes
+
+* request sha256sums for txdb and report ([#42](https://github.com/varfish-org/mehari-data-tx/issues/42)) ([cfdfb24](https://github.com/varfish-org/mehari-data-tx/commit/cfdfb24926be12409b365d84acfbe61a2c9076bf))
+
 ## [0.7.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.0...v0.7.1) (2024-08-16)
 
 
