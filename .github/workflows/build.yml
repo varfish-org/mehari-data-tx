@@ -66,4 +66,5 @@ jobs:
 
       - name: List files
         run: |
-          tree -a -L 5 ~/work/mehari-data-tx/mehari-data-tx
+          tree -f ~/work/mehari-data-tx/mehari-data-tx
+          tree -f /github/workspace
