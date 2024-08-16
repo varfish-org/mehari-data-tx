@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.6.1...v0.7.0) (2024-08-16)
+
+
+### Features
+
+* Convert build scripts to snakemake workflow ([#38](https://github.com/varfish-org/mehari-data-tx/issues/38)) ([45c7021](https://github.com/varfish-org/mehari-data-tx/commit/45c702113141e7009bc882185d1e58372c54f4ac))
+
 ## [0.6.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.6.0...v0.6.1) (2024-05-02)
 
 
