@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.4](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.3...v0.7.4) (2024-08-16)
+
+
+### Miscellaneous Chores
+
+* release v0.7.4 ([ae6899c](https://github.com/varfish-org/mehari-data-tx/commit/ae6899c93e6ac373d32c82fe39a3e31cf54140c1))
+
 ## [0.7.3](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.3...v0.7.3) (2024-08-16)
 
 
