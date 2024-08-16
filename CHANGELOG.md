@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.3](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.2...v0.7.3) (2024-08-16)
+
+
+### Bug Fixes
+
+* release please src path, part 2 ([#44](https://github.com/varfish-org/mehari-data-tx/issues/44)) ([6437ef6](https://github.com/varfish-org/mehari-data-tx/commit/6437ef6de74c3735b1cd2c8b1eb96d3bf916cbb4))
+
 ## [0.7.2](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.1...v0.7.2) (2024-08-16)
 
 
