@@ -6,9 +6,9 @@ on:
 name: release-please
 
 # cf. https://github.com/mamba-org/provision-with-micromamba#important
-defaults:
-  run:
-    shell: bash -l {0}
+# defaults:
+#  run:
+#    shell: bash -l {0}
 
 env:
   MEHARI_VERSION: "0.26.1"
@@ -90,9 +90,9 @@ jobs:
           set -x
           dir=/home/runner/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow/results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo
           src_prefix=$dir/txs.bin
-          dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
+          dst_prefix=~/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
           for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
-            mv $src_prefix$ext $dst_prefix$ext
+            cp $src_prefix$ext $dst_prefix$ext
           done
           gh release upload \
             ${{ needs.release-please.outputs.tag_name }} \
