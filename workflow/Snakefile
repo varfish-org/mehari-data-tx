@@ -1,0 +1,38 @@
+from snakemake.utils import validate, min_version
+
+min_version("8.16.0")
+
+
+configfile: "config/config.yaml"
+
+
+validate(config, schema="schemas/config.schema.yaml")
+
+
+wildcard_constraints:
+    assembly=r"(GRCh37|GRCh38)",
+    source=r"(refseq|ensembl)",
+
+
+include: "rules/common.smk"
+include: "rules/download.smk"
+include: "rules/cdot.smk"
+include: "rules/seqrepo.smk"
+include: "rules/mehari.smk"
+include: "rules/validate.smk"
+
+
+rule all:
+    input:
+        expand(
+            [
+                "results/{alias}/mehari/seqrepo/txs.bin.zst.discards.tsv",
+                "results/{alias}/mehari/seqrepo/report/mehari_db_check.txt",
+            ],
+            alias=[
+                "GRCh37-refseq",
+                "GRCh38-refseq",
+                "GRCh38-ensembl",
+                "GRCh37-ensembl",
+            ],
+        ),

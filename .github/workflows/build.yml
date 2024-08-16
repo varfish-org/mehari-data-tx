@@ -14,43 +14,56 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.25.4"
+  MEHARI_VERSION: "0.26.1"
+  SNAKEMAKE_OUTPUT_CACHE: "/github/workspace/snakemake_cache"
 
 jobs:
-  Build:
+  build_data_release:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         genome_release:
-          - grch37
-          - grch38
-    runs-on: ubuntu-latest
+          - GRCh37
+          - GRCh38
+        source:
+          - refseq
+          - ensembl
     steps:
       - uses: actions/checkout@v4
 
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Cache data directory
-        id: cache-primes
-        uses: actions/cache@v3
+        id: cache-mehari-data-tx
+        uses: actions/cache@v4
         with:
-          path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
+          path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
-      - name: Install Conda environment
-        uses: mamba-org/provision-with-micromamba@main
+      - name: Cache snakemake cache directory
+        id: cache-snakemake
+        uses: actions/cache@v4
         with:
-          environment-file: false
-          environment-name: mehari-data-tx
-          channels: conda-forge,bioconda,defaults
-          extra-specs: |
-            python =3.8
-            entrez-direct =16.2
-            biocommons.seqrepo =0.6.5
-            htslib =1.17
+          path: |
+            /github/workspace/snakemake_cache
+            ~/snakemake_cache
+            ${{ github.workspace }}/snakemake_cache
+          key: ${{ matrix.genome_release }}-${{ matrix.source }}
 
-      - name: Run the data build
+      - name: Run data build workflow
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: mehari-data-tx-workflow
+          snakefile: workflow/Snakefile
+          stagein: |
+            mkdir -p /github/workspace/snakemake_cache
+            mkdir -p ~/snakemake_cache
+            mkdir -p ${{ github.workspace }}/snakemake_cache
+          args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
+          show-disk-usage-on-error: true
+
+      - name: List files
         run: |
-          export GENOME_RELEASE=${{ matrix.genome_release }}
-          bash src/run.sh
+          tree -a -L 5 ~/work/mehari-data-tx/mehari-data-tx

@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+ - python =3.10
+ - entrez-direct =16.2
+ - htslib =1.17
+ - ratelimit =2.2.1
+ - requests =2.32.3
+ - bioutils =0.5.7
+ - pip
+ - pip:
+     - git+https://github.com/biocommons/biocommons.seqrepo@c4e620b0ead9270562231144a996ef0b367356f1

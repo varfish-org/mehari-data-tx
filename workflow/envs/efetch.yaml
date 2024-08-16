@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python =3.10
+  - requests ==2.32.3
+  - samtools >=1.16
+  - dinopy ==3.0.0

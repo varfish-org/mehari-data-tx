@@ -1,0 +1,60 @@
+__use_yte__: true
+
+datasets:
+  mehari_check_db_stats:
+    path: ?input.mehari_check_db_stats
+    separator: "\t"
+  fix_incorrect_cds:
+    path: ?input.fix_incorrect_cds
+    separator: "\t"
+  refseq_id_to_ensembl_id:
+    path: ?input.refseq_id_to_ensembl_id
+    separator: "\t"
+  discards_of_interest:
+    path: ?input.discards_of_interest
+    separator: "\t"
+views:
+  mehari_check_db_stats:
+    dataset: mehari_check_db_stats
+    render-table:
+      columns:
+        reason:
+          display-mode: normal
+        len:
+          display-mode: normal
+  fix_incorrect_cds:
+    dataset: fix_incorrect_cds
+    render-table:
+      columns:
+        accession:
+          display-mode: normal
+        change:
+          display-mode: normal
+        start_codon:
+          display-mode: normal
+        stop_codon:
+          display-mode: normal
+  refseq_id_to_ensembl_id:
+    dataset: refseq_id_to_ensembl_id
+    render-table:
+      columns:
+        RefSeq mRNA ID:
+          display-mode: normal
+        Gene stable ID:
+          display-mode: hidden
+        Gene stable ID version:
+          display-mode: normal
+        Transcript stable ID:
+          display-mode: hidden
+        Transcript stable ID version:
+          display-mode: normal
+        HGNC ID:
+          display-mode: normal
+  discards_of_interest:
+    dataset: discards_of_interest
+    render-table:
+      columns:
+        idtype:
+          display-mode: normal
+        id:
+          display-mode: normal

@@ -1,0 +1,171 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+
+description: snakemake configuration file
+
+type: object
+
+definitions:
+  ensembl-entry:
+    type: object
+    properties:
+      ensembl:
+        type: object
+        additionalProperties: false
+        properties:
+          species:
+            type: string
+          release:
+            type: integer
+          build:
+            type: string
+          datatypes:
+            type: array
+            items:
+              type: string
+              enum:
+                - cdna
+                - cds
+                - dna
+                - ncrna
+                - pep
+        required:
+          - species
+          - release
+          - build
+          - datatypes
+  refseq-entry:
+    type: object
+    properties:
+      refseq:
+        type: object
+        additionalProperties: false
+        properties:
+          species:
+            type: string
+          species_name:
+            type: string
+        required:
+          - species
+          - species_name
+  source-entry:
+    type: object
+    properties:
+      cdot:
+        type: object
+        additionalProperties: false
+        properties:
+          release:
+            type: string
+          source:
+            type: string
+          custom:
+            type: string
+        required:
+          - release
+        oneOf:
+          - required:
+              - custom
+          - required:
+              - source
+      known_issues:
+        type: array
+        items:
+          type: object
+          properties:
+            id_type:
+              type: string
+              enum:
+                - hgnc_id
+                - gene_symbol
+                - ensembl_id
+                - refseq_id
+            id:
+              type: string
+            description:
+              type: string
+          required:
+            - id_type
+            - id
+            - description
+      fixes:
+        type: object
+        properties:
+          fix_cds:
+            type: array
+            items:
+              type: string
+          add_from_ensembl:
+            type: array
+            items:
+              type: string
+          polyA:
+            type: array
+            items:
+              type: string
+    required:
+      - cdot
+
+properties:
+  reference:
+    type: object
+    minProperties: 1
+    additionalProperties:
+      anyOf:
+        - $ref: "#/definitions/ensembl-entry"
+        - $ref: "#/definitions/refseq-entry"
+  sources:
+    type: object
+    minProperties: 1
+    additionalProperties:
+      anyOf:
+        - $ref: "#/definitions/source-entry"
+    required:
+      - GRCh38-ensembl
+      - GRCh37-ensembl
+  hgnc:
+    type: object
+    properties:
+      version:
+        type: string
+        format: date
+    required:
+      - version
+  human-phenotype-ontology:
+    type: object
+    properties:
+      genes_to_disease:
+        type: object
+        properties:
+          release:
+            type: string
+        required:
+          - release
+    required:
+      - genes_to_disease
+  namespaces:
+    type: object
+    properties:
+      ensembl:
+        type: string
+      refseq:
+        type: string
+    required:
+      - ensembl
+      - refseq
+  mehari:
+    type: object
+    additionalProperties: false
+    properties:
+      version:
+        type: string
+    required:
+      - version
+required:
+  - reference
+  - sources
+  - hgnc
+  - human-phenotype-ontology
+  - namespaces
+  - mehari
+
+additionalProperties: false

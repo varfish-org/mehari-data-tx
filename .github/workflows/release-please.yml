@@ -11,7 +11,8 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.25.4"
+  MEHARI_VERSION: "0.26.1"
+  SNAKEMAKE_OUTPUT_CACHE: "/github/workspace/snakemake_cache"
 
 jobs:
   release-please:
@@ -34,12 +35,15 @@ jobs:
   Build-Release-Assets:
     if: github.repository_owner == 'varfish-org'
     needs: release-please
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         genome_release:
-          - grch37
-          - grch38
-    runs-on: ubuntu-latest
+          - GRCh37
+          - GRCh38
+        source:
+          - refseq
+          - ensembl
     steps:
       - uses: actions/checkout@v4
         if: ${{ needs.release-please.outputs.release_created }}
@@ -47,52 +51,55 @@ jobs:
       - name: Get current date
         if: ${{ needs.release-please.outputs.release_created }}
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Cache data directory
-        if: ${{ needs.release-please.outputs.release_created }}
-        id: cache-primes
-        uses: actions/cache@v3
+        id: cache-mehari-data-tx
+        uses: actions/cache@v4
         with:
-          path: mehari-data-tx
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('src/download.sh') }}
+          path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
 
-      - name: Install Conda environment
-        if: ${{ needs.release-please.outputs.release_created }}
-        uses: mamba-org/provision-with-micromamba@main
+      - name: Cache snakemake cache directory
+        id: cache-snakemake
+        uses: actions/cache@v4
         with:
-          environment-file: false
-          environment-name: mehari-data-tx
-          channels: conda-forge,bioconda,defaults
-          extra-specs: |
-            python =3.8
-            entrez-direct =16.2
-            biocommons.seqrepo =0.6.5
-            htslib =1.17
+          path: |
+            /github/workspace/snakemake_cache
+            ~/snakemake_cache
+            ${{ github.workspace }}/snakemake_cache
+          key: ${{ matrix.genome_release }}-${{ matrix.source }}
 
-      - name: Run the data build
+      - name: Run data build workflow
         if: ${{ needs.release-please.outputs.release_created }}
-        run: |
-          export GENOME_RELEASE=${{ matrix.genome_release }}
-          bash src/run.sh
+        uses: snakemake/snakemake-github-action@v1
+        with:
+          directory: mehari-data-tx-workflow
+          snakefile: workflow/Snakefile
+          stagein: |
+            mkdir -p /github/workspace/snakemake_cache
+            mkdir -p ~/snakemake_cache
+            mkdir -p ${{ github.workspace }}/snakemake_cache
+          args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
+          show-disk-usage-on-error: true
 
       - name: upload release assets
         if: ${{ needs.release-please.outputs.release_created }}
         id: upload-release-assets
         run: |
           set -x
-          dir=/home/runner/mehari-data-tx/pass-2
+          dir=/home/runner/mehari-data-tx/mehari-data-tx-workflow/results/mehari/${{ matrix.genome_release }}-${{ matrix.source }}/seqrepo
           src_prefix=$dir/txs.bin
-          dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
-          for ext in .zst .zst.sha256 .zst.report .zst.report.sha256; do
+          dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
+          for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
             mv $src_prefix$ext $dst_prefix$ext
           done
           gh release upload \
             ${{ needs.release-please.outputs.tag_name }} \
             $dst_prefix.zst \
             $dst_prefix.zst.sha256 \
-            $dst_prefix.zst.report \
-            $dst_prefix.zst.report.sha256
+            $dst_prefix.zst.report.jsonl \
+            $dst_prefix.zst.report.jsonl.sha256
         env:
           # GitHub provides this variable in the CI env. You don't
           # need to add anything to the secrets vault.

@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python =3.12
+  - polars =0.20
+#  - hvplot =0.10
+  - pandas =2.2.2
+#  - pyarrow =16.1.0

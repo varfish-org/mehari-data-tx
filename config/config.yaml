@@ -1,0 +1,251 @@
+# reference sequence definitions
+reference:
+  GRCh38:
+    ensembl:
+      species: homo_sapiens
+      release: 112
+      build: GRCh38
+      datatypes: [cdna, ncrna]
+    refseq:
+      species: H_sapiens
+      species_name: human
+#      build: GCF_000001405.40_GRCh38.p14
+#      version: 110
+#      taxon_id: 9606
+  GRCh37:
+    ensembl:
+      species: homo_sapiens
+      release: 105
+      build: GRCh37
+      datatypes: [cdna, ncrna]
+    refseq:
+      species: H_sapiens
+      species_name: human
+
+
+# cdot transcript sources for the references defined above
+sources:
+  GRCh38-refseq:
+    cdot:
+      release: 0.2.26
+      custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
+    fixes:
+      # for the following set of transcripts, check against nuccore whether the CDS region is correct
+      fix_cds: [
+        # SHANK3
+        "NM_001372044.2",
+        # CAPN8
+        "NM_001143962.2",
+        # CASP8AP2
+        "NM_001137667.2",  # partial, MANE Select
+        # "NM_001137668.2",  # partial
+        # "NM_012115.4",     # partial
+        # DAG1
+        "NM_001177639.3",    # The RefSeq transcript has 1 non-frameshifting indel compared to this genomic sequence
+        # FOXO6
+        # "NM_001291281.3",  # partial, MANE Select
+        # POLK
+        # "NM_001345921.3",  # partial
+        # "NM_001345922.3",  # partial
+        # "NM_001372044.2",  # partial, RefSeq Select
+        # "NM_001387110.3",  # partial
+        # "NM_001387111.3",  # partial
+        # "NM_001395899.1",  # partial
+        # "NM_001395901.1",  # partial
+        # "NM_001395902.1",  # partial
+        # "NM_016218.6",     # partial, RefSeq Select
+        # SAMD1
+        # "NM_138352.3",     # partial, MANE Select
+        # MUC19
+        # "NM_173600.2",     # partial, RefSeq Select
+        # older versions in cdot than available in the current cdna ref releases:
+        # "NM_001401501.1",  # partial
+        # "NM_002457.4",     # partial, RefSeq Select
+        # "NM_003890.2",     # partial, RefSeq Select
+        # "NM_012234.6",     # partial, RefSeq Select
+        # "NM_017940.6",
+      ]
+      # for the following refseq transcripts, lookup the ensembl matches and include the respective
+      # sequences in seqrepo and the transcript information from cdot
+      add_from_ensembl: [
+        # Invalid CDS length in cdot:
+        # Most (or all?) of these are marked as CDS join(a..b,c..d) in nuccore
+        "NM_001172437.2",
+        "NM_001184961.1",
+        "NM_015068.3",
+        "NM_182705.2",
+        "NM_001145051.2",
+        "NM_001301020.1",
+        "NM_004152.3",
+        "NM_001301302.1",
+        "NM_002537.3",
+        "NM_001134939.1",
+        "NM_001301371.1",
+        "NM_016178.2",
+        "NM_053005.5",
+        # MANE select but refseq transcript + annotation seems to be problematic (missing stop codon)
+        "NM_001405666.3",
+        "NM_012234.6",
+      ]
+#      swap_version:
+#        - { "from": "NM_012234.6", "to": "NM_012234.7"}
+#      # for the following transcripts, append a polyA tail to fix the stop codon
+#      polyA: [
+#        "NM_001424184.1",
+#        "NM_001145051.2",
+#      ]
+
+  GRCh37-refseq:
+    cdot:
+      release: 0.2.26
+      custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
+    fixes:
+      fix_cds: [
+        # SHANK3
+        "NM_001372044.2",
+        # CAPN8
+        "NM_001143962.2",
+        # SECC22B
+        "NM_004892.6",
+      ]
+      add_from_ensembl: [
+        # All of these are marked as CDS join(a..b,c..d) in nuccore:
+        # OAZ1
+        "NM_004152.3",
+        "NM_001301020.1",
+        # OAZ2
+        "NM_002537.3",
+        "NM_001301302.1",
+        # OAZ3
+        "NM_001301371.1",
+        "NM_001134939.1",
+      ]
+
+  # the following entry is semi hardcoded for now
+  # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
+  GRCh38-ensembl:
+    cdot:
+      release: 0.2.26
+      custom: ensembl.Homo_sapiens.GRCh38.112.gff3
+    known_issues:
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12348"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12027"
+        description: tcell receptor alpha; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:6109"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:2889"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12155"
+        description: tcell receptor beta; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12271"
+        description: tcell receptor gamma; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:5477"
+        description: immunoglobulin heavy locus; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: fragile site, distamycin A type, rare, fra(16)(p12.1); consistent with ensg missing from hgnc
+      - id_type: hgnc_id
+        id: "HGNC:12252"
+        description: tcell receptor delta; consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: consistent with missing ensg in hgnc
+      - id_type: hgnc_id
+        id: "HGNC:10628"
+        description: has ensg in ncbi; however only listed in ensembl 37 and not 38
+      - id_type: ensembl_id
+        id: "ENST00000649912.2"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000711617.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713548.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713549.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713558.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000713584.1"
+        description: novel gene/transcript without HGNC id
+      - id_type: ensembl_id
+        id: "ENST00000715520.1"
+        description: novel gene/transcript without HGNC id
+  GRCh37-ensembl:
+    cdot:
+      release: 0.2.26
+      custom: ensembl.Homo_sapiens.GRCh37.87.gff3
+    known_issues:
+      - id_type: gene_symbol
+        id: "ATXN8"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:32925"
+        description: foobar
+      - id_type: gene_symbol
+        id: "FRA16E"
+        description: foobar
+      - id_type: hgnc_id
+        id: "HGNC:3861"
+        description: foobar
+
+
+# HGNC complete set file to check missing HGNC ids from cdot against
+hgnc:
+  # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
+  # format: yyyy-mm-dd
+  # quarterly versions: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
+  version: "2024-04-01"
+
+# namespaces to use for seqrepo
+namespaces:
+  ensembl: Ensembl
+  refseq: NCBI
+
+human-phenotype-ontology:
+  genes_to_disease:
+    release: v2024-07-01
+
+# mehari version to use (currently ignored)
+mehari:
+  version: 0.26.6
