@@ -88,7 +88,7 @@ jobs:
         id: upload-release-assets
         run: |
           set -x
-          dir=/home/runner/mehari-data-tx/mehari-data-tx-workflow/results/mehari/${{ matrix.genome_release }}-${{ matrix.source }}/seqrepo
+          dir=/home/runner/mehari-data-tx/mehari-data-tx-workflow/results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo
           src_prefix=$dir/txs.bin
           dst_prefix=$dir/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
           for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
