@@ -248,4 +248,4 @@ human-phenotype-ontology:
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.26.6
+  version: 0.28.0
