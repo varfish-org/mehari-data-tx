@@ -50,7 +50,8 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
         where = "quarterly"
     else:
         where = "monthly"
-    url = f"http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/archive/{where}/json/hgnc_complete_set_{version}.json"
+    # url = f"http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/archive/{where}/json/hgnc_complete_set_{version}.json"
+    url = f"https://storage.googleapis.com/public-download-files/hgnc/archive/archive/{where}/json/hgnc_complete_set_{version}.json"
     return url
 
 
@@ -66,7 +67,7 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     if wildcards.source.lower() == "refseq":
         cdot_files.update(
             **{
-                # "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
+                "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
                 "cdot_grafted": f"results/{alias}/cdot/{alias}.cdot.grafted.json.gz",
             }
         )
