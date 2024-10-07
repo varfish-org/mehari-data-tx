@@ -50,7 +50,8 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
         where = "quarterly"
     else:
         where = "monthly"
-    url = f"http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/archive/{where}/json/hgnc_complete_set_{version}.json"
+    # url = f"http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/archive/{where}/json/hgnc_complete_set_{version}.json"
+    url = f"https://storage.googleapis.com/public-download-files/hgnc/archive/archive/{where}/json/hgnc_complete_set_{version}.json"
     return url
 
 
