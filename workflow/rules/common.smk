@@ -66,7 +66,7 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     if wildcards.source.lower() == "refseq":
         cdot_files.update(
             **{
-                # "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
+                "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
                 "cdot_grafted": f"results/{alias}/cdot/{alias}.cdot.grafted.json.gz",
             }
         )
