@@ -1,6 +1,6 @@
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - jq ==1.7.1
   - pigz ==2.8
