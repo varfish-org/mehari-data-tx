@@ -1,6 +1,6 @@
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - curl ==7.87.0
   - wget ==1.21.4

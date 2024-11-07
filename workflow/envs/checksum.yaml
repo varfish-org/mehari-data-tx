@@ -1,5 +1,5 @@
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - sha256 ==1.0

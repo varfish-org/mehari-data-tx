@@ -1,6 +1,6 @@
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - python =3.12
   - polars =0.20
