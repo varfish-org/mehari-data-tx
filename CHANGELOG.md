@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.7.6](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.5...v0.7.6) (2024-11-07)
+
+
+### Bug Fixes
+
+* don't use anaconda defaults channel ([#51](https://github.com/varfish-org/mehari-data-tx/issues/51)) ([1cfd71a](https://github.com/varfish-org/mehari-data-tx/commit/1cfd71ac0f73fc13b08aaa8791b0503ffbf75c0d))
+* re-enable refseq MT grafting from ensembl ([#54](https://github.com/varfish-org/mehari-data-tx/issues/54)) ([6b6b5d2](https://github.com/varfish-org/mehari-data-tx/commit/6b6b5d2b8bc7ea5d1ac2746b701a3ace6f4fa923))
+* update hgnc download url ([#52](https://github.com/varfish-org/mehari-data-tx/issues/52)) ([5e3a89a](https://github.com/varfish-org/mehari-data-tx/commit/5e3a89abb8dbbf690d5defe7150feeef80368739))
+
 ## [0.7.5](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.4...v0.7.5) (2024-08-16)
 
 
