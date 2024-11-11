@@ -53,6 +53,12 @@ jobs:
         id: date
         run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
+      - name: Setup apptainer
+        run: |
+          sudo add-apt-repository -y ppa:apptainer/ppa
+          sudo apt-get update
+          sudo apt install -y apptainer
+
       - name: Cache data directory
         id: cache-mehari-data-tx
         uses: actions/cache@v4
@@ -80,7 +86,7 @@ jobs:
             mkdir -p /github/workspace/snakemake_cache
             mkdir -p ~/snakemake_cache
             mkdir -p ${{ github.workspace }}/snakemake_cache
-          args: "--configfile config/config.yaml --sdm conda --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
+          args: "--configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
 
       - name: upload release assets
