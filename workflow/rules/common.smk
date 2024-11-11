@@ -163,3 +163,7 @@ def get_genes_to_disease_download_url() -> str:
 def get_known_issues(wildcards: Wildcards) -> list[str]:
     alias = get_alias(wildcards)
     return config["sources"][alias].get("known_issues", [])
+
+
+def get_mehari_docker_url() -> str:
+    return config["mehari"]["docker"]

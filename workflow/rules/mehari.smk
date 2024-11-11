@@ -25,7 +25,7 @@ rule mehari_build_txs_db:
     benchmark:
         "benchmarks/{assembly}-{source}/mehari/seqrepo/build_txs_db.tsv"
     container:
-        "docker://ghcr.io/varfish-org/mehari:pr-603"
+        get_mehari_docker_url()
     shell:
         """
         mehari db create \

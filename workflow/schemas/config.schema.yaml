@@ -158,8 +158,11 @@ properties:
     properties:
       version:
         type: string
+      docker:
+        type: string
     required:
       - version
+      - docker
 required:
   - reference
   - sources

@@ -1,5 +1,6 @@
-software-deployment-method: conda
+software-deployment-method:
+  - conda
+  - apptainer
 cache: True
 resources:
   ratelimit: 3
-

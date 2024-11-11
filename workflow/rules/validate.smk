@@ -32,7 +32,7 @@ rule check_mehari_db:
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/check.log",
     container:
-        "docker://ghcr.io/varfish-org/mehari:pr-603"
+        get_mehari_docker_url()
     shell:
         """(
         mehari db check \
