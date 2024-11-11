@@ -67,7 +67,7 @@ jobs:
           sudo sh -c 'echo kernel.unprivileged_userns_clone=1 \
              > /etc/sysctl.d/91-local-userns.conf'
           sudo sysctl -p /etc/sysctl.d/90-disable-userns-restrictions.conf \
-                      -p /etc/sysctl.d/91-local-userns.con
+                      -p /etc/sysctl.d/91-local-userns.conf
 
       - name: Cache data directory
         id: cache-mehari-data-tx
