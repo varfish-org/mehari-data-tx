@@ -7,8 +7,29 @@ def get_alias(wildcards: Wildcards) -> str:
     return f"{wildcards.assembly}-{wildcards.source}"
 
 
-def genome_release(wildcards: Wildcards) -> str:
+def genome_assembly(wildcards: Wildcards) -> str:
     return wildcards.assembly.lower()
+
+
+def genome_assembly_version_parameter(_wildcards: Wildcards) -> str:
+    # TODO determine e.g. patch version for GRCh37/38
+    return ""
+
+
+def transcript_source(wildcards: Wildcards) -> str:
+    return wildcards.source.lower()
+
+
+def transcript_source_version_parameter(wildcards: Wildcards) -> str:
+    if wildcards.source.lower() == "ensembl":
+        release = config["reference"][wildcards.assembly]["ensembl"]["release"]
+        return f"--transcript-source-version {release}"
+    else:
+        return ""
+
+
+def cdot_version(wildcards: Wildcards) -> str:
+    return config["sources"][get_alias(wildcards)]["cdot"]["release"]
 
 
 def get_ensembl_sequence_param(param: str) -> Callable[[Wildcards], str]:
