@@ -14,7 +14,7 @@ defaults:
     shell: bash -l {0}
 
 env:
-  MEHARI_VERSION: "0.26.1"
+  MEHARI_VERSION: "0.30.0"
   SNAKEMAKE_OUTPUT_CACHE: "/github/workspace/snakemake_cache"
 
 jobs:
