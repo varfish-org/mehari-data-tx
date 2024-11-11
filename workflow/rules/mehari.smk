@@ -24,8 +24,8 @@ rule mehari_build_txs_db:
         "logs/{assembly}-{source}/mehari/seqrepo/build_txs_db.log",
     benchmark:
         "benchmarks/{assembly}-{source}/mehari/seqrepo/build_txs_db.tsv"
-    conda:
-        "../envs/mehari.yaml"
+    container:
+        "docker://ghcr.io/varfish-org/mehari:pr-603"
     shell:
         """
         mehari db create \
