@@ -39,17 +39,14 @@ jobs:
         run: |
           sudo add-apt-repository -y ppa:apptainer/ppa
           sudo apt-get update
-          sudo apt install -y apptainer-suid squashfuse
+          sudo apt install -y apptainer squashfuse
 
       # See https://github.com/apptainer/apptainer/pull/2262
       - name: Disable apparmor namespace restrictions for apptainer
         run: |
-          sudo sh -c 'echo kernel.apparmor_restrict_unprivileged_userns=0 \
-              >/etc/sysctl.d/90-disable-userns-restrictions.conf'
-          sudo sh -c 'echo kernel.unprivileged_userns_clone=1 \
-             > /etc/sysctl.d/91-local-userns.conf'
-          sudo sysctl -p /etc/sysctl.d/90-disable-userns-restrictions.conf \
-                      -p /etc/sysctl.d/91-local-userns.conf
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 \
+                      -w kernel.apparmor_restrict_unprivileged_userns=0 \
+                      -w kernel.unprivileged_userns_clone=1
 
       - name: Cache data directory
         id: cache-mehari-data-tx
