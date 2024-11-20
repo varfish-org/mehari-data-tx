@@ -44,9 +44,14 @@ jobs:
       # See https://github.com/apptainer/apptainer/pull/2262
       - name: Disable apparmor namespace restrictions for apptainer
         run: |
+          set -x
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 \
                       -w kernel.apparmor_restrict_unprivileged_userns=0 \
                       -w kernel.unprivileged_userns_clone=1
+          sysctl kernel.apparmor_restrict_unprivileged_unconfined \
+                      kernel.apparmor_restrict_unprivileged_userns \
+                      kernel.unprivileged_userns_clone
+          apptainer run docker://ghcr.io/varfish-org/mehari:pr-603
 
       - name: Cache data directory
         id: cache-mehari-data-tx
