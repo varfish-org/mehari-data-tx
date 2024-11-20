@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.8.0...v0.8.1) (2024-11-20)
+
+
+### Miscellaneous Chores
+
+* release 0.8.1 ([450a448](https://github.com/varfish-org/mehari-data-tx/commit/450a448f29db26effb68bd13d3907d072eb9185d))
+
 ## [0.8.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.6...v0.8.0) (2024-11-20)
 
 
