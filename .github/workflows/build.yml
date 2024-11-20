@@ -11,7 +11,7 @@ on:
 # cf. https://github.com/mamba-org/provision-with-micromamba#important
 defaults:
   run:
-    shell: bash -l {0}
+    shell: bash -el {0}
 
 env:
   MEHARI_VERSION: "0.30.0"
