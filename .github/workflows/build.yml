@@ -60,7 +60,6 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            /github/workspace/snakemake_cache
             ~/snakemake_cache
             ${{ github.workspace }}/snakemake_cache
           key: ${{ matrix.genome_release }}-${{ matrix.source }}
@@ -87,7 +86,6 @@ jobs:
       - name: Run data build workflow
         shell: bash -el {0}
         run: |
-          mkdir -p /github/workspace/snakemake_cache
           mkdir -p ~/snakemake_cache
           mkdir -p ${{ github.workspace }}/snakemake_cache
           snakemake --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt
