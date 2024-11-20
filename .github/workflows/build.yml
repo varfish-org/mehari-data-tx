@@ -51,12 +51,8 @@ jobs:
           sysctl kernel.apparmor_restrict_unprivileged_unconfined \
                       kernel.apparmor_restrict_unprivileged_userns \
                       kernel.unprivileged_userns_clone
-          imgdir=/github/workspace/mehari-data-tx-workflow/.snakemake/singularity
-          mkdir -p $imgdir
-          pushd $imgdir
           singularity pull --name bc40b59cbb87acb3ff98d1dbdc12639e.simg docker://ghcr.io/varfish-org/mehari:pr-603
-          popd
-          singularity exec --home '/github/workspace/mehari-data-tx-workflow' -B /github/workspace/snakemake_cache:/github/workspace/snakemake_cache:rw /github/workspace/mehari-data-tx-workflow/.snakemake/singularity/bc40b59cbb87acb3ff98d1dbdc12639e.simg bash -c 'set -euo pipefail; mehari --help'
+          singularity exec --home '/github/workspace/mehari-data-tx-workflow' -B /github/workspace/snakemake_cache:/github/workspace/snakemake_cache:rw bc40b59cbb87acb3ff98d1dbdc12639e.simg bash -c 'set -euo pipefail; mehari --help'
 
       - name: Cache data directory
         id: cache-mehari-data-tx
