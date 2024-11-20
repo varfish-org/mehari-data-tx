@@ -51,7 +51,6 @@ jobs:
           sysctl kernel.apparmor_restrict_unprivileged_unconfined \
                       kernel.apparmor_restrict_unprivileged_userns \
                       kernel.unprivileged_userns_clone
-          apptainer run docker://ghcr.io/varfish-org/mehari:pr-603
 
       - name: Cache data directory
         id: cache-mehari-data-tx
@@ -79,7 +78,7 @@ jobs:
             mkdir -p /github/workspace/snakemake_cache
             mkdir -p ~/snakemake_cache
             mkdir -p ${{ github.workspace }}/snakemake_cache
-          args: "--configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
+          args: "--verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
           show-disk-usage-on-error: true
 
       - name: List files
