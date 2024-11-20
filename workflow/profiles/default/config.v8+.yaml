@@ -1,5 +1,7 @@
-software-deployment-method: conda
+software-deployment-method:
+  - conda
+  - apptainer
 cache: True
+apptainer-args: "-B ${SNAKEMAKE_OUTPUT_CACHE}:${SNAKEMAKE_OUTPUT_CACHE}:rw"
 resources:
   ratelimit: 3
-

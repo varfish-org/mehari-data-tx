@@ -28,12 +28,11 @@ rule check_mehari_db:
             category="{assembly}-{source}",
         ),
     params:
-        known_issues=get_known_issues,
         cdot=get_mehari_check_cdot_param_string,
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/check.log",
-    conda:
-        "../envs/mehari.yaml"
+    container:
+        get_mehari_docker_url()
     shell:
         """(
         mehari db check \

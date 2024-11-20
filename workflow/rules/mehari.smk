@@ -15,20 +15,28 @@ rule mehari_build_txs_db:
             else ""
         ),
         cdot=get_mehari_cdot_param_string,
-        genome_release=genome_release,
+        assembly=genome_assembly,
+        assembly_version=genome_assembly_version_parameter,
+        cdot_version=cdot_version,
+        transcript_source=transcript_source,
+        transcript_source_version=transcript_source_version_parameter,
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/build_txs_db.log",
     benchmark:
         "benchmarks/{assembly}-{source}/mehari/seqrepo/build_txs_db.tsv"
-    conda:
-        "../envs/mehari.yaml"
+    container:
+        get_mehari_docker_url()
     shell:
         """
         mehari db create \
         --path-out {output.txs} \
         --path-seqrepo-instance {input.seqrepo_instance} \
         {params.cdot} \
-        --genome-release {params.genome_release} \
+        --cdot-version {params.cdot_version} \
+        --assembly {params.assembly} \
+        {params.assembly_version} \
+        --transcript-source {params.transcript_source} \
+        {params.transcript_source_version} \
         --threads {threads} \
         {params.mane} 2> {log}
         """
