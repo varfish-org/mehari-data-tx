@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.6...v0.8.0) (2024-11-20)
+
+
+### Features
+
+* Upgrade mehari to 0.30.0 ([#55](https://github.com/varfish-org/mehari-data-tx/issues/55)) ([4b06bc8](https://github.com/varfish-org/mehari-data-tx/commit/4b06bc83d1a0679fd1dca9786ef598a659bb63a0))
+
 ## [0.7.6](https://github.com/varfish-org/mehari-data-tx/compare/v0.7.5...v0.7.6) (2024-11-07)
 
 
