@@ -44,16 +44,9 @@ jobs:
       # See https://github.com/apptainer/apptainer/pull/2262
       - name: Disable apparmor namespace restrictions for apptainer
         run: |
-          set -x
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 \
                       -w kernel.apparmor_restrict_unprivileged_userns=0 \
                       -w kernel.unprivileged_userns_clone=1
-          sysctl kernel.apparmor_restrict_unprivileged_unconfined \
-                      kernel.apparmor_restrict_unprivileged_userns \
-                      kernel.unprivileged_userns_clone
-          mkdir -p fake_cache
-          singularity pull --name bc40b59cbb87acb3ff98d1dbdc12639e.simg docker://ghcr.io/varfish-org/mehari:pr-603
-          singularity exec --home $PWD -B $PWD/fake_cache:$PWD/fake_cache:rw bc40b59cbb87acb3ff98d1dbdc12639e.simg bash -c 'set -euo pipefail; mehari --help'
 
       - name: Cache data directory
         id: cache-mehari-data-tx
@@ -72,17 +65,32 @@ jobs:
             ${{ github.workspace }}/snakemake_cache
           key: ${{ matrix.genome_release }}-${{ matrix.source }}
 
-      - name: Run data build workflow
-        uses: snakemake/snakemake-github-action@v1
+      - name: Cache conda
+        uses: actions/cache@v3
+        env:
+          # Increase this value to reset cache if etc/example-environment.yml has not changed
+          CACHE_NUMBER: 0
         with:
-          directory: mehari-data-tx-workflow
-          snakefile: workflow/Snakefile
-          stagein: |
-            mkdir -p /github/workspace/snakemake_cache
-            mkdir -p ~/snakemake_cache
-            mkdir -p ${{ github.workspace }}/snakemake_cache
-          args: "--verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt"
-          show-disk-usage-on-error: true
+          path: ~/conda_pkgs_dir
+          key:
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yaml') }}
+
+      - name: Setup Miniconda and snakemake
+        uses: conda-incubator/setup-miniconda@v3.1.0
+        with:
+          auto-update-conda: true
+          conda-solver: "libmamba"
+          python-version: 3.12
+          environment-file: "environment.yaml"
+          conda-remove-defaults: "true"
+
+      - name: Run data build workflow
+        shell: bash -el {0}
+        run: |
+          mkdir -p /github/workspace/snakemake_cache
+          mkdir -p ~/snakemake_cache
+          mkdir -p ${{ github.workspace }}/snakemake_cache
+          snakemake --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt
 
       - name: List files
         run: |
