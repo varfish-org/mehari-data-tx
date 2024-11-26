@@ -79,4 +79,4 @@ rule datavzrd:
     log:
         "logs/datavzrd_report/{assembly}-{source}/seqrepo/check_mehari_db.log",
     wrapper:
-        "v3.13.1/utils/datavzrd"
+        "v5.0.2/utils/datavzrd"

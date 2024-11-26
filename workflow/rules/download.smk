@@ -10,7 +10,7 @@ rule get_ensembl_sequence:
         "logs/{assembly}-ensembl/get_ensembl_sequence.{datatype}.log",
     cache: "omit-software"  # save space and time with between workflow caching (see docs)
     wrapper:
-        "v3.11.0/bio/reference/ensembl-sequence"
+        "v5.0.2/bio/reference/ensembl-sequence"
 
 
 rule merge_ensembl_sequence:

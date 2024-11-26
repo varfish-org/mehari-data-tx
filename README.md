@@ -8,10 +8,10 @@ This repository contains a snakemake workflow to build mehari transcript databas
 
 Databases are built for each combination of genome release (GRCh37, GRCh38) and reference source (ensembl, refseq):
 
-- mehari-data `v0.7.0`
+- mehari-data `v0.9.0`
   - uses:
-    - mehari `v0.26.1`
-    - cdot: `v0.2.26`
+    - mehari `v0.30.1`
+    - cdot: `v0.2.27`
   - `GRCh37-refseq`
       - genome release: GRCh37.p13
       - VEP/ENSEMBL equivalent: `105`
