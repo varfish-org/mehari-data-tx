@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.8.1...v0.9.0) (2024-11-26)
+
+
+### Bug Fixes
+
+* bump cdot to 0.2.27, snakemake wrappers ([#58](https://github.com/varfish-org/mehari-data-tx/issues/58)) ([db18015](https://github.com/varfish-org/mehari-data-tx/commit/db18015350a7c1e858f645ac01d5a4d5da5bc1b1))
+
+
+### Miscellaneous Chores
+
+* Release-As: 0.9.0 ([594dff4](https://github.com/varfish-org/mehari-data-tx/commit/594dff4019ed64797ae8bf7af62f019c9585d1dd))
+
 ## [0.8.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.8.0...v0.8.1) (2024-11-20)
 
 
