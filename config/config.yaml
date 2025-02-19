@@ -234,8 +234,9 @@ sources:
 hgnc:
   # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
   # format: yyyy-mm-dd
-  # quarterly versions: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-  version: "2024-04-01"
+  # check https://www.genenames.org/download/archive/quarterly/json/ for available versions.
+  # quarterly versions: _usually_: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
+  version: "2025-01-06"
 
 # namespaces to use for seqrepo
 namespaces:
@@ -244,7 +245,8 @@ namespaces:
 
 human-phenotype-ontology:
   genes_to_disease:
-    release: v2024-07-01
+    # check https://github.com/obophenotype/human-phenotype-ontology/releases/ for available versions
+    release: v2024-01-16
 
 # mehari version to use (currently ignored)
 mehari:
