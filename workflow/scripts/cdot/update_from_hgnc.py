@@ -56,6 +56,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
         "entrez_id",
         "ensembl_gene_id",
         "symbol",
+        "alias_symbol",
         "refseq_accession",
         "mane_select",
     ]
@@ -81,7 +82,7 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
                         r = [r]
                     for r_ in r:
                         name_to_hgnc[source][r_] = hgnc_id
-                if source == "symbol":
+                if source == "symbol" or source == "alias_symbol":
                     hgnc_to_symbol[hgnc_id] = r
 
         if r := record.get("locus_type"):
@@ -181,6 +182,7 @@ def update_cdot(
             "mane_select_ensembl",
             "mane_select_refseq",
             "symbol",
+            "alias_symbol",
         ]
         _hgnc_id = transcript_hgnc_id
         if not transcript_hgnc_id:
