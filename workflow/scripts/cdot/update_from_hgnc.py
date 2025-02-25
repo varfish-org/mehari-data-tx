@@ -55,11 +55,14 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
     sources = [
         "entrez_id",
         "ensembl_gene_id",
-        "symbol",
-        "alias_symbol",
         "refseq_accession",
         "mane_select",
     ]
+    # gene name to hgnc id
+    # order is important, as the first match is taken
+    symbols = ["symbol", "alias_symbol", "gene_name", "gene_symbol"]
+
+    sources += symbols
     for record in hgnc["docs"]:
         hgnc_id = record["hgnc_id"][5:]  # strip "HGNC:" prefix
         id_to_hgnc_record[hgnc_id] = record
@@ -82,8 +85,9 @@ def cdot_from_hgnc(cdot: str, hgnc: str):
                         r = [r]
                     for r_ in r:
                         name_to_hgnc[source][r_] = hgnc_id
-                if source == "symbol" or source == "alias_symbol":
-                    hgnc_to_symbol[hgnc_id] = r
+                if source in {"symbol", "alias_symbol", "gene_symbol", "gene_name"}:
+                    if not hgnc_to_symbol[hgnc_id]:
+                        hgnc_to_symbol[hgnc_id] = r
 
         if r := record.get("locus_type"):
             if b := LOCUS_TYPE_TO_BIOTYPE.get(r):
@@ -129,7 +133,7 @@ def update_cdot(
                 if hgnc_id := name_to_hgnc[source].get(
                     key, name_to_hgnc[source].get(acc, None)
                 ):
-                    print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
+                    print(f"→ Corresponding HGNC ID (via {source}):", hgnc_id, file=sys.stderr)
                     gene["hgnc"] = hgnc_id
                     _hgnc_id = hgnc_id
                     update_target["genes"].update({key: gene})
@@ -181,13 +185,14 @@ def update_cdot(
             "refseq_accession",
             "mane_select_ensembl",
             "mane_select_refseq",
-            "symbol",
-            "alias_symbol",
         ]
+        symbols = ["symbol", "alias_symbol", "gene_name", "gene_symbol"]
+        sources += symbols
         _hgnc_id = transcript_hgnc_id
         if not transcript_hgnc_id:
             print("Transcript without HGNC ID:", keys, file=sys.stderr)
-            for source in sources:
+            # order matters -- all matches are reported but only the last match is kept
+            for source in reversed(sources):
                 for k in keys:
                     if hgnc_id := name_to_hgnc[source].get(k, None):
                         print("→ Corresponding HGNC ID:", hgnc_id, file=sys.stderr)
