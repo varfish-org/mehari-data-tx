@@ -250,5 +250,5 @@ human-phenotype-ontology:
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.30.0
-  docker: "docker://ghcr.io/varfish-org/mehari:0.30.0"
+  version: 0.31.0
+  docker: "docker://ghcr.io/varfish-org/mehari:0.31.0"
