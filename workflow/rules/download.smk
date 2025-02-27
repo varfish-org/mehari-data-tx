@@ -90,7 +90,7 @@ rule get_hgnc_complete_set:
     log:
         "logs/hgnc/get_hgnc_complete_set.log",
     shell:
-        """(wget --quiet -O -  {params.url} | jq '.' > {output}) 2> {log}"""
+        """(wget -O -  {params.url} | jq '.' > {output}) 2> {log}"""
 
 
 rule get_genes_to_disease:
