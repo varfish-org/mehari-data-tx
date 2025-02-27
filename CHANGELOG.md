@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.9.0...v0.10.0) (2025-02-27)
+
+
+### Features
+
+* Update hgnc complete set version ([#60](https://github.com/varfish-org/mehari-data-tx/issues/60)) ([13adbdd](https://github.com/varfish-org/mehari-data-tx/commit/13adbddcd1adea1972798d3e25f9168d052fbe8a))
+
 ## [0.9.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.8.1...v0.9.0) (2024-11-26)
 
 
