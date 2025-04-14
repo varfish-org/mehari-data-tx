@@ -142,6 +142,7 @@ jobs:
                 $dst_prefix.zst.report.jsonl \
                 $dst_prefix.zst.report.jsonl.sha256
             fi
+          done
         env:
           # GitHub provides this variable in the CI env. You don't
           # need to add anything to the secrets vault.
