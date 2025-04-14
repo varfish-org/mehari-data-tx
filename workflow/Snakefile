@@ -40,3 +40,10 @@ rule all:
                 "GRCh37-ensembl",
             ],
         ),
+        expand(
+            [
+                "results/{assembly}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst",
+                "results/{assembly}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst.sha256",
+            ],
+            assembly=["GRCh37", "GRCh38"],
+        ),
