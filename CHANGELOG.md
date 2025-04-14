@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3](https://github.com/varfish-org/mehari-data-tx/compare/v0.10.2...v0.10.3) (2025-04-14)
+
+
+### Bug Fixes
+
+* aggregate results in rule and touch marker file ([#66](https://github.com/varfish-org/mehari-data-tx/issues/66)) ([fc5cc7a](https://github.com/varfish-org/mehari-data-tx/commit/fc5cc7aa42b80e53512886a7efa8dc08fd1f9abc))
+
 ## [0.10.2](https://github.com/varfish-org/mehari-data-tx/compare/v0.10.1...v0.10.2) (2025-04-14)
 
 
