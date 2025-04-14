@@ -110,7 +110,7 @@ jobs:
         run: |
           mkdir -p ~/snakemake_cache
           mkdir -p ${{ github.workspace }}/snakemake_cache
-          snakemake --directory mehari-data-tx-workflow --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst
+          snakemake --directory mehari-data-tx-workflow --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/all.completed
 
 
       - name: upload release assets
