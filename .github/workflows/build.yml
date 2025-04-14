@@ -25,9 +25,6 @@ jobs:
         genome_release:
           - GRCh37
           - GRCh38
-        source:
-          - refseq
-          - ensembl
     steps:
       - uses: actions/checkout@v4
 
@@ -53,7 +50,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Cache snakemake cache directory
         id: cache-snakemake
@@ -62,7 +59,7 @@ jobs:
           path: |
             ~/snakemake_cache
             ${{ github.workspace }}/snakemake_cache
-          key: ${{ matrix.genome_release }}-${{ matrix.source }}
+          key: ${{ matrix.genome_release }}
 
       - name: Cache conda
         uses: actions/cache@v3
@@ -88,7 +85,7 @@ jobs:
         run: |
           mkdir -p ~/snakemake_cache
           mkdir -p ${{ github.workspace }}/snakemake_cache
-          snakemake --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt
+          snakemake --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst
 
       - name: List files
         run: |
