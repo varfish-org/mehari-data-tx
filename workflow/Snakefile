@@ -24,6 +24,11 @@ include: "rules/validate.smk"
 
 rule all:
     input:
+        "results/all.completed",
+
+
+rule collect_results:
+    input:
         expand(
             [
                 "results/{alias}/mehari/seqrepo/txs.bin.zst",
@@ -47,3 +52,5 @@ rule all:
             ],
             assembly=["GRCh37", "GRCh38"],
         ),
+    output:
+        touch("results/all.completed"),
