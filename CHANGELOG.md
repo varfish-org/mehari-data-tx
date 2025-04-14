@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.2](https://github.com/varfish-org/mehari-data-tx/compare/v0.10.1...v0.10.2) (2025-04-14)
+
+
+### Bug Fixes
+
+* add missing 'done' in github workflow ([#64](https://github.com/varfish-org/mehari-data-tx/issues/64)) ([eaf93dd](https://github.com/varfish-org/mehari-data-tx/commit/eaf93dd7b29f135ddc0720f511fd596ee13b59f1))
+
 ## [0.10.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.10.0...v0.10.1) (2025-04-14)
 
 
