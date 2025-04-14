@@ -236,7 +236,7 @@ hgnc:
   # format: yyyy-mm-dd
   # check https://www.genenames.org/download/archive/quarterly/json/ for available versions.
   # quarterly versions: _usually_: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-  version: "2025-01-06"
+  version: "2025-04-01"
 
 # namespaces to use for seqrepo
 namespaces:
@@ -246,9 +246,10 @@ namespaces:
 human-phenotype-ontology:
   genes_to_disease:
     # check https://github.com/obophenotype/human-phenotype-ontology/releases/ for available versions
-    release: v2024-01-16
+    # note that sometimes the release tag starts with "v", sometimes it does not
+    release: "2025-03-03"
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.32.0
-  docker: "docker://ghcr.io/varfish-org/mehari:0.32.0"
+  version: 0.33.0
+  docker: "docker://ghcr.io/varfish-org/mehari:0.33.0"

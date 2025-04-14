@@ -41,9 +41,6 @@ jobs:
         genome_release:
           - GRCh37
           - GRCh38
-        source:
-          - refseq
-          - ensembl
     steps:
       - uses: actions/checkout@v4
         if: ${{ needs.release-please.outputs.release_created }}
@@ -74,7 +71,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ matrix.source }}-${{ hashFiles('config/config.yaml') }}
+          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
 
       - name: Cache snakemake cache directory
         if: ${{ needs.release-please.outputs.release_created }}
@@ -84,7 +81,7 @@ jobs:
           path: |
             ~/snakemake_cache
             ${{ github.workspace }}/snakemake_cache
-          key: ${{ matrix.genome_release }}-${{ matrix.source }}
+          key: ${{ matrix.genome_release }}
 
       - name: Cache conda
         if: ${{ needs.release-please.outputs.release_created }}
@@ -113,7 +110,7 @@ jobs:
         run: |
           mkdir -p ~/snakemake_cache
           mkdir -p ${{ github.workspace }}/snakemake_cache
-          snakemake --directory mehari-data-tx-workflow --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo/report/mehari_db_check.txt
+          snakemake --directory mehari-data-tx-workflow --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.genome_release }}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst
 
 
       - name: upload release assets
@@ -121,18 +118,30 @@ jobs:
         id: upload-release-assets
         run: |
           set -x
-          dir=/home/runner/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow/results/${{ matrix.genome_release }}-${{ matrix.source }}/mehari/seqrepo
-          src_prefix=$dir/txs.bin
-          dst_prefix=~/mehari-data-txs-${{ matrix.genome_release }}-${{ matrix.source }}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
-          for ext in .zst .zst.sha256 .zst.report.jsonl .zst.report.jsonl.sha256; do
-            cp $src_prefix$ext $dst_prefix$ext
-          done
-          gh release upload \
-            ${{ needs.release-please.outputs.tag_name }} \
-            $dst_prefix.zst \
-            $dst_prefix.zst.sha256 \
-            $dst_prefix.zst.report.jsonl \
-            $dst_prefix.zst.report.jsonl.sha256
+          for source in ensembl-and-refseq ensembl refseq; do
+            dir=/home/runner/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow/results/${{ matrix.genome_release }}-${source}/mehari/seqrepo
+            src_prefix=$dir/txs.bin
+            # TODO include cdot, ensembl and refseq versions and/or timestamps in the filenames
+            dst_prefix=~/mehari-data-txs-${{ matrix.genome_release }}-${source}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
+            for ext in .zst .zst.sha256; do
+              cp $src_prefix$ext $dst_prefix$ext
+            done
+
+            gh release upload \
+              ${{ needs.release-please.outputs.tag_name }} \
+              $dst_prefix.zst \
+              $dst_prefix.zst.sha256
+
+            # if source is not ensembl-and refseq, also copy report files:
+            if [ "$source" != "ensembl-and-refseq" ]; then
+              for ext in .zst.report.jsonl .zst.report.jsonl.sha256; do
+                cp $src_prefix$ext $dst_prefix$ext
+              done
+              gh release upload \
+                ${{ needs.release-please.outputs.tag_name }} \
+                $dst_prefix.zst.report.jsonl \
+                $dst_prefix.zst.report.jsonl.sha256
+            fi
         env:
           # GitHub provides this variable in the CI env. You don't
           # need to add anything to the secrets vault.

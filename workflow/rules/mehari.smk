@@ -42,6 +42,37 @@ rule mehari_build_txs_db:
         """
 
 
+rule mehari_merge_txs_dbs_per_assembly:
+    input:
+        dbs=expand(
+            "results/{{assembly}}-{source}/mehari/seqrepo/txs.bin.zst",
+            source=["ensembl", "refseq"],
+        ),
+        # require checks to be done before merging
+        checks=expand(
+            "results/{assembly}-{source}/mehari/seqrepo/report/mehari_db_check.txt",
+            assembly=["GRCh37", "GRCh38"],
+            source=["ensembl", "refseq"],
+        ),
+    output:
+        db="results/{assembly}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst",
+    log:
+        "logs/{assembly}-ensembl-and-refseq/mehari/seqrepo/merge_txs_dbs.log",
+    params:
+        dbs_param=lambda wildcards, input: " ".join(
+            f"--database {db}" for db in input.dbs
+        ),
+    container:
+        get_mehari_docker_url()
+    shell:
+        """
+        (mehari db merge \
+        {params.dbs_param} \
+        --output {output.db} \
+        ) 2> {log}
+        """
+
+
 rule calculate_sha256_sum:
     input:
         "{file}",
