@@ -26,6 +26,15 @@ def main(cdot, lookup):
     for tx_id in list(cdot["transcripts"].keys()):
         if tx_id not in ensembl_transcripts:
             cdot["transcripts"].pop(tx_id)
+        else:
+            tx = cdot["transcripts"][tx_id]
+            for genome_build in tx["genome_builds"].values():
+                if tags := genome_build.get("tag"):
+                    tags = tags.split(",")
+                else:
+                    tags = []
+                genome_build["tag"] = ",".join([*tags, "EnsemblGraft"])
+            print("Updated transcript {tx_id} tags to {tags}".format(tx_id=tx_id, tags=genome_build["tag"]), file=sys.stderr)
     return cdot
 
 
