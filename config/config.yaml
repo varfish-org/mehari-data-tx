@@ -247,7 +247,7 @@ human-phenotype-ontology:
   genes_to_disease:
     # check https://github.com/obophenotype/human-phenotype-ontology/releases/ for available versions
     # note that sometimes the release tag starts with "v", sometimes it does not
-    release: "v2025-03-03"
+    release: "v2025-05-06"
 
 # mehari version to use (currently ignored)
 mehari:
