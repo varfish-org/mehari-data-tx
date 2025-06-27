@@ -111,7 +111,7 @@ sources:
   GRCh37-refseq:
     cdot:
       release: 0.2.27
-      custom: GCF_000001405.25_GRCh37.p13_genomic.105.20201022.gff
+      custom: GCF_000001405.25_GRCh37.p13_genomic.105.20220307.gff
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
