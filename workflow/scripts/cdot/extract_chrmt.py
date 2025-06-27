@@ -50,6 +50,15 @@ def main(json_path: str, file=sys.stdout):
     for tx_id in list(json_data["transcripts"].keys()):
         if tx_id not in tx_ids:
             json_data["transcripts"].pop(tx_id)
+        else:
+            tx = json_data["transcripts"][tx_id]
+            for genome_build in tx["genome_builds"].values():
+                if tags := genome_build.get("tag"):
+                    tags = tags.split(",")
+                else:
+                    tags = []
+                genome_build["tag"] = ",".join([*tags, "EnsemblGraft"])
+                print("Updated transcript {tx_id} tags to {tags}".format(tx_id=tx_id, tags=genome_build["tag"]), file=sys.stderr)
     print("... done reducing to chrMT", file=sys.stderr)
 
     json.dump(json_data, file, indent=2)
