@@ -3,7 +3,7 @@ reference:
   GRCh38:
     ensembl:
       species: homo_sapiens
-      release: 112
+      release: 114
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
@@ -27,8 +27,8 @@ reference:
 sources:
   GRCh38-refseq:
     cdot:
-      release: 0.2.27
-      custom: GCF_000001405.40_GRCh38.p14_genomic.110.gff
+      release: 0.2.29
+      custom: Homo_sapiens_GRCh38_RefSeq_110.gff
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
@@ -110,8 +110,8 @@ sources:
 
   GRCh37-refseq:
     cdot:
-      release: 0.2.27
-      custom: GCF_000001405.25_GRCh37.p13_genomic.105.20220307.gff
+      release: 0.2.29
+      custom: Homo_sapiens_GRCh37_RefSeq_105.20220307.gff
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
@@ -151,8 +151,8 @@ sources:
   # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:
     cdot:
-      release: 0.2.27
-      custom: ensembl.Homo_sapiens.GRCh38.112.gtf
+      release: 0.2.29
+      custom: Homo_sapiens_GRCh38_Ensembl_114.gtf
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:32925"
@@ -213,8 +213,8 @@ sources:
         description: novel gene/transcript without HGNC id
   GRCh37-ensembl:
     cdot:
-      release: 0.2.27
-      custom: ensembl.Homo_sapiens.GRCh37.87.gtf
+      release: 0.2.29
+      custom:  Homo_sapiens_GRCh37_Ensembl_87.gtf
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
@@ -236,7 +236,7 @@ hgnc:
   # format: yyyy-mm-dd
   # check https://www.genenames.org/download/archive/quarterly/json/ for available versions.
   # quarterly versions: _usually_: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-  version: "2025-04-01"
+  version: "2025-07-04"
 
 # namespaces to use for seqrepo
 namespaces:
@@ -251,5 +251,5 @@ human-phenotype-ontology:
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.36.0
-  docker: "docker://ghcr.io/varfish-org/mehari:0.36.0"
+  version: 0.37.1
+  docker: "docker://ghcr.io/varfish-org/mehari:0.37.1"

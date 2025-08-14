@@ -57,7 +57,7 @@ rule generate_table_with_discards_to_review:
     shell:
         """(
         echo -e "idtype\tid\tgene_name\treason\ttags" > {output.table}
-        jq -r 'select( .type == "Discard" ) | [.value.id.type, .value.id.value, .value.gene_name, .value.reason, (.value.tags // [] | join(","))] | @tsv' {input.discarded} >> {output.table}
+        jq -r 'select( .type == "Discard" ) | [.value.id.type, .value.id.value, .value.gene_name, .value.reason, (.value.tags // [] | map(.Other? // .) | join(","))] | @tsv' {input.discarded} >> {output.table}
         ) >{log} 2>&1"""
 
 
