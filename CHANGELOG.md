@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.10.4...v0.11.0) (2025-08-14)
+
+
+### Features
+
+* bump cdot and mehari versions, bump ensembl release ([#70](https://github.com/varfish-org/mehari-data-tx/issues/70)) ([762af1b](https://github.com/varfish-org/mehari-data-tx/commit/762af1b55d58da488f263389f6dd6a45a55d5edf))
+
 ## [0.10.4](https://github.com/varfish-org/mehari-data-tx/compare/v0.10.3...v0.10.4) (2025-06-27)
 
 
