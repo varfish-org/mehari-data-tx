@@ -116,7 +116,7 @@ sources:
 
   GRCh37-refseq:
     cdot:
-      release: 0.2.29
+      release: 0.2.31
       custom: Homo_sapiens_GRCh37_RefSeq_105.20220307.gff
     known_issues:
       - id_type: gene_symbol
