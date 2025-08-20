@@ -30,18 +30,24 @@ sources:
       release: 0.2.31
       custom: Homo_sapiens_GRCh38_RefSeq_RS_2023_10.gff
     known_issues:
+      - id_type: hgnc_id
+        id: "HGNC:58422"
+        description: "ADAD2-AS1; RNA, long non-coding"
+      - id_type: hgnc_id
+        id: "HGNC:58418"
+        description: "IQSEC3-AS3; RNA, long non-coding"
       - id_type: gene_symbol
         id: "ATXN8"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: gene_symbol
         id: "FRA16E"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
     fixes:
       # for the following set of transcripts, check against nuccore whether the CDS region is correct
       fix_cds: [
@@ -155,6 +161,27 @@ sources:
       custom: Homo_sapiens_GRCh38_Ensembl_114.gtf
     known_issues:
       - id_type: hgnc_id
+        id: "HGNC:14024"
+        description: "The respective MANE RefSeq transcript was retracted from NCBI (https://www.ncbi.nlm.nih.gov/nuccore/NM_004676.2) and the respective ensembl transcript (ENST00000303728.6) is marked as non-coding."
+      - id_type: hgnc_id
+        id: "HGNC:21504"
+        description: "The respective MANE RefSeq transcript was retracted from NCBI (https://www.ncbi.nlm.nih.gov/nuccore/NM_001002758.1) and the respective ensembl transcript (ENST00000303804.6) is marked as non-coding."
+      - id_type: hgnc_id
+        id: "HGNC:8177"
+        description: olfactory receptor family 12 subfamily D member 1 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:15408"
+        description: olfactory receptor family 10 subfamily J member 4 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:14766"
+        description: olfactory receptor family 52 subfamily E member 1 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:14844"
+        description: olfactory receptor family 5 subfamily AL member 1 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:15359"
+        description: olfactory receptor family 4 subfamily Q member 2 (gene/pseudogene)
+      - id_type: hgnc_id
         id: "HGNC:32925"
         description: consistent with missing ensg in hgnc
       - id_type: hgnc_id
@@ -218,16 +245,16 @@ sources:
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: gene_symbol
         id: "FRA16E"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
 
 
 # HGNC complete set file to check missing HGNC ids from cdot against
