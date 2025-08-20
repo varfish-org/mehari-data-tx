@@ -212,27 +212,39 @@ def update_cdot_from_map(cdot_to_update: dict, id_map: dict, info_map: dict[Hgnc
         details = format_mapping_details(found_mappings) if found_mappings else ""
         hgnc_for_report, resolved_hgnc_id = hgnc_orig, None
 
-        if len(found_mappings) == 1:
-            single_id = next(iter(found_mappings.keys()))
+        high_priority_sources = {"hgnc_ensembl_gene_id", "hgnc_entrez_id"}
+        hgnc_by_direct_link = {
+            hgnc_id
+            for hgnc_id, sources in found_mappings.items()
+            if any(src in high_priority_sources for src_set in sources.values() for src in src_set)
+        }
+
+        if len(hgnc_by_direct_link) == 1:
+            single_id = hgnc_by_direct_link.pop()
             hgnc_for_report = single_id.value
             if hgnc_orig != single_id.value:
                 gene["hgnc"] = single_id.value
             resolved_hgnc_id = single_id
-        elif len(found_mappings) > 1:
-            conflicting_ids = {h.value for h in found_mappings.keys()}
-            if hgnc_orig and hgnc_orig in conflicting_ids:
-                # the original HGNC ID is part of the conflict set. keep it.
-                hgnc_for_report = hgnc_orig
-                resolved_hgnc_id = HgncId(hgnc_orig)  # trust original for downstream updates
-                print(
-                    f"CONFLICT for gene {key}: Original HGNC ID '{hgnc_orig}' is part of a conflict set {conflicting_ids}. Retaining original. Details: {details}",
-                    file=sys.stderr,
-                )
-            else:
-                # a true conflict where the original is not present or there was no original
-                conflicting_ids_str = ",".join(sorted(list(conflicting_ids)))
-                hgnc_for_report = conflicting_ids_str
-                print(f"CONFLICT for gene {key}: {details}", file=sys.stderr)
+        else:
+            if len(found_mappings) == 1:
+                single_id = next(iter(found_mappings.keys()))
+                hgnc_for_report = single_id.value
+                if hgnc_orig != single_id.value:
+                    gene["hgnc"] = single_id.value
+                resolved_hgnc_id = single_id
+            elif len(found_mappings) > 1:
+                conflicting_ids = {h.value for h in found_mappings.keys()}
+                if hgnc_orig and hgnc_orig in conflicting_ids:
+                    hgnc_for_report = hgnc_orig
+                    resolved_hgnc_id = HgncId(hgnc_orig)
+                    print(
+                        f"CONFLICT for gene {key}: Original HGNC ID '{hgnc_orig}' is part of a conflict set {conflicting_ids}. Retaining original. Details: {details}",
+                        file=sys.stderr,
+                    )
+                else:
+                    conflicting_ids_str = ",".join(sorted(list(conflicting_ids)))
+                    hgnc_for_report = conflicting_ids_str
+                    print(f"CONFLICT for gene {key}: {details}", file=sys.stderr)
 
         report.append(("gene", "hgnc", key, hgnc_orig, hgnc_for_report, details))
 
@@ -285,25 +297,39 @@ def update_cdot_from_map(cdot_to_update: dict, id_map: dict, info_map: dict[Hgnc
         details = format_mapping_details(found_mappings) if found_mappings else ""
         hgnc_for_report, resolved_hgnc_id = hgnc_orig, None
 
-        if len(found_mappings) == 1:
-            single_id = next(iter(found_mappings.keys()))
+        high_priority_tx_sources = {"hgnc_mane_select", "hgnc_refseq_accession"}
+        hgnc_by_direct_tx_link = {
+            hgnc_id
+            for hgnc_id, sources in found_mappings.items()
+            if any(src in high_priority_tx_sources for src_set in sources.values() for src in src_set)
+        }
+
+        if len(hgnc_by_direct_tx_link) == 1:
+            single_id = hgnc_by_direct_tx_link.pop()
             hgnc_for_report = single_id.value
             if hgnc_orig != single_id.value:
                 tx["hgnc"] = single_id.value
             resolved_hgnc_id = single_id
-        elif len(found_mappings) > 1:
-            conflicting_ids = {h.value for h in found_mappings.keys()}
-            if hgnc_orig and hgnc_orig in conflicting_ids:
-                hgnc_for_report = hgnc_orig
-                resolved_hgnc_id = HgncId(hgnc_orig)
-                print(
-                    f"CONFLICT for transcript {key}: Original HGNC ID '{hgnc_orig}' is part of a conflict set {conflicting_ids}. Retaining original. Details: {details}",
-                    file=sys.stderr,
-                )
-            else:
-                conflicting_ids_str = ",".join(sorted(list(conflicting_ids)))
-                hgnc_for_report = conflicting_ids_str
-                print(f"CONFLICT for transcript {key}: {details}", file=sys.stderr)
+        else:
+            if len(found_mappings) == 1:
+                single_id = next(iter(found_mappings.keys()))
+                hgnc_for_report = single_id.value
+                if hgnc_orig != single_id.value:
+                    tx["hgnc"] = single_id.value
+                resolved_hgnc_id = single_id
+            elif len(found_mappings) > 1:
+                conflicting_ids = {h.value for h in found_mappings.keys()}
+                if hgnc_orig and hgnc_orig in conflicting_ids:
+                    hgnc_for_report = hgnc_orig
+                    resolved_hgnc_id = HgncId(hgnc_orig)
+                    print(
+                        f"CONFLICT for transcript {key}: Original HGNC ID '{hgnc_orig}' is part of a conflict set {conflicting_ids}. Retaining original. Details: {details}",
+                        file=sys.stderr,
+                    )
+                else:
+                    conflicting_ids_str = ",".join(sorted(list(conflicting_ids)))
+                    hgnc_for_report = conflicting_ids_str
+                    print(f"CONFLICT for transcript {key}: {details}", file=sys.stderr)
 
         report.append(("transcript", "hgnc", key, hgnc_orig, hgnc_for_report, details))
 
