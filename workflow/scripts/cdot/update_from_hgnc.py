@@ -214,17 +214,28 @@ def update_cdot_from_map(cdot_to_update: dict, id_map: dict, info_map: dict[Hgnc
 
         if len(found_mappings) == 1:
             single_id = next(iter(found_mappings.keys()))
-            hgnc_for_report, resolved_hgnc_id = single_id.value, single_id
+            hgnc_for_report = single_id.value
             if hgnc_orig != single_id.value:
                 gene["hgnc"] = single_id.value
+            resolved_hgnc_id = single_id
         elif len(found_mappings) > 1:
-            conflicting_ids_str = ",".join(sorted([h.value for h in found_mappings.keys()]))
-            hgnc_for_report = conflicting_ids_str
-            print(f"CONFLICT for gene {key}: {details}", file=sys.stderr)
+            conflicting_ids = {h.value for h in found_mappings.keys()}
+            if hgnc_orig and hgnc_orig in conflicting_ids:
+                # the original HGNC ID is part of the conflict set. keep it.
+                hgnc_for_report = hgnc_orig
+                resolved_hgnc_id = HgncId(hgnc_orig)  # trust original for downstream updates
+                print(
+                    f"CONFLICT for gene {key}: Original HGNC ID '{hgnc_orig}' is part of a conflict set {conflicting_ids}. Retaining original. Details: {details}",
+                    file=sys.stderr,
+                )
+            else:
+                # a true conflict where the original is not present or there was no original
+                conflicting_ids_str = ",".join(sorted(list(conflicting_ids)))
+                hgnc_for_report = conflicting_ids_str
+                print(f"CONFLICT for gene {key}: {details}", file=sys.stderr)
 
         report.append(("gene", "hgnc", key, hgnc_orig, hgnc_for_report, details))
 
-        # update symbol and biotype only if we have a resolved hgnc id
         if resolved_hgnc_id:
             if not gene.get("gene_symbol") and (symbol := info_map.get(resolved_hgnc_id, {}).get("symbol")):
                 gene["gene_symbol"] = symbol
@@ -276,13 +287,23 @@ def update_cdot_from_map(cdot_to_update: dict, id_map: dict, info_map: dict[Hgnc
 
         if len(found_mappings) == 1:
             single_id = next(iter(found_mappings.keys()))
-            hgnc_for_report, resolved_hgnc_id = single_id.value, single_id
+            hgnc_for_report = single_id.value
             if hgnc_orig != single_id.value:
                 tx["hgnc"] = single_id.value
+            resolved_hgnc_id = single_id
         elif len(found_mappings) > 1:
-            conflicting_ids_str = ",".join(sorted([h.value for h in found_mappings.keys()]))
-            hgnc_for_report = conflicting_ids_str
-            print(f"CONFLICT for transcript {key}: {details}", file=sys.stderr)
+            conflicting_ids = {h.value for h in found_mappings.keys()}
+            if hgnc_orig and hgnc_orig in conflicting_ids:
+                hgnc_for_report = hgnc_orig
+                resolved_hgnc_id = HgncId(hgnc_orig)
+                print(
+                    f"CONFLICT for transcript {key}: Original HGNC ID '{hgnc_orig}' is part of a conflict set {conflicting_ids}. Retaining original. Details: {details}",
+                    file=sys.stderr,
+                )
+            else:
+                conflicting_ids_str = ",".join(sorted(list(conflicting_ids)))
+                hgnc_for_report = conflicting_ids_str
+                print(f"CONFLICT for transcript {key}: {details}", file=sys.stderr)
 
         report.append(("transcript", "hgnc", key, hgnc_orig, hgnc_for_report, details))
 
@@ -334,18 +355,27 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
         json.dump(cdot, out, indent=2)
         out.flush()
 
-    df = pd.DataFrame(report, columns=["type", "what", "key", "hgnc_id_orig", "hgnc_id_new", "details"])
+    df = pd.DataFrame(report, columns=["type", "what", "key", "value_orig", "value_new", "details"])
     df["kind"] = "unchanged"
 
-    df.loc[
-        df["hgnc_id_orig"].notnull() & (df["hgnc_id_orig"] != df["hgnc_id_new"]) & df["hgnc_id_new"].notnull(), "kind"
-    ] = "updated"
-    df.loc[df["hgnc_id_orig"].isnull() & df["hgnc_id_new"].notnull(), "kind"] = "fixed_missing"
-    df.loc[df["hgnc_id_orig"].notnull() & df["hgnc_id_new"].isnull(), "kind"] = "removed"
-    df.loc[df["hgnc_id_orig"].isnull() & df["hgnc_id_new"].isnull(), "kind"] = "still_missing"
+    df.loc[df["value_orig"].notnull() & (df["value_orig"] != df["value_new"]) & df["value_new"].notnull(), "kind"] = (
+        "updated"
+    )
+    df.loc[df["value_orig"].isnull() & df["value_new"].notnull(), "kind"] = "fixed_missing"
+    df.loc[df["value_orig"].notnull() & df["value_new"].isnull(), "kind"] = "removed"
+    df.loc[df["value_orig"].isnull() & df["value_new"].isnull(), "kind"] = "still_missing"
 
-    is_conflict = df["hgnc_id_new"].str.contains(",", na=False)
+    is_conflict = (df["what"] == "hgnc") & (df["value_new"].str.contains(",", na=False))
     df.loc[is_conflict, "kind"] = "conflict"
 
-    df = df[(df["kind"] != "unchanged") | (df["what"] != "hgnc")].copy()
+    is_retained_conflict = (
+        (df["what"] == "hgnc")
+        & (df["value_orig"] == df["value_new"])
+        & (df["value_orig"].notnull())
+        & (df["details"].str.contains(" | ", regex=False, na=False))
+    )
+    df.loc[is_retained_conflict, "kind"] = "conflict_retained_original"
+
+    df = df[~((df["kind"] == "unchanged") & (df["what"] == "hgnc"))].copy()
+
     df.to_csv(snakemake.output.report, sep="\t", index=False)
