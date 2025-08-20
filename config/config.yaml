@@ -121,16 +121,16 @@ sources:
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: gene_symbol
         id: "FRA16E"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
     fixes:
       fix_cds: [
         # SHANK3
