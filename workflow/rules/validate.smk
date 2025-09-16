@@ -31,8 +31,8 @@ rule check_mehari_db:
         cdot=get_mehari_check_cdot_param_string,
     log:
         "logs/{assembly}-{source}/mehari/seqrepo/check.log",
-    container:
-        get_mehari_docker_url()
+    # container:
+    #     get_mehari_docker_url()
     shell:
         """(
         mehari db check \
