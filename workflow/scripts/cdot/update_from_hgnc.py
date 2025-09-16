@@ -144,8 +144,8 @@ def build_identifier_hgnc_map(cdot: dict, hgnc: dict) -> tuple[defaultdict, defa
             id_class = EnsemblTranscriptId if accession.startswith("ENS") else RefseqTranscriptId
             for ident in ids_with_optional_version(accession, id_class):
                 _add_to_map(ident, hgnc_id, "hgnc_mane_select")
-        for alias in record.get("alias_symbol", []):
-            _add_to_map(AliasSymbol(alias), hgnc_id, "hgnc_alias_symbol")
+        # for alias in record.get("alias_symbol", []):
+        #     _add_to_map(AliasSymbol(alias), hgnc_id, "hgnc_alias_symbol")
 
     # process cdot json; the keys are the ncbi/ensembl gene ids
     for key, gene in cdot["genes"].items():
@@ -199,9 +199,9 @@ def update_cdot_from_map(cdot_to_update: dict, id_map: dict, info_map: dict[Hgnc
         identifiers.extend(ids_with_optional_version(key, id_class))
         if symbol := gene.get("gene_symbol"):
             identifiers.append(GeneSymbol(symbol))
-        if aliases := gene.get("aliases"):
-            for alias in map(str.strip, aliases.split(",")):
-                identifiers.append(AliasSymbol(alias))
+        # if aliases := gene.get("aliases"):
+        #     for alias in map(str.strip, aliases.split(",")):
+        #         identifiers.append(AliasSymbol(alias))
 
         found_mappings: defaultdict[HgncId, defaultdict[Identifier, set[str]]] = defaultdict(lambda: defaultdict(set))
         for ident in filter(None, set(identifiers)):
