@@ -10,3 +10,5 @@ dependencies:
   - gzip ==1.13
   - coreutils ==9.5
   - jq ==1.7.1
+  - miller =6.13
+  - pigz =2.8

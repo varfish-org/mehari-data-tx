@@ -119,3 +119,58 @@ rule add_hgnc_id_to_genes_to_disease:
         "logs/human-phenotype-ontology/add_hgnc_id_to_genes_to_disease.log",
     script:
         "../scripts/human_phenotype_ontology/add_hgnc_id_to_genes_to_disease.py"
+
+
+rule get_clinvar_affected_transcripts:
+    output:
+        clinvar="results/clinvar/clinvar.jsonl.gz",
+    conda:
+        "../envs/base.yaml"
+    shell:
+        """
+        (
+        for i in {{00..03}};
+         do wget -qO- "https://github.com/varfish-org/clinvar-data-jsonl/releases/download/clinvar-weekly-20250908/clinvar-data-jsonl-20250908+0.18.5.tar.gz.$i";
+        done
+        ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-20250908+0.18.5/clinvar-full-release.jsonl.gz" > {output.clinvar}
+        """
+
+
+rule clinvar_tx_accs:
+    input:
+        clinvar="results/clinvar/clinvar.jsonl.gz",
+    output:
+        clinvar_info="results/clinvar/clinvar-vcv-scv-symbol-txAcc.tsv",
+        tx_acc_count="results/clinvar/clinvar-txAcc-count.tsv",
+    conda:
+        "../envs/base.yaml"
+    shell:
+        """
+        (
+          echo -e "vcv\tscv\tsymbol\ttxAcc";
+          pigz -dc {input.clinvar} \
+          | jq -r 'select(.classifiedRecord.clinicalAssertions != null) | .accession as $vcv | .classifiedRecord.clinicalAssertions[] | .clinvarAccession.accession as $scv | select(.simpleAllele.genes != null and (.simpleAllele.genes | length) > 0) | (.simpleAllele.genes[0].symbol // "UNKNOWN") as $gene | .simpleAllele.attributes[]? | select(.attribute.type == "HGVS" and ((.attribute.base.value | startswith("NM_")) or (.attribute.base.value | startswith("NR_")))) | "\($vcv)\t\($scv)\t\($gene)\t\(.attribute.base.value)"' | cut -d : -f 1 | cut -d . -f 1
+        ) | sed -e "s/SCV004027544.NM_177438/SCV004027544\tDICER1\tNM_177438/g" > {output.clinvar_info}
+
+        mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} > {output.tx_acc_count}
+        """
+
+
+rule clinvar_hgnc_id_counts:
+    input:
+        clinvar="results/clinvar/clinvar.jsonl.gz",
+    output:
+        hgnc_ids="results/clinvar/clinvar-hgnc-ids.tsv",
+        hgnc_id_counts="results/clinvar/clinvar-hgnc-id-counts.tsv",
+    conda:
+        "../envs/base.yaml"
+    shell:
+        """
+
+        (
+          echo -e "hgncId";
+          jq -r '[.classifiedRecord.simpleAllele.genes[]? | .hgncId?] | map(select(. != null and . != "")) | unique[]' <(pigz -dc {input.clinvar}) \
+        ) > {output.hgnc_ids}
+
+        mlr --itsv --otsv count -g hgncId  {output.hgnc_ids} > {output.hgnc_id_counts}
+        """
