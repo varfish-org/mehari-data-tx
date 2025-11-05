@@ -160,7 +160,7 @@ rule clinvar_hgnc_id_counts:
     input:
         clinvar="results/clinvar/clinvar.jsonl.gz",
     output:
-        hgnc_ids="results/clinvar/clinvar-hgnc-ids.tsv",
+        hgnc_ids=temp("results/clinvar/clinvar-hgnc-ids.tsv"),
         hgnc_id_counts="results/clinvar/clinvar-hgnc-id-counts.tsv",
     conda:
         "../envs/base.yaml"
@@ -172,5 +172,5 @@ rule clinvar_hgnc_id_counts:
           jq -r '[.classifiedRecord.simpleAllele.genes[]? | .hgncId?] | map(select(. != null and . != "")) | unique[]' <(pigz -dc {input.clinvar}) \
         ) > {output.hgnc_ids}
 
-        mlr --itsv --otsv count -g hgncId  {output.hgnc_ids} > {output.hgnc_id_counts}
+        mlr --itsv --otsv count -g hgncId then sort -nr count {output.hgnc_ids} > {output.hgnc_id_counts}
         """
