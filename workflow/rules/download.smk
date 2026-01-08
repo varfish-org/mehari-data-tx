@@ -126,13 +126,16 @@ rule get_clinvar_affected_transcripts:
         clinvar="results/clinvar/clinvar.jsonl.gz",
     conda:
         "../envs/base.yaml"
+    params:
+        release=config["clinvar-data-jsonl"]["release"],
+        date=config["clinvar-data-jsonl"]["release"].split("+", 1)[0],
     shell:
         """
         (
         for i in {{00..03}};
-         do wget -qO- "https://github.com/varfish-org/clinvar-data-jsonl/releases/download/clinvar-weekly-20250908/clinvar-data-jsonl-20250908+0.18.5.tar.gz.$i";
+         do wget -qO- "https://github.com/varfish-org/clinvar-data-jsonl/releases/download/clinvar-weekly-{params.date}/clinvar-data-jsonl-{params.release}.tar.gz.$i";
         done
-        ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-20250908+0.18.5/clinvar-full-release.jsonl.gz" > {output.clinvar}
+        ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-{params.release}/clinvar-full-release.jsonl.gz" > {output.clinvar}
         """
 
 

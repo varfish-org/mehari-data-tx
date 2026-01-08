@@ -277,6 +277,10 @@ human-phenotype-ontology:
     # and sometimes the release date in the title does not match the release date in the filenames
     release: "v2025-11-24"
 
+clinvar-data-jsonl:
+  # check https://github.com/varfish-org/clinvar-data-jsonl/releases/ for available versions.
+  release: "20260104+0.18.5"
+
 # mehari version to use (currently ignored)
 mehari:
   version: 0.38.1
