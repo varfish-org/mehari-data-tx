@@ -3,7 +3,7 @@ reference:
   GRCh38:
     ensembl:
       species: homo_sapiens
-      release: 114
+      release: 115
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
@@ -158,7 +158,7 @@ sources:
   GRCh38-ensembl:
     cdot:
       release: 0.2.32
-      custom: Homo_sapiens_GRCh38_Ensembl_114.gtf
+      custom: Homo_sapiens_GRCh38_Ensembl_115.gtf
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:14024"
