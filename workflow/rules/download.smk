@@ -155,15 +155,18 @@ rule clinvar_tx_accs:
           | .clinvarAccession?.accession as $scv
           | (.simpleAllele? // {{}}) as $sa
           | select( ($sa.genes? // []) | length > 0)
-          | ($sa.genes?[0]?.symbol? // "UNKNOWN") as $gene
+          | ($sa.genes?[0]?.symbol? // "UNKNOWN") as $raw_gene
+          # FIX: this record has `NM_177438.3:c.5527+26A>G` as its _gene symbol_
+          | (if $scv == "SCV004027544" then "DICER1" else $raw_gene end) as $gene
           | $sa.attributes?[]?
           | select(.attribute?.type == "HGVS" and
                    ((.attribute?.base?.value? // "") | (startswith("NM_") or startswith("NR_"))))
-          | "\($vcv)\t\($scv)\t\($gene)\t\(.attribute?.base?.value?)"'
+          | (.attribute?.base?.value? | split(":")[0] | split(".")[0]) as $tx
+          | "\($vcv)\t\($scv)\t\($gene)\t\($tx)"'
         (
           echo -e "vcv\tscv\tsymbol\ttxAcc";
-          pigz -dc {input.clinvar} | jaq -r "$expression" | cut -d : -f 1 | cut -d . -f 1
-        ) | sed -e "s/SCV004027544.NM_177438/SCV004027544\tDICER1\tNM_177438/g" > {output.clinvar_info}
+          pigz -dc {input.clinvar} | jaq -r "$expression"
+        ) > {output.clinvar_info}
 
         mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} > {output.tx_acc_count}
         """
