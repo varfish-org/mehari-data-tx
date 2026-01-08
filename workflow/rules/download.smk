@@ -132,7 +132,7 @@ rule get_clinvar_affected_transcripts:
     shell:
         """
         (
-        for i in {{00..03}};
+        for i in {{00..04}};
          do wget -qO- "https://github.com/varfish-org/clinvar-data-jsonl/releases/download/clinvar-weekly-{params.date}/clinvar-data-jsonl-{params.release}.tar.gz.$i";
         done
         ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-{params.release}/clinvar-full-release.jsonl.gz" > {output.clinvar}
