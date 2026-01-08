@@ -24,8 +24,8 @@ rule mehari_build_txs_db:
         "logs/{assembly}-{source}/mehari/seqrepo/build_txs_db.log",
     benchmark:
         "benchmarks/{assembly}-{source}/mehari/seqrepo/build_txs_db.tsv"
-    # container:
-    #     get_mehari_docker_url()
+    container:
+        get_mehari_docker_url()
     shell:
         """
         mehari db create \
@@ -62,8 +62,8 @@ rule mehari_merge_txs_dbs_per_assembly:
         dbs_param=lambda wildcards, input: " ".join(
             f"--database {db}" for db in input.dbs
         ),
-    # container:
-    #     get_mehari_docker_url()
+    container:
+        get_mehari_docker_url()
     shell:
         """
         (mehari db merge \
