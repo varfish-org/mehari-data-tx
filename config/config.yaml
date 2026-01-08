@@ -263,7 +263,7 @@ hgnc:
   # format: yyyy-mm-dd
   # check https://www.genenames.org/download/archive/quarterly/json/ for available versions.
   # quarterly versions: _usually_: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-  version: "2025-07-04"
+  version: "2026-01-06"
 
 # namespaces to use for seqrepo
 namespaces:
