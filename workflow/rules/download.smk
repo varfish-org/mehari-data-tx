@@ -149,10 +149,20 @@ rule clinvar_tx_accs:
         "../envs/base.yaml"
     shell:
         """
+        expression='select(.classifiedRecord?.clinicalAssertions? != null)
+          | .accession as $vcv
+          | .classifiedRecord.clinicalAssertions[]?
+          | .clinvarAccession?.accession as $scv
+          | (.simpleAllele? // {{}}) as $sa
+          | select( ($sa.genes? // []) | length > 0)
+          | ($sa.genes?[0]?.symbol? // "UNKNOWN") as $gene
+          | $sa.attributes?[]?
+          | select(.attribute?.type == "HGVS" and
+                   ((.attribute?.base?.value? // "") | (startswith("NM_") or startswith("NR_"))))
+          | "\($vcv)\t\($scv)\t\($gene)\t\(.attribute?.base?.value?)"'
         (
           echo -e "vcv\tscv\tsymbol\ttxAcc";
-          pigz -dc {input.clinvar} \
-          | jq -r 'select(.classifiedRecord.clinicalAssertions != null) | .accession as $vcv | .classifiedRecord.clinicalAssertions[] | .clinvarAccession.accession as $scv | select(.simpleAllele.genes != null and (.simpleAllele.genes | length) > 0) | (.simpleAllele.genes[0].symbol // "UNKNOWN") as $gene | .simpleAllele.attributes[]? | select(.attribute.type == "HGVS" and ((.attribute.base.value | startswith("NM_")) or (.attribute.base.value | startswith("NR_")))) | "\($vcv)\t\($scv)\t\($gene)\t\(.attribute.base.value)"' | cut -d : -f 1 | cut -d . -f 1
+          pigz -dc {input.clinvar} | jaq -r "$expression" | cut -d : -f 1 | cut -d . -f 1
         ) | sed -e "s/SCV004027544.NM_177438/SCV004027544\tDICER1\tNM_177438/g" > {output.clinvar_info}
 
         mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} > {output.tx_acc_count}
@@ -169,10 +179,10 @@ rule clinvar_hgnc_id_counts:
         "../envs/base.yaml"
     shell:
         """
-
+        expression='[ .classifiedRecord?.simpleAllele?.genes?[]? | .hgncId? ] | map(select(. != null and . != ""))'
         (
           echo -e "hgncId";
-          jq -r '[.classifiedRecord.simpleAllele.genes[]? | .hgncId?] | map(select(. != null and . != "")) | unique[]' <(pigz -dc {input.clinvar}) \
+          pigz -dc {input.clinvar} | jaq -r "$expression" | sort -u
         ) > {output.hgnc_ids}
 
         mlr --itsv --otsv count -g hgncId then sort -nr count {output.hgnc_ids} > {output.hgnc_id_counts}
