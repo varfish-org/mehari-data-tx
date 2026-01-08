@@ -275,7 +275,7 @@ human-phenotype-ontology:
     # check https://github.com/obophenotype/human-phenotype-ontology/releases/ for available versions
     # note that sometimes the release tag starts with "v", sometimes it does not
     # and sometimes the release date in the title does not match the release date in the filenames
-    release: "v2025-08-11"
+    release: "v2025-11-24"
 
 # mehari version to use (currently ignored)
 mehari:
