@@ -152,6 +152,15 @@ properties:
     required:
       - ensembl
       - refseq
+  clinvar-data-jsonl:
+    type: object
+    additionalProperties: false
+    properties:
+      release:
+        type: string
+        pattern: "^[0-9]{8}\\+[0-9]+\\.[0-9]+\\.[0-9]+$"
+    required:
+      - release
   mehari:
     type: object
     additionalProperties: false
@@ -168,6 +177,7 @@ required:
   - sources
   - hgnc
   - human-phenotype-ontology
+  - clinvar-data-jsonl
   - namespaces
   - mehari
 

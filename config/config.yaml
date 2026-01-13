@@ -3,7 +3,7 @@ reference:
   GRCh38:
     ensembl:
       species: homo_sapiens
-      release: 114
+      release: 115
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
@@ -15,7 +15,7 @@ reference:
   GRCh37:
     ensembl:
       species: homo_sapiens
-      release: 105
+      release: 87
       build: GRCh37
       datatypes: [cdna, ncrna]
     refseq:
@@ -27,21 +27,27 @@ reference:
 sources:
   GRCh38-refseq:
     cdot:
-      release: 0.2.29
-      custom: Homo_sapiens_GRCh38_RefSeq_110.gff
+      release: 0.2.32
+      custom: Homo_sapiens_GRCh38_RefSeq_RS_2025_08.gff
     known_issues:
+      - id_type: hgnc_id
+        id: "HGNC:58422"
+        description: "ADAD2-AS1; RNA, long non-coding"
+      - id_type: hgnc_id
+        id: "HGNC:58418"
+        description: "IQSEC3-AS3; RNA, long non-coding"
       - id_type: gene_symbol
         id: "ATXN8"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: gene_symbol
         id: "FRA16E"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
     fixes:
       # for the following set of transcripts, check against nuccore whether the CDS region is correct
       fix_cds: [
@@ -110,21 +116,21 @@ sources:
 
   GRCh37-refseq:
     cdot:
-      release: 0.2.29
+      release: 0.2.32
       custom: Homo_sapiens_GRCh37_RefSeq_105.20220307.gff
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: gene_symbol
         id: "FRA16E"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
     fixes:
       fix_cds: [
         # SHANK3
@@ -151,9 +157,30 @@ sources:
   # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:
     cdot:
-      release: 0.2.29
-      custom: Homo_sapiens_GRCh38_Ensembl_114.gtf
+      release: 0.2.32
+      custom: Homo_sapiens_GRCh38_Ensembl_115.gtf
     known_issues:
+      - id_type: hgnc_id
+        id: "HGNC:14024"
+        description: "The respective MANE RefSeq transcript was retracted from NCBI (https://www.ncbi.nlm.nih.gov/nuccore/NM_004676.2) and the respective ensembl transcript (ENST00000303728.6) is marked as non-coding."
+      - id_type: hgnc_id
+        id: "HGNC:21504"
+        description: "The respective MANE RefSeq transcript was retracted from NCBI (https://www.ncbi.nlm.nih.gov/nuccore/NM_001002758.1) and the respective ensembl transcript (ENST00000303804.6) is marked as non-coding."
+      - id_type: hgnc_id
+        id: "HGNC:8177"
+        description: olfactory receptor family 12 subfamily D member 1 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:15408"
+        description: olfactory receptor family 10 subfamily J member 4 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:14766"
+        description: olfactory receptor family 52 subfamily E member 1 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:14844"
+        description: olfactory receptor family 5 subfamily AL member 1 (gene/pseudogene)
+      - id_type: hgnc_id
+        id: "HGNC:15359"
+        description: olfactory receptor family 4 subfamily Q member 2 (gene/pseudogene)
       - id_type: hgnc_id
         id: "HGNC:32925"
         description: consistent with missing ensg in hgnc
@@ -213,21 +240,21 @@ sources:
         description: novel gene/transcript without HGNC id
   GRCh37-ensembl:
     cdot:
-      release: 0.2.29
-      custom:  Homo_sapiens_GRCh37_Ensembl_87.gtf
+      release: 0.2.32
+      custom: Homo_sapiens_GRCh37_Ensembl_87.gtf
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: hgnc_id
         id: "HGNC:32925"
-        description: foobar
+        description: "Biotype: TEC (To be Experimentally Confirmed); No Protein"
       - id_type: gene_symbol
         id: "FRA16E"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
       - id_type: hgnc_id
         id: "HGNC:3861"
-        description: foobar
+        description: "Fragile site. No Transcript. No Protein."
 
 
 # HGNC complete set file to check missing HGNC ids from cdot against
@@ -236,7 +263,7 @@ hgnc:
   # format: yyyy-mm-dd
   # check https://www.genenames.org/download/archive/quarterly/json/ for available versions.
   # quarterly versions: _usually_: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-  version: "2025-07-04"
+  version: "2026-01-06"
 
 # namespaces to use for seqrepo
 namespaces:
@@ -247,9 +274,14 @@ human-phenotype-ontology:
   genes_to_disease:
     # check https://github.com/obophenotype/human-phenotype-ontology/releases/ for available versions
     # note that sometimes the release tag starts with "v", sometimes it does not
-    release: "v2025-05-06"
+    # and sometimes the release date in the title does not match the release date in the filenames
+    release: "v2025-11-24"
+
+clinvar-data-jsonl:
+  # check https://github.com/varfish-org/clinvar-data-jsonl/releases/ for available versions.
+  release: "20260104+0.18.5"
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.37.1
-  docker: "docker://ghcr.io/varfish-org/mehari:0.37.1"
+  version: 0.39.0
+  docker: "docker://ghcr.io/varfish-org/mehari:0.39.0"

@@ -50,11 +50,3 @@ views:
           display-mode: normal
         HGNC ID:
           display-mode: normal
-  discards_of_interest:
-    dataset: discards_of_interest
-    render-table:
-      columns:
-        idtype:
-          display-mode: normal
-        id:
-          display-mode: normal

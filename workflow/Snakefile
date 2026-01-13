@@ -35,7 +35,7 @@ rule collect_results:
                 "results/{alias}/mehari/seqrepo/txs.bin.zst.sha256",
                 "results/{alias}/mehari/seqrepo/txs.bin.zst.report.jsonl",
                 "results/{alias}/mehari/seqrepo/txs.bin.zst.report.jsonl.sha256",
-                "results/{alias}/mehari/seqrepo/txs.bin.zst.discards.tsv",
+                # "results/{alias}/mehari/seqrepo/txs.bin.zst.discards.tsv",
                 "results/{alias}/mehari/seqrepo/report/mehari_db_check.txt",
             ],
             alias=[

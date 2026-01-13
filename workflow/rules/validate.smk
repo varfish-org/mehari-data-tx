@@ -20,6 +20,8 @@ rule check_mehari_db:
         tx_db_report_sha256="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.report.jsonl.sha256",
         hgnc="results/hgnc/hgnc_complete_set.json",
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
+        clinvar_tx_acc_counts=rules.clinvar_tx_accs.output.tx_acc_count,
+        clinvar_hgnc_counts=rules.clinvar_hgnc_id_counts.output.hgnc_id_counts,
         known_issues="results/{assembly}-{source}/fixes/known_issues.tsv",
     output:
         # stats="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.stats.tsv",
@@ -38,26 +40,12 @@ rule check_mehari_db:
         mehari db check \
         --db {input.tx_db} \
         --hgnc {input.hgnc} \
+        --clinvar-hgnc-counts {input.clinvar_hgnc_counts} \
+        --clinvar-tx-acc-counts {input.clinvar_tx_acc_counts} \
         --disease-genes {input.genes_to_disease} \
         {params.cdot} \
         --known-issues {input.known_issues} \
         --output {output.report} \
-        ) >{log} 2>&1"""
-
-
-rule generate_table_with_discards_to_review:
-    input:
-        discarded="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.report.jsonl",
-    output:
-        table="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.discards.tsv",
-    log:
-        "logs/{assembly}-{source}/mehari/seqrepo/discards_table.log",
-    conda:
-        "../envs/datastuff.yaml"
-    shell:
-        """(
-        echo -e "idtype\tid\tgene_name\treason\ttags" > {output.table}
-        jq -r 'select( .type == "Discard" ) | [.value.id.type, .value.id.value, .value.gene_name, .value.reason, (.value.tags // [] | map(.Other? // .) | join(","))] | @tsv' {input.discarded} >> {output.table}
         ) >{log} 2>&1"""
 
 
@@ -67,7 +55,6 @@ rule datavzrd:
         mehari_check_db_stats="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.stats.tsv",
         fix_incorrect_cds="results/{assembly}-{source}/cdot/fix_incorrect_cds.tsv",
         refseq_id_to_ensembl_id="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
-        discards_of_interest="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.discards.tsv",
     params:
         extra="",
     output:

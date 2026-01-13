@@ -119,3 +119,80 @@ rule add_hgnc_id_to_genes_to_disease:
         "logs/human-phenotype-ontology/add_hgnc_id_to_genes_to_disease.log",
     script:
         "../scripts/human_phenotype_ontology/add_hgnc_id_to_genes_to_disease.py"
+
+
+rule get_clinvar_affected_transcripts:
+    output:
+        clinvar="results/clinvar/clinvar.jsonl.gz",
+    log:
+        "logs/clinvar/get_clinvar_affected_transcripts.log"
+    conda:
+        "../envs/base.yaml"
+    params:
+        release=config["clinvar-data-jsonl"]["release"],
+        date=config["clinvar-data-jsonl"]["release"].split("+", 1)[0],
+    shell:
+        """
+        (
+        for i in {{00..04}};
+         do wget -qO- "https://github.com/varfish-org/clinvar-data-jsonl/releases/download/clinvar-weekly-{params.date}/clinvar-data-jsonl-{params.release}.tar.gz.$i";
+        done
+        ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-{params.release}/clinvar-full-release.jsonl.gz" 2> {log} > {output.clinvar}
+        """
+
+
+rule clinvar_tx_accs:
+    input:
+        clinvar="results/clinvar/clinvar.jsonl.gz",
+    output:
+        clinvar_info="results/clinvar/clinvar-vcv-scv-symbol-txAcc.tsv",
+        tx_acc_count="results/clinvar/clinvar-txAcc-count.tsv",
+    log:
+        "logs/clinvar/clinvar_tx_accs.log"
+    conda:
+        "../envs/base.yaml"
+    shell:
+        """
+        expression='select(.classifiedRecord?.clinicalAssertions? != null)
+          | .accession as $vcv
+          | .classifiedRecord.clinicalAssertions[]?
+          | .clinvarAccession?.accession as $scv
+          | (.simpleAllele? // {{}}) as $sa
+          | select( ($sa.genes? // []) | length > 0)
+          | ($sa.genes?[0]?.symbol? // "UNKNOWN") as $raw_gene
+          # FIX: this record has `NM_177438.3:c.5527+26A>G` as its _gene symbol_
+          | (if $scv == "SCV004027544" then "DICER1" else $raw_gene end) as $gene
+          | $sa.attributes?[]?
+          | select(.attribute?.type == "HGVS" and
+                   ((.attribute?.base?.value? // "") | (startswith("NM_") or startswith("NR_"))))
+          | (.attribute?.base?.value? | split(":")[0] | split(".")[0]) as $tx
+          | "\($vcv)\t\($scv)\t\($gene)\t\($tx)"'
+        (
+          echo -e "vcv\tscv\tsymbol\ttxAcc";
+          pigz -dc {input.clinvar} | jaq -r "$expression"
+        ) 2> {log} > {output.clinvar_info}
+
+        mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} 2>> {log} > {output.tx_acc_count}
+        """
+
+
+rule clinvar_hgnc_id_counts:
+    input:
+        clinvar="results/clinvar/clinvar.jsonl.gz",
+    output:
+        hgnc_ids=temp("results/clinvar/clinvar-hgnc-ids.tsv"),
+        hgnc_id_counts="results/clinvar/clinvar-hgnc-id-counts.tsv",
+    log:
+        "logs/clinvar/clinvar_hgnc_id_counts.log"
+    conda:
+        "../envs/base.yaml"
+    shell:
+        """
+        expression='[ .classifiedRecord?.simpleAllele?.genes?[]? | .hgncId? ] | map(select(. != null and . != ""))'
+        (
+          echo -e "hgncId";
+          pigz -dc {input.clinvar} | jaq -r "$expression" | sort -u
+        ) 2> {log} > {output.hgnc_ids}
+
+        mlr --itsv --otsv count -g hgncId then sort -nr count {output.hgnc_ids} 2>> {log} > {output.hgnc_id_counts}
+        """
