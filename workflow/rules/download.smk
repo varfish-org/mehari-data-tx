@@ -124,6 +124,8 @@ rule add_hgnc_id_to_genes_to_disease:
 rule get_clinvar_affected_transcripts:
     output:
         clinvar="results/clinvar/clinvar.jsonl.gz",
+    log:
+        "logs/clinvar/get_clinvar_affected_transcripts.log"
     conda:
         "../envs/base.yaml"
     params:
@@ -135,7 +137,7 @@ rule get_clinvar_affected_transcripts:
         for i in {{00..04}};
          do wget -qO- "https://github.com/varfish-org/clinvar-data-jsonl/releases/download/clinvar-weekly-{params.date}/clinvar-data-jsonl-{params.release}.tar.gz.$i";
         done
-        ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-{params.release}/clinvar-full-release.jsonl.gz" > {output.clinvar}
+        ) | pigz -dc | tar -f- -xO "clinvar-data-jsonl-{params.release}/clinvar-full-release.jsonl.gz" 2> {log} > {output.clinvar}
         """
 
 
@@ -145,6 +147,8 @@ rule clinvar_tx_accs:
     output:
         clinvar_info="results/clinvar/clinvar-vcv-scv-symbol-txAcc.tsv",
         tx_acc_count="results/clinvar/clinvar-txAcc-count.tsv",
+    log:
+        "logs/clinvar/clinvar_tx_accs.log"
     conda:
         "../envs/base.yaml"
     shell:
@@ -166,9 +170,9 @@ rule clinvar_tx_accs:
         (
           echo -e "vcv\tscv\tsymbol\ttxAcc";
           pigz -dc {input.clinvar} | jaq -r "$expression"
-        ) > {output.clinvar_info}
+        ) 2> {log} > {output.clinvar_info}
 
-        mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} > {output.tx_acc_count}
+        mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} 2>> {log} > {output.tx_acc_count}
         """
 
 
@@ -178,6 +182,8 @@ rule clinvar_hgnc_id_counts:
     output:
         hgnc_ids=temp("results/clinvar/clinvar-hgnc-ids.tsv"),
         hgnc_id_counts="results/clinvar/clinvar-hgnc-id-counts.tsv",
+    log:
+        "logs/clinvar/clinvar_hgnc_id_counts.log"
     conda:
         "../envs/base.yaml"
     shell:
@@ -186,7 +192,7 @@ rule clinvar_hgnc_id_counts:
         (
           echo -e "hgncId";
           pigz -dc {input.clinvar} | jaq -r "$expression" | sort -u
-        ) > {output.hgnc_ids}
+        ) 2> {log} > {output.hgnc_ids}
 
-        mlr --itsv --otsv count -g hgncId then sort -nr count {output.hgnc_ids} > {output.hgnc_id_counts}
+        mlr --itsv --otsv count -g hgncId then sort -nr count {output.hgnc_ids} 2>> {log} > {output.hgnc_id_counts}
         """
