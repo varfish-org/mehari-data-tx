@@ -20,7 +20,7 @@ rule check_mehari_db:
         tx_db_report_sha256="results/{assembly}-{source}/mehari/seqrepo/txs.bin.zst.report.jsonl.sha256",
         hgnc="results/hgnc/hgnc_complete_set.json",
         genes_to_disease="results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv",
-        clinvar_tx_acc_counts=rules.clinvar_tx_accs.output.tx_acc_count,
+        clinvar_tx_acc_counts=rules.clinvar_tx_acc_counts.output.tx_acc_count,
         clinvar_hgnc_counts=rules.clinvar_hgnc_id_counts.output.hgnc_id_counts,
         known_issues="results/{assembly}-{source}/fixes/known_issues.tsv",
     output:

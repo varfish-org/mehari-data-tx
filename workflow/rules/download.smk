@@ -125,7 +125,7 @@ rule get_clinvar_affected_transcripts:
     output:
         clinvar="results/clinvar/clinvar.jsonl.gz",
     log:
-        "logs/clinvar/get_clinvar_affected_transcripts.log"
+        "logs/clinvar/get_clinvar_affected_transcripts.log",
     conda:
         "../envs/base.yaml"
     params:
@@ -141,38 +141,38 @@ rule get_clinvar_affected_transcripts:
         """
 
 
-rule clinvar_tx_accs:
+rule clinvar_tx_acc_counts:
     input:
         clinvar="results/clinvar/clinvar.jsonl.gz",
     output:
-        clinvar_info="results/clinvar/clinvar-vcv-scv-symbol-txAcc.tsv",
         tx_acc_count="results/clinvar/clinvar-txAcc-count.tsv",
     log:
-        "logs/clinvar/clinvar_tx_accs.log"
+        "logs/clinvar/clinvar_tx_acc_counts.log",
     conda:
         "../envs/base.yaml"
     shell:
         """
-        expression='select(.classifiedRecord?.clinicalAssertions? != null)
-          | .accession as $vcv
-          | .classifiedRecord.clinicalAssertions[]?
-          | .clinvarAccession?.accession as $scv
-          | (.simpleAllele? // {{}}) as $sa
-          | select( ($sa.genes? // []) | length > 0)
-          | ($sa.genes?[0]?.symbol? // "UNKNOWN") as $raw_gene
-          # FIX: this record has `NM_177438.3:c.5527+26A>G` as its _gene symbol_
-          | (if $scv == "SCV004027544" then "DICER1" else $raw_gene end) as $gene
-          | $sa.attributes?[]?
-          | select(.attribute?.type == "HGVS" and
-                   ((.attribute?.base?.value? // "") | (startswith("NM_") or startswith("NR_"))))
-          | (.attribute?.base?.value? | split(":")[0] | split(".")[0]) as $tx
-          | "\($vcv)\t\($scv)\t\($gene)\t\($tx)"'
         (
-          echo -e "vcv\tscv\tsymbol\ttxAcc";
-          pigz -dc {input.clinvar} | jaq -r "$expression"
-        ) 2> {log} > {output.clinvar_info}
-
-        mlr --itsv --otsv count -g txAcc then sort -nr count {output.clinvar_info} 2>> {log} > {output.tx_acc_count}
+            echo -e "txAcc\tcount";
+            pigz -dc {input.clinvar} | jaq -nr '
+                reduce (
+                    inputs
+                    | select(.classifiedRecord?.clinicalAssertions? != null)
+                    | .classifiedRecord.clinicalAssertions[]?
+                    | .simpleAllele? // {{}}
+                    | select( (.genes? // [] | length) > 0 )
+                    | .attributes?[]?
+                    | select(.attribute?.type == "HGVS")
+                    | (.attribute?.base?.value? // "")
+                    | select(startswith("NM_") or startswith("NR_"))
+                    | split(":")[0] | split(".")[0]
+                ) as $tx (
+                    {{}}; .[$tx] += 1
+                )
+                | to_entries | sort_by(.value) | reverse
+                | .[] | "\(.key)\t\(.value)"
+            '
+        ) 2> {log} > {output.tx_acc_count}
         """
 
 
@@ -180,19 +180,17 @@ rule clinvar_hgnc_id_counts:
     input:
         clinvar="results/clinvar/clinvar.jsonl.gz",
     output:
-        hgnc_ids=temp("results/clinvar/clinvar-hgnc-ids.tsv"),
         hgnc_id_counts="results/clinvar/clinvar-hgnc-id-counts.tsv",
     log:
-        "logs/clinvar/clinvar_hgnc_id_counts.log"
+        "logs/clinvar/clinvar_hgnc_id_counts.log",
     conda:
         "../envs/base.yaml"
     shell:
         """
-        expression='[ .classifiedRecord?.simpleAllele?.genes?[]? | .hgncId? ] | map(select(. != null and . != ""))'
+        expression='reduce (inputs | [ .classifiedRecord?.simpleAllele?.genes?[]?.hgncId? | select(. != null and . != "") ] | unique | .[]) as $id ({{}}; .[$id] += 1)
+                | to_entries | sort_by(.value) | reverse | .[] | "\(.key)\t\(.value)"'
         (
-          echo -e "hgncId";
-          pigz -dc {input.clinvar} | jaq -r "$expression" | sort -u
-        ) 2> {log} > {output.hgnc_ids}
-
-        mlr --itsv --otsv count -g hgncId then sort -nr count {output.hgnc_ids} 2>> {log} > {output.hgnc_id_counts}
+          echo -e "hgncId\tcount";
+          pigz -dc {input.clinvar} | jaq -r "$expression"
+        ) 2> {log} > {output.hgnc_id_counts}
         """
