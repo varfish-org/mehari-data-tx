@@ -275,11 +275,11 @@ human-phenotype-ontology:
     # check https://github.com/obophenotype/human-phenotype-ontology/releases/ for available versions
     # note that sometimes the release tag starts with "v", sometimes it does not
     # and sometimes the release date in the title does not match the release date in the filenames
-    release: "v2025-11-24"
+    release: "v2026-02-16"
 
 clinvar-data-jsonl:
   # check https://github.com/varfish-org/clinvar-data-jsonl/releases/ for available versions.
-  release: "20260104+0.18.5"
+  release: "20260226+0.18.5"
 
 # mehari version to use (currently ignored)
 mehari:
