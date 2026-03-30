@@ -1,9 +1,12 @@
 from contextlib import redirect_stderr
 from io import StringIO
+from typing import TYPE_CHECKING
 
 import pandas as pd
 import requests
-from snakemake.script import snakemake
+
+if TYPE_CHECKING:
+    from snakemake.iocontainers import snakemake
 
 HEADER = {
     "refseq_mrna": "RefSeq mRNA ID",

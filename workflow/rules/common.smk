@@ -1,6 +1,6 @@
 from typing import Callable
 
-from snakemake.io import InputFiles, Wildcards
+from snakemake.iocontainers import InputFiles, Wildcards
 
 
 def get_alias(wildcards: Wildcards) -> str:

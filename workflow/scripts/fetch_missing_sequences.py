@@ -7,12 +7,14 @@ from io import BytesIO
 from itertools import islice
 from math import ceil
 from time import sleep
-from typing import Collection
+from typing import Collection, TYPE_CHECKING
 
 import requests
 from dinopy import FastaReader, FastaWriter
-from snakemake.script import snakemake
 from snakemake import shell
+
+if TYPE_CHECKING:
+    from snakemake.iocontainers import snakemake
 
 
 def batched(iterable, n):
