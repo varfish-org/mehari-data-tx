@@ -10,7 +10,7 @@ rule mehari_build_txs_db:
     threads: workflow.cores / 2
     params:
         mane=lambda wildcards, input: (
-            f"--path-mane-txs-tsv {input.tags}"
+            f"--mane-transcripts {input.tags}"
             if wildcards.assembly == "GRCh37"
             else ""
         ),
@@ -24,15 +24,15 @@ rule mehari_build_txs_db:
         "logs/{assembly}-{source}/mehari/seqrepo/build_txs_db.log",
     benchmark:
         "benchmarks/{assembly}-{source}/mehari/seqrepo/build_txs_db.tsv"
-    container:
-        get_mehari_docker_url()
+    # container:
+    #     get_mehari_docker_url()
     shell:
         """
         mehari db create \
-        --path-out {output.txs} \
-        --path-seqrepo-instance {input.seqrepo_instance} \
+        --output {output.txs} \
+        --seqrepo {input.seqrepo_instance} \
         {params.cdot} \
-        --cdot-version {params.cdot_version} \
+        --annotation-version {params.cdot_version} \
         --assembly {params.assembly} \
         {params.assembly_version} \
         --transcript-source {params.transcript_source} \
@@ -62,8 +62,8 @@ rule mehari_merge_txs_dbs_per_assembly:
         dbs_param=lambda wildcards, input: " ".join(
             f"--database {db}" for db in input.dbs
         ),
-    container:
-        get_mehari_docker_url()
+    # container:
+    #     get_mehari_docker_url()
     shell:
         """
         (mehari db merge \
