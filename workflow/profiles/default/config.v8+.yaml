@@ -5,3 +5,4 @@ cache: True
 apptainer-args: "-B ${SNAKEMAKE_OUTPUT_CACHE}:${SNAKEMAKE_OUTPUT_CACHE}:rw"
 resources:
   ratelimit: 3
+retries: 5

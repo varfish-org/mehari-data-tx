@@ -120,6 +120,8 @@ rule lookup_ensembl_ids_for_refseq_ids:
         accessions="results/{assembly}-{source}/cdot/{assembly}-{source}.partial_but_select.txt",
     params:
         additional_accessions=transcripts_to_lookup_ensembl_ids_for,
+    resources:
+        runtime=lambda wildcards, attempt: 10 ** (attempt - 1) + 60,
     output:
         tsv="results/{assembly}-{source}/lookup/refseq_id_to_ensembl_id.tsv",
     log:
