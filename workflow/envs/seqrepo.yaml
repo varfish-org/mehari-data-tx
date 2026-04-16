@@ -9,5 +9,8 @@ dependencies:
  - ratelimit =2.2.1
  - requests =2.32.3
  - bioutils =0.6.1
- - biocommons.seqrepo =0.6.11
- - setuptools =82.0.1
+# - biocommons.seqrepo =0.6.11
+# - setuptools =82.0.1
+ - pip
+ - pip:
+   - biocommons.seqrepo @ git+https://github.com/biocommons/biocommons.seqrepo.git@72c9091c83e689e7880bc1f0df34326a61dfef18
