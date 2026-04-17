@@ -1,6 +1,6 @@
 from typing import Callable
 
-from snakemake.io import InputFiles, Wildcards
+from snakemake.iocontainers import InputFiles, Wildcards
 
 
 def get_alias(wildcards: Wildcards) -> str:
@@ -116,7 +116,7 @@ def get_mehari_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str
     expected_input_keys = input.keys()
     for key in cdot_files.keys():
         assert key in expected_input_keys
-    return " ".join(f"--path-cdot-json {path}" for path in cdot_files.values())
+    return " ".join(f"--annotation {path}" for path in cdot_files.values())
 
 
 def get_mehari_check_cdot_param_string(wildcards: Wildcards, input: InputFiles) -> str:

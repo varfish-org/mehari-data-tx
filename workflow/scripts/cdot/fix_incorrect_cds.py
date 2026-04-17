@@ -9,7 +9,7 @@ from typing import Any
 from xml.etree.ElementTree import ElementTree
 
 import pandas as pd
-from snakemake.script import snakemake
+
 
 Exon = namedtuple(
     "Exon",

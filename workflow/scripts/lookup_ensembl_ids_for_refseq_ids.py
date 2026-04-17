@@ -1,9 +1,13 @@
 from contextlib import redirect_stderr
 from io import StringIO
+from typing import TYPE_CHECKING
 
 import pandas as pd
 import requests
-from snakemake.script import snakemake
+import time
+
+if TYPE_CHECKING:
+    from snakemake.iocontainers import snakemake
 
 HEADER = {
     "refseq_mrna": "RefSeq mRNA ID",
@@ -63,6 +67,8 @@ def main(refseq_ids: set[str]):
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
+    sleep_s = snakemake.resources.runtime
+    time.sleep(sleep_s)
     refseq_ids = set(snakemake.params.additional_accessions)
     with open(snakemake.input.accessions, "rt") as f:
         for line in f:
