@@ -82,7 +82,7 @@ rule find_select_transcripts:
         "../envs/jq.yaml"
     shell:
         """(
-        pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.genome_builds[].tag) | select (. != null) | select( .genome_builds[].tag | contains("Select")).id' | sort > {output.accessions}
+        pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.genome_builds[].tag) | select (. != null) | select( .genome_builds[].tag | contains("Select")).id' | env LC_ALL=C sort -u > {output.accessions}
         ) >{log} 2>&1"""
 
 
@@ -97,7 +97,7 @@ rule find_partial_transcripts:
         "../envs/jq.yaml"
     shell:
         """(
-        pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.partial == 1 ).id' | sort > {output.accessions}
+        pigz -dc {input.cdot} | jq -r '.transcripts[] | select(.partial == 1 ).id' | env LC_ALL=C sort -u > {output.accessions}
         ) >{log} 2>&1"""
 
 
@@ -112,7 +112,7 @@ rule determine_partial_but_select_transcripts:
     log:
         "logs/{assembly}-{source}/report/determine_partial_but_select_transcripts.log",
     shell:
-        """(comm -12 {input.select} {input.partial} > {output.accessions}) >{log} 2>&1"""
+        """(env LC_ALL=C comm -12 {input.select} {input.partial} > {output.accessions}) >{log} 2>&1"""
 
 
 rule lookup_ensembl_ids_for_refseq_ids:

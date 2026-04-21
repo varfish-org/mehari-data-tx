@@ -20,6 +20,10 @@ env:
 jobs:
   build_data_release:
     runs-on: ubuntu-latest
+    # skip job if it is a Release Please PR
+    if: |
+      !startsWith(github.head_ref, 'release-please--') &&
+      !startsWith(github.event.head_commit.message, 'chore(main): release')
     strategy:
       matrix:
         genome_release:
@@ -27,6 +31,7 @@ jobs:
           - GRCh38
     steps:
       - uses: actions/checkout@v4
+
 
       - name: Get current date
         id: date
@@ -50,7 +55,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
+          key: mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-${{ env.MEHARI_VERSION }}-${{ steps.date.outputs.date }}
+          restore-keys: |
+            mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-
+            mehari-data-tx-${{ matrix.genome_release }}-
 
       - name: Cache snakemake cache directory
         id: cache-snakemake
@@ -59,7 +67,9 @@ jobs:
           path: |
             ~/snakemake_cache
             ${{ github.workspace }}/snakemake_cache
-          key: ${{ matrix.genome_release }}
+          key: snakemake-cache-${{ matrix.genome_release }}-${{ github.sha }}
+          restore-keys: |
+            snakemake-cache-${{ matrix.genome_release }}-
 
       - name: Cache conda
         uses: actions/cache@v3
