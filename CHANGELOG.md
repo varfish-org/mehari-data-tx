@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.13.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.12.0...v0.13.0) (2026-04-20)
+
+
+### Release-As
+
+* 0.13.0 ([8254801](https://github.com/varfish-org/mehari-data-tx/commit/82548019b6f88dafb8fe68bb4e012e93eeb6b084))
+
+
+### Bug Fixes
+
+* simplify clinvar information extraction, bump mehari version ([#74](https://github.com/varfish-org/mehari-data-tx/issues/74)) ([599eb19](https://github.com/varfish-org/mehari-data-tx/commit/599eb19e2706bec62edd96dac8bef9c66d77fcda))
+
 ## [0.12.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.11.0...v0.12.0) (2026-01-13)
 
 
