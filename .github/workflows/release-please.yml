@@ -71,7 +71,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
-          key: ${{ steps.date.outputs.date }}-${{ env.MEHARI_VERSION }}-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}
+          key: mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-${{ env.MEHARI_VERSION }}-${{ steps.date.outputs.date }}
+          restore-keys: |
+            mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-
+            mehari-data-tx-${{ matrix.genome_release }}-
 
       - name: Cache snakemake cache directory
         if: ${{ needs.release-please.outputs.release_created }}
@@ -81,7 +84,9 @@ jobs:
           path: |
             ~/snakemake_cache
             ${{ github.workspace }}/snakemake_cache
-          key: ${{ matrix.genome_release }}
+          key: snakemake-cache-${{ matrix.genome_release }}-${{ github.sha }}
+          restore-keys: |
+            snakemake-cache-${{ matrix.genome_release }}-
 
       - name: Cache conda
         if: ${{ needs.release-please.outputs.release_created }}
