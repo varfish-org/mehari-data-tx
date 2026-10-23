@@ -26,6 +26,7 @@ defaults:
 
 env:
   MEHARI_VERSION: "0.47.0"
+  MINIFORGE_VERSION: "26.7.2-1"
   SNAKEMAKE_OUTPUT_CACHE: "${{ github.workspace }}/snakemake_cache"
 
 # One job per database keeps each job within the disk space of a runner (about 14 GB).
@@ -61,7 +62,9 @@ jobs:
         name: Setup Miniconda and snakemake
         uses: conda-incubator/setup-miniconda@v4.1.0
         with:
-          auto-update-conda: true
+          # a fixed conda, so that a new release cannot break CI unnoticed
+          miniforge-version: ${{ env.MINIFORGE_VERSION }}
+          auto-update-conda: false
           conda-solver: "libmamba"
           python-version: 3.12
           environment-file: "environment.yaml"
