@@ -26,9 +26,11 @@ env:
   MEHARI_VERSION: "0.47.0"
   SNAKEMAKE_OUTPUT_CACHE: "${{ github.workspace }}/snakemake_cache"
 
-# One job per database keeps each job within the disk space of a runner, see README.
+# One job per database keeps each job within the disk space of a runner (about 14 GB).
 jobs:
-  aliases:
+  # lists the databases and prepares the inputs that all database checks share,
+  # so that the build jobs download neither ClinVar (4.5 GB) nor HGNC and HPO
+  prepare:
     runs-on: ubuntu-latest
     # skip job if it is a Release Please PR, unless called to build the release assets
     if: |
@@ -70,12 +72,32 @@ jobs:
           echo "build=$(jq -c .build results/aliases.json)" >> $GITHUB_OUTPUT
           echo "merge=$(jq -c .merge results/aliases.json)" >> $GITHUB_OUTPUT
 
+      - name: Prepare shared inputs
+        run: |
+          # without the snakemake output cache, so that the outputs are files and not links into the cache
+          snakemake --workflow-profile none --sdm conda --configfile config/config.yaml --show-failed-logs --cores 4 \
+            results/clinvar/clinvar-txAcc-count.tsv \
+            results/clinvar/clinvar-hgnc-id-counts.tsv \
+            results/hgnc/hgnc_complete_set.json \
+            results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv
+
+      - name: Keep shared inputs for the build jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: shared-inputs
+          path: |
+            results/clinvar/clinvar-txAcc-count.tsv
+            results/clinvar/clinvar-hgnc-id-counts.tsv
+            results/hgnc/hgnc_complete_set.json
+            results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv
+          retention-days: 1
+
   build_data_release:
-    needs: aliases
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        alias: ${{ fromJSON(needs.aliases.outputs.build) }}
+        alias: ${{ fromJSON(needs.prepare.outputs.build) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -108,6 +130,18 @@ jobs:
       - *cache-conda
 
       - *setup-snakemake
+
+      - name: Download shared inputs
+        uses: actions/download-artifact@v4
+        with:
+          name: shared-inputs
+          path: results
+
+      # The downloaded files have no snakemake metadata. Each derived file must be newer
+      # than its inputs, or snakemake rebuilds it, including the ClinVar download.
+      - name: Mark shared inputs as up to date
+        run: |
+          touch results/clinvar/*.tsv results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv
 
       - name: Run data build workflow
         shell: bash -el {0}
@@ -150,11 +184,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
 
   merge_data_release:
-    needs: [aliases, build_data_release]
+    needs: [prepare, build_data_release]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include: ${{ fromJSON(needs.aliases.outputs.merge) }}
+        include: ${{ fromJSON(needs.prepare.outputs.merge) }}
     steps:
       - uses: actions/checkout@v4
 
