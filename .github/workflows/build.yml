@@ -181,7 +181,8 @@ jobs:
           fi
           for ext in $exts; do
             cp "$src_prefix$ext" "$dst_prefix$ext"
-            gh release upload ${{ inputs.tag_name }} "$dst_prefix$ext"
+            # --clobber, so that a rerun of a failed job can upload again
+            gh release upload --clobber ${{ inputs.tag_name }} "$dst_prefix$ext"
           done
         env:
           # GitHub provides this variable in the CI env. You don't
@@ -224,3 +225,23 @@ jobs:
           snakemake --allowed-rules mehari_merge_txs_dbs_per_assembly calculate_sha256_sum --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.alias }}/mehari/seqrepo/txs.bin.zst.sha256
 
       - *upload-release-assets
+
+  # The one check for the branch protection, independent of the databases in the matrix.
+  result:
+    name: CI result
+    needs: [prepare, build_data_release, merge_data_release]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check that all jobs succeeded
+        env:
+          PREPARE: ${{ needs.prepare.result }}
+          BUILD: ${{ needs.build_data_release.result }}
+          MERGE: ${{ needs.merge_data_release.result }}
+        run: |
+          echo "prepare: $PREPARE, build: $BUILD, merge: $MERGE"
+          # prepare is skipped on purpose for release-please pull requests and commits
+          if [ "$PREPARE" = skipped ]; then
+            exit 0
+          fi
+          [ "$PREPARE" = success ] && [ "$BUILD" = success ] && [ "$MERGE" = success ]
