@@ -6,32 +6,37 @@ This repository contains a snakemake workflow to build mehari transcript databas
 
 ## Resulting Files
 
-Databases are built for each combination of genome release (GRCh37, GRCh38) and reference source (ensembl, refseq):
+Databases are built for each combination of genome release (GRCh37, GRCh38) and reference source (ensembl, refseq), once for each source release listed in `config/config.yaml`:
 
-- mehari-data `v0.9.0`
+- mehari-data `v0.14.0`
   - uses:
-    - mehari `v0.30.1`
-    - cdot: `v0.2.27`
-  - `GRCh37-refseq`
+    - mehari `v0.47.0`
+    - cdot: `v0.2.36`
+  - `GRCh37-refseq-105.20220307`
       - genome release: GRCh37.p13
-      - VEP/ENSEMBL equivalent: `105`
+      - RefSeq annotation release: `105.20220307`
       - RefSeq assembly: [GCF\_000001405.25](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.25/)
-      - resulting transcript database: `mehari-0.26.1.GRCh37-refseq.txs.bin.zst`
-  - `GRCh37-ensembl`
+      - resulting transcript database: `mehari-data-txs-GRCh37-refseq-105.20220307-0.14.0.bin.zst`
+  - `GRCh37-ensembl-87`
       - genome release: GRCh37.p13
-      - VEP/ENSEMBL release: `105`
+      - VEP/ENSEMBL release: `87`
       - RefSeq equivalent: [GCF\_000001405.25](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.25/)
-      - resulting transcript database: `mehari-0.26.1.GRCh37-ensembl.txs.bin.zst`
-  - `GRCh38-refseq`
-      - genome release: GRCh38.p13
-      - VEP/ENSEMBL equivalent: `112`
-      - RefSeq assembly: [GCF\_000001405.39](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39/)
-      - resulting transcript database: `mehari-0.26.1.GRCh38-refseq.txs.bin.zst`
-  - `GRCh38-ensembl`
-      - genome release: GRCh38.p13
-      - VEP/ENSEMBL release: `112`
-      - RefSeq equivalent: [GCF\_000001405.39](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.39/)
-      - resulting transcript database: `mehari-0.26.1.GRCh38-ensembl.txs.bin.zst`
+      - resulting transcript database: `mehari-data-txs-GRCh37-ensembl-87-0.14.0.bin.zst`
+  - `GRCh38-refseq-RS_2025_08`
+      - genome release: GRCh38.p14
+      - RefSeq annotation release: `RS_2025_08`
+      - RefSeq assembly: [GCF\_000001405.40](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.40/)
+      - resulting transcript database: `mehari-data-txs-GRCh38-refseq-RS_2025_08-0.14.0.bin.zst`
+  - `GRCh38-ensembl-115` and `GRCh38-ensembl-116`
+      - genome release: GRCh38.p14
+      - VEP/ENSEMBL release: `115` and `116`
+      - RefSeq equivalent: [GCF\_000001405.40](https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.40/)
+      - resulting transcript databases: `mehari-data-txs-GRCh38-ensembl-115-0.14.0.bin.zst` and `mehari-data-txs-GRCh38-ensembl-116-0.14.0.bin.zst`
+  - `GRCh37-ensembl-87-and-refseq-105.20220307` and `GRCh38-ensembl-116-and-refseq-RS_2025_08`
+      - the newest listed Ensembl and RefSeq databases of a genome release, merged
+      - resulting transcript databases: `mehari-data-txs-GRCh37-ensembl-87-and-refseq-105.20220307-0.14.0.bin.zst` and `mehari-data-txs-GRCh38-ensembl-116-and-refseq-RS_2025_08-0.14.0.bin.zst`
+
+Up to `v0.13.0`, the databases were named `mehari-data-txs-{genome release}-{ensembl,refseq,ensembl-and-refseq}-{version}.bin.zst`, with one release per source.
 
 
 New builds of mehari-data will be considered when
