@@ -125,6 +125,12 @@ properties:
   hgnc:
     type: object
     properties:
+      archive:
+        type: string
+        enum:
+          - quarterly
+          - monthly
+        default: quarterly
       version:
         type: string
         format: date
