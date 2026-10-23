@@ -28,7 +28,7 @@ rule mehari_build_txs_db:
         get_mehari_docker_url()
     shell:
         """
-        mehari db create \
+        mehari db transcripts create \
         --output {output.txs} \
         --seqrepo {input.seqrepo_instance} \
         {params.cdot} \
@@ -66,7 +66,7 @@ rule mehari_merge_txs_dbs_per_assembly:
         get_mehari_docker_url()
     shell:
         """
-        (mehari db merge \
+        (mehari db transcripts merge \
         {params.dbs_param} \
         --output {output.db} \
         ) 2> {log}
