@@ -51,3 +51,27 @@ rule collect_results:
         ),
     output:
         touch("results/all.completed"),
+
+
+# lists the databases for the CI build matrix
+rule list_aliases:
+    output:
+        "results/aliases.json",
+    localrule: True
+    params:
+        build=all_aliases(),
+        merge=[
+            {
+                "alias": merged_alias(assembly),
+                "ensembl": newest_alias(assembly, "ensembl"),
+                "refseq": newest_alias(assembly, "refseq"),
+            }
+            for assembly in config["reference"]
+        ],
+    run:
+        import json
+
+        with open(output[0], "w") as file:
+            json.dump(
+                {"build": params.build, "merge": params.merge}, file, indent=2
+            )

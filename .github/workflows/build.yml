@@ -7,6 +7,15 @@ on:
   pull_request:
     branches:
       - main
+  # release-please.yml calls this workflow to upload the databases to a release
+  workflow_call:
+    inputs:
+      tag_name:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
 
 # cf. https://github.com/mamba-org/provision-with-micromamba#important
 defaults:
@@ -17,61 +26,24 @@ env:
   MEHARI_VERSION: "0.47.0"
   SNAKEMAKE_OUTPUT_CACHE: "${{ github.workspace }}/snakemake_cache"
 
+# One job per database keeps each job within the disk space of a runner, see README.
 jobs:
-  build_data_release:
+  aliases:
     runs-on: ubuntu-latest
-    # skip job if it is a Release Please PR
+    # skip job if it is a Release Please PR, unless called to build the release assets
     if: |
-      !startsWith(github.head_ref, 'release-please--') &&
-      !startsWith(github.event.head_commit.message, 'chore(main): release')
-    strategy:
-      matrix:
-        genome_release:
-          - GRCh37
-          - GRCh38
+      inputs.tag_name || (
+        !startsWith(github.head_ref, 'release-please--') &&
+        !startsWith(github.event.head_commit.message, 'chore(main): release')
+      )
+    outputs:
+      build: ${{ steps.aliases.outputs.build }}
+      merge: ${{ steps.aliases.outputs.merge }}
     steps:
       - uses: actions/checkout@v4
 
-
-      - name: Get current date
-        id: date
-        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-
-      - name: Setup apptainer
-        run: |
-          sudo add-apt-repository -y ppa:apptainer/ppa
-          sudo apt-get update
-          sudo apt install -y apptainer squashfuse
-
-      # See https://github.com/apptainer/apptainer/pull/2262
-      - name: Disable apparmor namespace restrictions for apptainer
-        run: |
-          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 \
-                      -w kernel.apparmor_restrict_unprivileged_userns=0 \
-                      -w kernel.unprivileged_userns_clone=1
-
-      - name: Cache data directory
-        id: cache-mehari-data-tx
-        uses: actions/cache@v4
-        with:
-          path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
-          key: mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-${{ env.MEHARI_VERSION }}-${{ steps.date.outputs.date }}
-          restore-keys: |
-            mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-
-            mehari-data-tx-${{ matrix.genome_release }}-
-
-      - name: Cache snakemake cache directory
-        id: cache-snakemake
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/snakemake_cache
-            ${{ github.workspace }}/snakemake_cache
-          key: snakemake-cache-${{ matrix.genome_release }}-${{ github.sha }}
-          restore-keys: |
-            snakemake-cache-${{ matrix.genome_release }}-
-
-      - name: Cache conda
+      - &cache-conda
+        name: Cache conda
         uses: actions/cache@v3
         env:
           # Increase this value to reset cache if etc/example-environment.yml has not changed
@@ -81,7 +53,8 @@ jobs:
           key:
             ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yaml') }}
 
-      - name: Setup Miniconda and snakemake
+      - &setup-snakemake
+        name: Setup Miniconda and snakemake
         uses: conda-incubator/setup-miniconda@v3.1.0
         with:
           auto-update-conda: true
@@ -90,13 +63,125 @@ jobs:
           environment-file: "environment.yaml"
           conda-remove-defaults: "true"
 
+      - name: List databases
+        id: aliases
+        run: |
+          snakemake --workflow-profile none --configfile config/config.yaml --cores 1 results/aliases.json
+          echo "build=$(jq -c .build results/aliases.json)" >> $GITHUB_OUTPUT
+          echo "merge=$(jq -c .merge results/aliases.json)" >> $GITHUB_OUTPUT
+
+  build_data_release:
+    needs: aliases
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        alias: ${{ fromJSON(needs.aliases.outputs.build) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - &setup-apptainer
+        name: Setup apptainer
+        run: |
+          sudo add-apt-repository -y ppa:apptainer/ppa
+          sudo apt-get update
+          sudo apt install -y apptainer squashfuse
+
+      # See https://github.com/apptainer/apptainer/pull/2262
+      - &disable-apparmor
+        name: Disable apparmor namespace restrictions for apptainer
+        run: |
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 \
+                      -w kernel.apparmor_restrict_unprivileged_userns=0 \
+                      -w kernel.unprivileged_userns_clone=1
+
+      - name: Cache snakemake cache directory
+        id: cache-snakemake
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/snakemake_cache
+            ${{ github.workspace }}/snakemake_cache
+          key: snakemake-cache-${{ matrix.alias }}-${{ github.sha }}
+          restore-keys: |
+            snakemake-cache-${{ matrix.alias }}-
+
+      - *cache-conda
+
+      - *setup-snakemake
+
       - name: Run data build workflow
         shell: bash -el {0}
         run: |
           mkdir -p ~/snakemake_cache
           mkdir -p ${{ github.workspace }}/snakemake_cache
-          snakemake --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/all.completed
+          # the check requires the database, its report and their checksums
+          snakemake --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.alias }}/mehari/seqrepo/report/mehari_db_check.txt
 
       - name: List files
         run: |
           tree -f ~/work/mehari-data-tx/mehari-data-tx
+
+      - name: Keep database for the merge job
+        uses: actions/upload-artifact@v4
+        with:
+          name: db-${{ matrix.alias }}
+          path: results/${{ matrix.alias }}/mehari/seqrepo/
+          retention-days: 1
+
+      - &upload-release-assets
+        name: Upload release assets
+        if: inputs.tag_name
+        run: |
+          set -x
+          src_prefix=results/${{ matrix.alias }}/mehari/seqrepo/txs.bin
+          dst_prefix=~/mehari-data-txs-${{ matrix.alias }}-${{ inputs.version }}.bin
+          exts=".zst .zst.sha256"
+          # merged databases have no report
+          if [ -e $src_prefix.zst.report.jsonl ]; then
+            exts="$exts .zst.report.jsonl .zst.report.jsonl.sha256"
+          fi
+          for ext in $exts; do
+            cp $src_prefix$ext $dst_prefix$ext
+            gh release upload ${{ inputs.tag_name }} $dst_prefix$ext
+          done
+        env:
+          # GitHub provides this variable in the CI env. You don't
+          # need to add anything to the secrets vault.
+          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+
+  merge_data_release:
+    needs: [aliases, build_data_release]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include: ${{ fromJSON(needs.aliases.outputs.merge) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - *setup-apptainer
+
+      - *disable-apparmor
+
+      - *cache-conda
+
+      - *setup-snakemake
+
+      - name: Download Ensembl database
+        uses: actions/download-artifact@v4
+        with:
+          name: db-${{ matrix.ensembl }}
+          path: results/${{ matrix.ensembl }}/mehari/seqrepo
+
+      - name: Download RefSeq database
+        uses: actions/download-artifact@v4
+        with:
+          name: db-${{ matrix.refseq }}
+          path: results/${{ matrix.refseq }}/mehari/seqrepo
+
+      - name: Merge databases
+        run: |
+          mkdir -p ${{ github.workspace }}/snakemake_cache
+          # only merge: the downloaded databases and checks have no snakemake metadata and must not be rebuilt
+          snakemake --allowed-rules mehari_merge_txs_dbs_per_assembly calculate_sha256_sum --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/${{ matrix.alias }}/mehari/seqrepo/txs.bin.zst.sha256
+
+      - *upload-release-assets

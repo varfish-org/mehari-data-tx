@@ -123,7 +123,8 @@ rule add_hgnc_id_to_genes_to_disease:
 
 rule get_clinvar_affected_transcripts:
     output:
-        clinvar="results/clinvar/clinvar.jsonl.gz",
+        # only the counts below are kept, this file has several GB
+        clinvar=temp("results/clinvar/clinvar.jsonl.gz"),
     log:
         "logs/clinvar/get_clinvar_affected_transcripts.log",
     conda:

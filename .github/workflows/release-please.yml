@@ -5,15 +5,6 @@ on:
 
 name: release-please
 
-# cf. https://github.com/mamba-org/provision-with-micromamba#important
-defaults:
-  run:
-    shell: bash -el {0}
-
-env:
-  MEHARI_VERSION: "0.47.0"
-  SNAKEMAKE_OUTPUT_CACHE: "${{ github.workspace }}/snakemake_cache"
-
 jobs:
   release-please:
     if: github.repository_owner == 'varfish-org'
@@ -35,122 +26,10 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
 
   Build-Release-Assets:
-    if: github.repository_owner == 'varfish-org'
+    if: github.repository_owner == 'varfish-org' && needs.release-please.outputs.release_created
     needs: release-please
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        genome_release:
-          - GRCh37
-          - GRCh38
-    steps:
-      - uses: actions/checkout@v4
-        if: ${{ needs.release-please.outputs.release_created }}
-
-      - name: Get current date
-        if: ${{ needs.release-please.outputs.release_created }}
-        id: date
-        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-
-      - name: Setup apptainer
-        if: ${{ needs.release-please.outputs.release_created }}
-        run: |
-          sudo add-apt-repository -y ppa:apptainer/ppa
-          sudo apt-get update
-          sudo apt install -y apptainer squashfuse
-
-      # See https://github.com/apptainer/apptainer/pull/2262
-      - name: Disable apparmor namespace restrictions for apptainer
-        if: ${{ needs.release-please.outputs.release_created }}
-        run: |
-          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 \
-                      -w kernel.apparmor_restrict_unprivileged_userns=0 \
-                      -w kernel.unprivileged_userns_clone=1
-
-      - name: Cache data directory
-        if: ${{ needs.release-please.outputs.release_created }}
-        id: cache-mehari-data-tx
-        uses: actions/cache@v4
-        with:
-          path: ~/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow
-          key: mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-${{ env.MEHARI_VERSION }}-${{ steps.date.outputs.date }}
-          restore-keys: |
-            mehari-data-tx-${{ matrix.genome_release }}-${{ hashFiles('config/config.yaml') }}-
-            mehari-data-tx-${{ matrix.genome_release }}-
-
-      - name: Cache snakemake cache directory
-        if: ${{ needs.release-please.outputs.release_created }}
-        id: cache-snakemake
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/snakemake_cache
-            ${{ github.workspace }}/snakemake_cache
-          key: snakemake-cache-${{ matrix.genome_release }}-${{ github.sha }}
-          restore-keys: |
-            snakemake-cache-${{ matrix.genome_release }}-
-
-      - name: Cache conda
-        if: ${{ needs.release-please.outputs.release_created }}
-        uses: actions/cache@v3
-        env:
-          # Increase this value to reset cache if etc/example-environment.yml has not changed
-          CACHE_NUMBER: 0
-        with:
-          path: ~/conda_pkgs_dir
-          key:
-            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('environment.yaml') }}
-
-      - name: Setup Miniconda and snakemake
-        if: ${{ needs.release-please.outputs.release_created }}
-        uses: conda-incubator/setup-miniconda@v3.1.0
-        with:
-          auto-update-conda: true
-          conda-solver: "libmamba"
-          python-version: 3.12
-          environment-file: "environment.yaml"
-          conda-remove-defaults: "true"
-
-      - name: Run data build workflow
-        if: ${{ needs.release-please.outputs.release_created }}
-        shell: bash -el {0}
-        run: |
-          mkdir -p ~/snakemake_cache
-          mkdir -p ${{ github.workspace }}/snakemake_cache
-          snakemake --directory mehari-data-tx-workflow --verbose --configfile config/config.yaml --workflow-profile workflow/profiles/default --show-failed-logs --cores 4 --jobs 4 results/all.completed
-
-
-      - name: upload release assets
-        if: ${{ needs.release-please.outputs.release_created }}
-        id: upload-release-assets
-        run: |
-          set -x
-          for source in ensembl-and-refseq ensembl refseq; do
-            dir=/home/runner/work/mehari-data-tx/mehari-data-tx/mehari-data-tx-workflow/results/${{ matrix.genome_release }}-${source}/mehari/seqrepo
-            src_prefix=$dir/txs.bin
-            # TODO include cdot, ensembl and refseq versions and/or timestamps in the filenames
-            dst_prefix=~/mehari-data-txs-${{ matrix.genome_release }}-${source}-${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}.bin
-            for ext in .zst .zst.sha256; do
-              cp $src_prefix$ext $dst_prefix$ext
-            done
-
-            gh release upload \
-              ${{ needs.release-please.outputs.tag_name }} \
-              $dst_prefix.zst \
-              $dst_prefix.zst.sha256
-
-            # if source is not ensembl-and refseq, also copy report files:
-            if [ "$source" != "ensembl-and-refseq" ]; then
-              for ext in .zst.report.jsonl .zst.report.jsonl.sha256; do
-                cp $src_prefix$ext $dst_prefix$ext
-              done
-              gh release upload \
-                ${{ needs.release-please.outputs.tag_name }} \
-                $dst_prefix.zst.report.jsonl \
-                $dst_prefix.zst.report.jsonl.sha256
-            fi
-          done
-        env:
-          # GitHub provides this variable in the CI env. You don't
-          # need to add anything to the secrets vault.
-          GITHUB_TOKEN: ${{ secrets.BOT_TOKEN }}
+    uses: ./.github/workflows/build.yml
+    with:
+      tag_name: ${{ needs.release-please.outputs.tag_name }}
+      version: ${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}
+    secrets: inherit
