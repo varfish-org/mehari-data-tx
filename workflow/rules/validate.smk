@@ -37,7 +37,7 @@ rule check_mehari_db:
         get_mehari_docker_url()
     shell:
         """(
-        mehari db check \
+        mehari db transcripts check \
         --db {input.tx_db} \
         --hgnc {input.hgnc} \
         --clinvar-hgnc-counts {input.clinvar_hgnc_counts} \

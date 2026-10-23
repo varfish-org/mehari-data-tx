@@ -3,7 +3,7 @@ reference:
   GRCh38:
     ensembl:
       species: homo_sapiens
-      release: 115
+      release: 116
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
@@ -27,7 +27,7 @@ reference:
 sources:
   GRCh38-refseq:
     cdot:
-      release: 0.2.32
+      release: 0.2.36
       custom: Homo_sapiens_GRCh38_RefSeq_RS_2025_08.gff
     known_issues:
       - id_type: hgnc_id
@@ -116,7 +116,7 @@ sources:
 
   GRCh37-refseq:
     cdot:
-      release: 0.2.32
+      release: 0.2.36
       custom: Homo_sapiens_GRCh37_RefSeq_105.20220307.gff
     known_issues:
       - id_type: gene_symbol
@@ -157,8 +157,8 @@ sources:
   # (rules::cdot::cdot_chrMT expects 'GRCh38-ensembl' to be defined)
   GRCh38-ensembl:
     cdot:
-      release: 0.2.32
-      custom: Homo_sapiens_GRCh38_Ensembl_115.gtf
+      release: 0.2.36
+      custom: Homo_sapiens_GRCh38_Ensembl_116.gtf
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:14024"
@@ -240,7 +240,7 @@ sources:
         description: novel gene/transcript without HGNC id
   GRCh37-ensembl:
     cdot:
-      release: 0.2.32
+      release: 0.2.36
       custom: Homo_sapiens_GRCh37_Ensembl_87.gtf
     known_issues:
       - id_type: gene_symbol
@@ -283,5 +283,5 @@ clinvar-data-jsonl:
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.42.0
-  docker: "docker://ghcr.io/varfish-org/mehari:0.42.0"
+  version: 0.47.0
+  docker: "docker://ghcr.io/varfish-org/mehari:0.47.0"
