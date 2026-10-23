@@ -30,6 +30,8 @@ jobs:
         id: release
         with:
           release-type: simple
+          # breaking changes bump the minor version until 1.0.0
+          bump-minor-pre-major: true
           token: ${{ secrets.BOT_TOKEN }}
 
   Build-Release-Assets:
