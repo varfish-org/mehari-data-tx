@@ -1,0 +1,31 @@
+name: update-check
+
+on:
+  schedule:
+    # Mondays, 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  update-check:
+    if: github.repository_owner == 'varfish-org'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for a new cdot data release
+        run: python3 .github/scripts/check_updates.py --summary "$RUNNER_TEMP/summary.md"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Open or update the pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          # A pull request opened with GITHUB_TOKEN does not trigger workflows,
+          # so CI would not run on it; BOT_TOKEN is a personal access token.
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: update-check
+          delete-branch: true
+          commit-message: "feat: update cdot, mehari and HGNC"
+          title: "feat: update cdot, mehari and HGNC"
+          body-path: ${{ runner.temp }}/summary.md
