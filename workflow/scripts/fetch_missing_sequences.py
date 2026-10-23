@@ -79,9 +79,13 @@ def fetch_ensembl(accessions: Collection[str]):
     max_ids = 50
     batches = list(batched(accessions, max_ids))
     retry = False
+    # Server errors of the Ensembl REST API are often transient: retry a batch with growing waits.
+    server_error_waits = [30, 60, 120, 300, 600]
+    server_errors = 0
     while len(batches) > 0:
         if not retry:
             batch = batches.pop(0)
+            server_errors = 0
         ids, versions = zip(*(accession.rsplit(".", 1) for accession in batch))
         data = {"ids": ids, "type": "cdna", "object_type": "transcript"}
         # To be on the safe side, we sleep for 1/15 seconds to have *at most* 15 requests per second.
@@ -99,6 +103,13 @@ def fetch_ensembl(accessions: Collection[str]):
                 print(f"Waiting {seconds} seconds.", file=sys.stderr)
                 retry = True
                 sleep(int(ceil(seconds)))
+                continue
+            elif r.status_code >= 500 and server_errors < len(server_error_waits):
+                seconds = server_error_waits[server_errors]
+                server_errors += 1
+                print(f"{r} from Ensembl, retrying in {seconds} seconds.", file=sys.stderr)
+                retry = True
+                sleep(seconds)
                 continue
             else:
                 raise ValueError(r)

@@ -14,7 +14,7 @@ def main(installed_files: list[str]):
     # Concatenating gzip files results in a valid (multi-)gzip file, so no need to do any (de/re-)compression.
     for part in installed_files:
         shell(
-            rf"""curl --silent '{prefix}/{part}' >> {snakemake.output.refseq_seq} 2>> {snakemake.log}"""
+            rf"""curl --fail --silent --show-error '{prefix}/{part}' >> {snakemake.output.refseq_seq} 2>> {snakemake.log}"""
         )
 
 

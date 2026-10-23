@@ -44,7 +44,7 @@ rule get_refseq_installed_files:
         "../envs/base.yaml"
     shell:
         """(
-        curl --silent "https://ftp.ncbi.nih.gov/refseq/{params.species}/mRNA_Prot/{params.species_name}.files.installed" > {output}
+        curl --fail --silent --show-error "https://ftp.ncbi.nih.gov/refseq/{params.species}/mRNA_Prot/{params.species_name}.files.installed" > {output}
         ) >{log} 2>&1"""
 
 
