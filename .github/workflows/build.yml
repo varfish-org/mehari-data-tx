@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - main
+  # a check run on demand, e.g. after CI was disabled while merging a stack
+  workflow_dispatch:
   # release-please.yml calls this workflow to upload the databases to a release
   workflow_call:
     inputs:
