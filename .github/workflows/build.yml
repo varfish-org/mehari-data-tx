@@ -31,16 +31,44 @@ env:
 
 # One job per database keeps each job within the disk space of a runner (about 14 GB).
 jobs:
+  # Whether a pull request or push changes anything that goes into the databases: the workflow
+  # (rules, scripts, tool versions in envs), the config (source versions, settings), the CI tools
+  # or this workflow. Manual runs build always.
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      data: ${{ steps.diff.outputs.data }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Compare with the base
+        id: diff
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          if { [ "$EVENT" != pull_request ] && [ "$EVENT" != push ]; } \
+            || [ -z "$BASE" ] || [ "$BASE" = 0000000000000000000000000000000000000000 ]; then
+            data=true
+          elif git diff --name-only "$BASE" HEAD -- workflow config environment.yaml .github/workflows/build.yml | grep -q .; then
+            data=true
+          else
+            data=false
+          fi
+          echo "data: $data"
+          echo "data=$data" >> "$GITHUB_OUTPUT"
+
   # lists the databases and prepares the inputs that all database checks share,
   # so that the build jobs download neither ClinVar (4.5 GB) nor HGNC and HPO
   prepare:
+    needs: changes
     runs-on: ubuntu-latest
-    # skip job if it is a Release Please PR, unless called to build the release assets
-    if: |
-      inputs.tag_name || (
-        !startsWith(github.head_ref, 'release-please--') &&
-        !startsWith(github.event.head_commit.message, 'chore(main): release')
-      )
+    # The release always builds; otherwise only relevant changes do, which leaves out
+    # release-please pull requests and release commits.
+    if: ${{ !cancelled() && (inputs.tag_name || needs.changes.outputs.data == 'true') }}
     outputs:
       build: ${{ steps.aliases.outputs.build }}
       merge: ${{ steps.aliases.outputs.merge }}
@@ -229,18 +257,23 @@ jobs:
   # The one check for the branch protection, independent of the databases in the matrix.
   result:
     name: CI result
-    needs: [prepare, build_data_release, merge_data_release]
+    needs: [changes, prepare, build_data_release, merge_data_release]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Check that all jobs succeeded
         env:
+          CHANGES: ${{ needs.changes.result }}
           PREPARE: ${{ needs.prepare.result }}
           BUILD: ${{ needs.build_data_release.result }}
           MERGE: ${{ needs.merge_data_release.result }}
+        # Not the default login shell: there, `exit 0` runs ~/.bash_logout, which fails on the
+        # runner and turns the exit code into 1.
+        shell: bash
         run: |
-          echo "prepare: $PREPARE, build: $BUILD, merge: $MERGE"
-          # prepare is skipped on purpose for release-please pull requests and commits
+          echo "changes: $CHANGES, prepare: $PREPARE, build: $BUILD, merge: $MERGE"
+          [ "$CHANGES" = success ] || exit 1
+          # prepare is skipped on purpose if nothing relevant changed
           if [ "$PREPARE" = skipped ]; then
             exit 0
           fi
