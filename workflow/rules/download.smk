@@ -32,37 +32,20 @@ rule merge_ensembl_sequence:
         """
 
 
-rule get_refseq_installed_files:
-    output:
-        "results/{assembly}-refseq-{refseq_release}/reference/files.installed",
-    params:
-        species=get_refseq_sequence_param("species"),
-        species_name=get_refseq_sequence_param("species_name"),
-    log:
-        "logs/{assembly}-refseq-{refseq_release}/get_refseq_installed_files.log",
-    conda:
-        "../envs/base.yaml"
-    shell:
-        """(
-        curl --fail --silent --show-error "https://ftp.ncbi.nih.gov/refseq/{params.species}/mRNA_Prot/{params.species_name}.files.installed" > {output}
-        ) >{log} 2>&1"""
-
-
 rule get_refseq_sequence:
-    input:
-        refseq_installed="results/{assembly}-refseq-{refseq_release}/reference/files.installed",
     output:
         refseq_seq="results/{assembly}-refseq-{refseq_release}/reference/{assembly}-refseq-{refseq_release}.fasta.gz",
     params:
-        species=get_refseq_sequence_param("species"),
-        species_name=get_refseq_sequence_param("species_name"),
+        url=get_refseq_sequence_url,
     cache: "omit-software"
     log:
         "logs/{assembly}-refseq-{refseq_release}/get_refseq_sequence.log",
     conda:
         "../envs/base.yaml"
-    script:
-        "../scripts/download_refseq.py"
+    shell:
+        """(
+        curl --fail --silent --show-error "{params.url}" > {output}
+        ) >{log} 2>&1"""
 
 
 rule get_cdot_data:

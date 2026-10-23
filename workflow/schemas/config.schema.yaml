@@ -47,9 +47,7 @@ definitions:
         type: object
         additionalProperties: false
         properties:
-          species:
-            type: string
-          species_name:
+          fasta:
             type: string
           releases:
             type: array
@@ -59,8 +57,7 @@ definitions:
               type: string
               pattern: "^[A-Za-z0-9_.]+$"
         required:
-          - species
-          - species_name
+          - fasta
           - releases
     required:
       - refseq
