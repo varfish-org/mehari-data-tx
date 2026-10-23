@@ -155,6 +155,19 @@ def main(accessions: Collection[str], fasta_path: str, fai_path: str):
         accession for accession in accessions if accession.startswith("ENS")
     }
     ncbi_accessions = accessions - ensembl_accessions
+    # cdot names some transcripts without an accession (e.g. fake-rna-ATP6 on chrMT);
+    # NCBI cannot return these, and rejects a request with nothing but these
+    no_accessions = {
+        accession
+        for accession in ncbi_accessions
+        if not re.fullmatch(r"[A-Z]+_?\d+(\.\d+)?", accession)
+    }
+    if no_accessions:
+        print(
+            f"Skipping {len(no_accessions)} IDs without accession: {', '.join(sorted(no_accessions))}",
+            file=sys.stderr,
+        )
+    ncbi_accessions -= no_accessions
 
     with FastaWriter(fasta_path, append=True) as faw:
         if ncbi_accessions:

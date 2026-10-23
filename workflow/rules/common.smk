@@ -100,11 +100,9 @@ def get_ensembl_sequence_param(param: str) -> Callable[[Wildcards], str]:
     return inner
 
 
-def get_refseq_sequence_param(param: str) -> Callable[[Wildcards], str]:
-    def inner(wildcards):
-        return config["reference"][wildcards.assembly]["refseq"][param]
-
-    return inner
+def get_refseq_sequence_url(wildcards: Wildcards) -> str:
+    url = config["reference"][wildcards.assembly]["refseq"]["fasta"]
+    return url.format(refseq_release=wildcards.refseq_release)
 
 
 def get_cdot_download_url(wildcards: Wildcards) -> str:

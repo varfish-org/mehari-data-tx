@@ -13,8 +13,9 @@ reference:
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
-      species: H_sapiens
-      species_name: human
+      # RefSeq transcript sequences (rna.fna) of the annotation release; '{refseq_release}' is replaced by each release.
+      # check https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/ for available releases.
+      fasta: https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/GCF_000001405.40-{refseq_release}/GCF_000001405.40_GRCh38.p14_rna.fna.gz
       # RefSeq annotation releases to build a database for, each named {assembly}-refseq-{release}.
       # The last one is used wherever one RefSeq release is needed:
       # for the RefSeq sequences of the Ensembl databases and the merged database.
@@ -30,8 +31,7 @@ reference:
       build: GRCh37
       datatypes: [cdna, ncrna]
     refseq:
-      species: H_sapiens
-      species_name: human
+      fasta: https://ftp.ncbi.nlm.nih.gov/genomes/all/annotation_releases/9606/{refseq_release}/GCF_000001405.25_GRCh37.p13/GCF_000001405.25_GRCh37.p13_rna.fna.gz
       releases: ["105.20220307"]
 
 
