@@ -260,10 +260,11 @@ sources:
 # HGNC complete set file to check missing HGNC ids from cdot against
 hgnc:
   # prefer quarterly versions, as these are stored indefinitely, while monthly versions are deleted after 1 year
-  # format: yyyy-mm-dd
   # check https://www.genenames.org/download/archive/quarterly/json/ for available versions.
-  # quarterly versions: _usually_: yyyy-01-01, yyyy-04-01, yyyy-07-01, yyyy-10-01
-  version: "2026-01-06"
+  # 'quarterly' or 'monthly': the archive that holds the version below
+  archive: quarterly
+  # format: yyyy-mm-dd
+  version: "2026-10-06"
 
 # namespaces to use for seqrepo
 namespaces:

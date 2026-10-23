@@ -67,11 +67,8 @@ def get_cdot_download_url(wildcards: Wildcards) -> str:
 
 def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
     version = config["hgnc"]["version"]
-    if version[5:] in {"01-01", "04-01", "07-01", "10-01"}:
-        where = "quarterly"
-    else:
-        where = "monthly"
-    url = f"storage.googleapis.com/public-download-files/hgnc/archive/archive/{where}/json/hgnc_complete_set_{version}.json"
+    archive = config["hgnc"]["archive"]
+    url = f"storage.googleapis.com/public-download-files/hgnc/archive/archive/{archive}/json/hgnc_complete_set_{version}.json"
     return url
 
 
