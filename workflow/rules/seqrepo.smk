@@ -1,7 +1,7 @@
 rule initialize_seqrepo:
     input:
-        ensembl="results/{assembly}-ensembl/reference/{assembly}-ensembl.fasta.gz",
-        refseq="results/{assembly}-refseq/reference/{assembly}-refseq.fasta.gz",
+        ensembl=reference_path("ensembl", "fasta.gz"),
+        refseq=reference_path("refseq", "fasta.gz"),
         missing_fasta="results/{assembly}-{source}/fixes/missing.fasta",
     output:
         seqrepo_root=directory("results/{assembly}-{source}/seqrepo"),
@@ -56,8 +56,8 @@ rule list_contigs:
 rule detect_missing_sequences:
     input:
         unpack(cdot_input_mapping),
-        ensembl="results/{assembly}-ensembl/reference/{assembly}-ensembl.contigs",
-        refseq="results/{assembly}-refseq/reference/{assembly}-refseq.contigs",
+        ensembl=reference_path("ensembl", "contigs"),
+        refseq=reference_path("refseq", "contigs"),
     output:
         missing_txt=report(
             "results/{assembly}-{source}/mehari/seqrepo/missing.txt",

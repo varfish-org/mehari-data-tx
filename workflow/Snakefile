@@ -11,7 +11,9 @@ validate(config, schema="schemas/config.schema.yaml")
 
 wildcard_constraints:
     assembly=r"(GRCh37|GRCh38)",
-    source=r"(refseq|ensembl)",
+    source=r"(ensembl-\d+|refseq-[\w.]+)",
+    ensembl_release=r"\d+",
+    refseq_release=r"[\w.]+",
 
 
 include: "rules/common.smk"
@@ -38,19 +40,14 @@ rule collect_results:
                 # "results/{alias}/mehari/seqrepo/txs.bin.zst.discards.tsv",
                 "results/{alias}/mehari/seqrepo/report/mehari_db_check.txt",
             ],
-            alias=[
-                "GRCh37-refseq",
-                "GRCh38-refseq",
-                "GRCh38-ensembl",
-                "GRCh37-ensembl",
-            ],
+            alias=all_aliases(),
         ),
         expand(
             [
-                "results/{assembly}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst",
-                "results/{assembly}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst.sha256",
+                "results/{alias}/mehari/seqrepo/txs.bin.zst",
+                "results/{alias}/mehari/seqrepo/txs.bin.zst.sha256",
             ],
-            assembly=["GRCh37", "GRCh38"],
+            alias=[merged_alias(assembly) for assembly in config["reference"]],
         ),
     output:
         touch("results/all.completed"),

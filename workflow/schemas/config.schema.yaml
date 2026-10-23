@@ -14,8 +14,13 @@ definitions:
         properties:
           species:
             type: string
-          release:
-            type: integer
+          releases:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              type: integer
+              minimum: 1
           build:
             type: string
           datatypes:
@@ -30,9 +35,11 @@ definitions:
                 - pep
         required:
           - species
-          - release
+          - releases
           - build
           - datatypes
+    required:
+      - ensembl
   refseq-entry:
     type: object
     properties:
@@ -44,9 +51,19 @@ definitions:
             type: string
           species_name:
             type: string
+          releases:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              type: string
+              pattern: "^[A-Za-z0-9_.]+$"
         required:
           - species
           - species_name
+          - releases
+    required:
+      - refseq
   source-entry:
     type: object
     properties:
@@ -110,7 +127,7 @@ properties:
     type: object
     minProperties: 1
     additionalProperties:
-      anyOf:
+      allOf:
         - $ref: "#/definitions/ensembl-entry"
         - $ref: "#/definitions/refseq-entry"
   sources:

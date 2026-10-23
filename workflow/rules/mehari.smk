@@ -44,20 +44,19 @@ rule mehari_build_txs_db:
 
 rule mehari_merge_txs_dbs_per_assembly:
     input:
-        dbs=expand(
-            "results/{{assembly}}-{source}/mehari/seqrepo/txs.bin.zst",
-            source=["ensembl", "refseq"],
-        ),
+        dbs=[
+            "results/{assembly}-ensembl-{ensembl_release}/mehari/seqrepo/txs.bin.zst",
+            "results/{assembly}-refseq-{refseq_release}/mehari/seqrepo/txs.bin.zst",
+        ],
         # require checks to be done before merging
-        checks=expand(
-            "results/{assembly}-{source}/mehari/seqrepo/report/mehari_db_check.txt",
-            assembly=["GRCh37", "GRCh38"],
-            source=["ensembl", "refseq"],
-        ),
+        checks=[
+            "results/{assembly}-ensembl-{ensembl_release}/mehari/seqrepo/report/mehari_db_check.txt",
+            "results/{assembly}-refseq-{refseq_release}/mehari/seqrepo/report/mehari_db_check.txt",
+        ],
     output:
-        db="results/{assembly}-ensembl-and-refseq/mehari/seqrepo/txs.bin.zst",
+        db="results/{assembly}-ensembl-{ensembl_release}-and-refseq-{refseq_release}/mehari/seqrepo/txs.bin.zst",
     log:
-        "logs/{assembly}-ensembl-and-refseq/mehari/seqrepo/merge_txs_dbs.log",
+        "logs/{assembly}-ensembl-{ensembl_release}-and-refseq-{refseq_release}/mehari/seqrepo/merge_txs_dbs.log",
     params:
         dbs_param=lambda wildcards, input: " ".join(
             f"--database {db}" for db in input.dbs

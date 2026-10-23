@@ -3,32 +3,46 @@ reference:
   GRCh38:
     ensembl:
       species: homo_sapiens
-      release: 116
+      # Ensembl releases to build a database for, each named {assembly}-ensembl-{release}.
+      # The highest one is used wherever one Ensembl release is needed:
+      # for RefSeq (sequences, chrMT, grafted transcripts) and the merged database.
+      # cdot must provide each release for the configured cdot release (see sources below),
+      # otherwise the cdot download fails.
+      # check https://github.com/SACGF/cdot/releases for available versions.
+      releases: [115, 116]
       build: GRCh38
       datatypes: [cdna, ncrna]
     refseq:
       species: H_sapiens
       species_name: human
+      # RefSeq annotation releases to build a database for, each named {assembly}-refseq-{release}.
+      # The last one is used wherever one RefSeq release is needed:
+      # for the RefSeq sequences of the Ensembl databases and the merged database.
+      # cdot must provide each release, as for Ensembl.
+      releases: [RS_2025_08]
 #      build: GCF_000001405.40_GRCh38.p14
 #      version: 110
 #      taxon_id: 9606
   GRCh37:
     ensembl:
       species: homo_sapiens
-      release: 87
+      releases: [87]
       build: GRCh37
       datatypes: [cdna, ncrna]
     refseq:
       species: H_sapiens
       species_name: human
+      releases: ["105.20220307"]
 
 
-# cdot transcript sources for the references defined above
+# cdot transcript sources for the references defined above.
+# An {assembly}-ensembl or {assembly}-refseq entry applies to all releases of that source;
+# '{ensembl_release}' or '{refseq_release}' in its cdot 'custom' file name is replaced by each release.
 sources:
   GRCh38-refseq:
     cdot:
       release: 0.2.36
-      custom: Homo_sapiens_GRCh38_RefSeq_RS_2025_08.gff
+      custom: Homo_sapiens_GRCh38_RefSeq_{refseq_release}.gff
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:58422"
@@ -117,7 +131,7 @@ sources:
   GRCh37-refseq:
     cdot:
       release: 0.2.36
-      custom: Homo_sapiens_GRCh37_RefSeq_105.20220307.gff
+      custom: Homo_sapiens_GRCh37_RefSeq_{refseq_release}.gff
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"
@@ -158,7 +172,7 @@ sources:
   GRCh38-ensembl:
     cdot:
       release: 0.2.36
-      custom: Homo_sapiens_GRCh38_Ensembl_116.gtf
+      custom: Homo_sapiens_GRCh38_Ensembl_{ensembl_release}.gtf
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:14024"
@@ -241,7 +255,7 @@ sources:
   GRCh37-ensembl:
     cdot:
       release: 0.2.36
-      custom: Homo_sapiens_GRCh37_Ensembl_87.gtf
+      custom: Homo_sapiens_GRCh37_Ensembl_{ensembl_release}.gtf
     known_issues:
       - id_type: gene_symbol
         id: "ATXN8"

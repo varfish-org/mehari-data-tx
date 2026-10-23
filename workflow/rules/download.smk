@@ -1,13 +1,13 @@
 rule get_ensembl_sequence:
     output:
-        "results/{assembly}-ensembl/reference/{assembly}-ensembl.{datatype}.fasta",
+        "results/{assembly}-ensembl-{ensembl_release}/reference/{assembly}-ensembl-{ensembl_release}.{datatype}.fasta",
     params:
         species=get_ensembl_sequence_param("species"),
         build=get_ensembl_sequence_param("build"),
-        release=get_ensembl_sequence_param("release"),
+        release=lambda wildcards: int(wildcards.ensembl_release),
         datatype=lambda wildcards: wildcards.datatype,
     log:
-        "logs/{assembly}-ensembl/get_ensembl_sequence.{datatype}.log",
+        "logs/{assembly}-ensembl-{ensembl_release}/get_ensembl_sequence.{datatype}.log",
     cache: "omit-software"  # save space and time with between workflow caching (see docs)
     wrapper:
         "v5.0.2/bio/reference/ensembl-sequence"
@@ -15,12 +15,12 @@ rule get_ensembl_sequence:
 
 rule merge_ensembl_sequence:
     input:
-        "results/{assembly}-ensembl/reference/{assembly}-ensembl.cdna.fasta",
-        "results/{assembly}-ensembl/reference/{assembly}-ensembl.ncrna.fasta",
+        "results/{assembly}-ensembl-{ensembl_release}/reference/{assembly}-ensembl-{ensembl_release}.cdna.fasta",
+        "results/{assembly}-ensembl-{ensembl_release}/reference/{assembly}-ensembl-{ensembl_release}.ncrna.fasta",
     output:
-        "results/{assembly}-ensembl/reference/{assembly}-ensembl.fasta.gz",
+        "results/{assembly}-ensembl-{ensembl_release}/reference/{assembly}-ensembl-{ensembl_release}.fasta.gz",
     log:
-        "logs/{assembly}-ensembl/merge_sequence.log",
+        "logs/{assembly}-ensembl-{ensembl_release}/merge_sequence.log",
     cache: "omit-software"  # save space and time with between workflow caching (see docs)
     conda:
         "../envs/samtools.yaml"
@@ -34,12 +34,12 @@ rule merge_ensembl_sequence:
 
 rule get_refseq_installed_files:
     output:
-        "results/{assembly}-refseq/reference/files.installed",
+        "results/{assembly}-refseq-{refseq_release}/reference/files.installed",
     params:
         species=get_refseq_sequence_param("species"),
         species_name=get_refseq_sequence_param("species_name"),
     log:
-        "logs/{assembly}-refseq/get_refseq_installed_files.log",
+        "logs/{assembly}-refseq-{refseq_release}/get_refseq_installed_files.log",
     conda:
         "../envs/base.yaml"
     shell:
@@ -50,15 +50,15 @@ rule get_refseq_installed_files:
 
 rule get_refseq_sequence:
     input:
-        refseq_installed="results/{assembly}-refseq/reference/files.installed",
+        refseq_installed="results/{assembly}-refseq-{refseq_release}/reference/files.installed",
     output:
-        refseq_seq="results/{assembly}-refseq/reference/{assembly}-refseq.fasta.gz",
+        refseq_seq="results/{assembly}-refseq-{refseq_release}/reference/{assembly}-refseq-{refseq_release}.fasta.gz",
     params:
         species=get_refseq_sequence_param("species"),
         species_name=get_refseq_sequence_param("species_name"),
     cache: "omit-software"
     log:
-        "logs/{assembly}-refseq/get_refseq_sequence.log",
+        "logs/{assembly}-refseq-{refseq_release}/get_refseq_sequence.log",
     conda:
         "../envs/base.yaml"
     script:

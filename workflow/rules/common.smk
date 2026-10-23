@@ -7,6 +7,71 @@ def get_alias(wildcards: Wildcards) -> str:
     return f"{wildcards.assembly}-{wildcards.source}"
 
 
+def source_kind(wildcards: Wildcards) -> str:
+    """The source without its release: 'ensembl' or 'refseq'."""
+    return wildcards.source.split("-", 1)[0]
+
+
+def source_release(wildcards: Wildcards) -> str:
+    """The Ensembl or RefSeq annotation release of the source."""
+    return wildcards.source.split("-", 1)[1]
+
+
+def get_source_config_key(wildcards: Wildcards) -> str:
+    """Key in config["sources"]; all releases of a source share one entry."""
+    return f"{wildcards.assembly}-{source_kind(wildcards)}"
+
+
+def releases(assembly: str, kind: str) -> list:
+    return config["reference"][assembly][kind]["releases"]
+
+
+def newest_release(assembly: str, kind: str):
+    """The highest Ensembl release, or the last listed RefSeq release."""
+    if kind == "ensembl":
+        return max(releases(assembly, kind))
+    return releases(assembly, kind)[-1]
+
+
+def newest_alias(assembly: str, kind: str) -> str:
+    return f"{assembly}-{kind}-{newest_release(assembly, kind)}"
+
+
+def used_alias(wildcards: Wildcards, kind: str) -> str:
+    """The alias of the given kind whose sequences and annotation a source uses.
+
+    That is the source itself, or the newest release of the other source.
+    """
+    if source_kind(wildcards) == kind:
+        return get_alias(wildcards)
+    return newest_alias(wildcards.assembly, kind)
+
+
+def reference_path(kind: str, suffix: str) -> Callable[[Wildcards], str]:
+    def inner(wildcards):
+        alias = used_alias(wildcards, kind)
+        return f"results/{alias}/reference/{alias}.{suffix}"
+
+    return inner
+
+
+def all_aliases() -> list[str]:
+    """Aliases of all databases built from a single source."""
+    return [
+        f"{assembly}-{kind}-{release}"
+        for assembly in config["reference"]
+        for kind in ("ensembl", "refseq")
+        for release in releases(assembly, kind)
+    ]
+
+
+def merged_alias(assembly: str) -> str:
+    return (
+        f"{newest_alias(assembly, 'ensembl')}"
+        f"-and-refseq-{newest_release(assembly, 'refseq')}"
+    )
+
+
 def genome_assembly(wildcards: Wildcards) -> str:
     return wildcards.assembly.lower()
 
@@ -17,19 +82,15 @@ def genome_assembly_version_parameter(_wildcards: Wildcards) -> str:
 
 
 def transcript_source(wildcards: Wildcards) -> str:
-    return wildcards.source.lower()
+    return source_kind(wildcards)
 
 
 def transcript_source_version_parameter(wildcards: Wildcards) -> str:
-    if wildcards.source.lower() == "ensembl":
-        release = config["reference"][wildcards.assembly]["ensembl"]["release"]
-        return f"--transcript-source-version {release}"
-    else:
-        return ""
+    return f"--transcript-source-version {source_release(wildcards)}"
 
 
 def cdot_version(wildcards: Wildcards) -> str:
-    return config["sources"][get_alias(wildcards)]["cdot"]["release"]
+    return config["sources"][get_source_config_key(wildcards)]["cdot"]["release"]
 
 
 def get_ensembl_sequence_param(param: str) -> Callable[[Wildcards], str]:
@@ -48,11 +109,14 @@ def get_refseq_sequence_param(param: str) -> Callable[[Wildcards], str]:
 
 def get_cdot_download_url(wildcards: Wildcards) -> str:
     alias = get_alias(wildcards)
-    params = config["sources"][alias]["cdot"]
+    params = config["sources"][get_source_config_key(wildcards)]["cdot"]
     release = params["release"]
     custom = params.get("custom", None)
     source = params.get("source", "ensembl")
     if custom:
+        custom = custom.format(
+            **{f"{source_kind(wildcards)}_release": source_release(wildcards)}
+        )
         url = f"https://github.com/SACGF/cdot/releases/download/data_v{release}/cdot-{release}.{custom}.json.gz"
     else:
         match source:
@@ -81,7 +145,7 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     cdot_files = {
         "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc{cds}.json.gz",
     }
-    if wildcards.source.lower() == "refseq":
+    if source_kind(wildcards) == "refseq":
         cdot_files.update(
             **{
                 "cdot_mt": f"results/{alias}/cdot/{alias}-from-ensembl.chrMT.json",
@@ -92,7 +156,7 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
 
 
 def ensembl_cdot(wildcards: Wildcards) -> str:
-    alias_ensembl = f"{wildcards.assembly}-ensembl"
+    alias_ensembl = used_alias(wildcards, "ensembl")
     return f"results/{alias_ensembl}/cdot/{alias_ensembl}.cdot.hgnc.json.gz"
 
 
@@ -103,7 +167,7 @@ def get_mehari_input(wildcards: Wildcards) -> dict[str, str]:
         **cdot_input_mapping(wildcards),
     }
     if wildcards.assembly == "GRCh37":
-        other = f"GRCh38-{wildcards.source}"
+        other = newest_alias("GRCh38", source_kind(wildcards))
         result.update({"tags": f"results/{other}/cdot/{other}.tags.tsv"})
     return result
 
@@ -125,24 +189,20 @@ def get_mehari_check_cdot_param_string(wildcards: Wildcards, input: InputFiles) 
 
 
 def transcripts_to_fix_with_nuccore(wildcards: Wildcards) -> list[str]:
-    alias = get_alias(wildcards)
-    return list(
-        sorted(set(config["sources"][alias].get("fixes", {}).get("fix_cds", [])))
-    )
+    key = get_source_config_key(wildcards)
+    return list(sorted(set(config["sources"][key].get("fixes", {}).get("fix_cds", []))))
 
 
 def transcripts_to_lookup_ensembl_ids_for(wildcards: Wildcards) -> list[str]:
-    alias = get_alias(wildcards)
+    key = get_source_config_key(wildcards)
     return list(
-        sorted(
-            set(config["sources"][alias].get("fixes", {}).get("add_from_ensembl", []))
-        )
+        sorted(set(config["sources"][key].get("fixes", {}).get("add_from_ensembl", [])))
     )
 
 
 def transcripts_to_fix_polyA(wildcards: Wildcards) -> list[str]:
-    alias = get_alias(wildcards)
-    return list(sorted(set(config["sources"][alias].get("fixes", {}).get("polyA", []))))
+    key = get_source_config_key(wildcards)
+    return list(sorted(set(config["sources"][key].get("fixes", {}).get("polyA", []))))
 
 
 def parse_missing_accessions(_wildcards, input) -> list[str]:
@@ -158,8 +218,8 @@ def get_genes_to_disease_download_url() -> str:
 
 
 def get_known_issues(wildcards: Wildcards) -> list[str]:
-    alias = get_alias(wildcards)
-    return config["sources"][alias].get("known_issues", [])
+    key = get_source_config_key(wildcards)
+    return config["sources"][key].get("known_issues", [])
 
 
 def get_mehari_docker_url() -> str:

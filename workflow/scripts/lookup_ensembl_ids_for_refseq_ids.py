@@ -74,7 +74,7 @@ with open(snakemake.log[0], "w") as log, redirect_stderr(log):
         for line in f:
             refseq_ids.add(line.strip())
     columns = list(HEADER.values())
-    if snakemake.wildcards.source.lower() == "refseq":
+    if snakemake.wildcards.source.lower().startswith("refseq"):
         response = main(refseq_ids).content.decode()
         try:
             df = pd.read_csv(StringIO(response), sep="\t", header=0, usecols=columns)
