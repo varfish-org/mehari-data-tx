@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.14.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.13.0...v0.14.0) (2026-10-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* name databases after their Ensembl and RefSeq releases ([#81](https://github.com/varfish-org/mehari-data-tx/issues/81))
+
+### Features
+
+* bump cdot to 0.2.36, GRCh38 Ensembl to 116 and mehari to 0.47.0 ([#79](https://github.com/varfish-org/mehari-data-tx/issues/79)) ([f27d170](https://github.com/varfish-org/mehari-data-tx/commit/f27d170b6560d8ec30436fffd5946231788de5bd))
+* name databases after their Ensembl and RefSeq releases ([#81](https://github.com/varfish-org/mehari-data-tx/issues/81)) ([1600422](https://github.com/varfish-org/mehari-data-tx/commit/1600422e47e6225f416d19d584a298a17b74c8f0))
+* take the RefSeq transcript FASTA from the cdot annotation release ([#83](https://github.com/varfish-org/mehari-data-tx/issues/83)) ([78e7dd3](https://github.com/varfish-org/mehari-data-tx/commit/78e7dd3019d4bfe2bf6b47be22eed9d6f2a8a14f))
+
+
+### Bug Fixes
+
+* fail on download errors and retry on Ensembl REST server errors ([#78](https://github.com/varfish-org/mehari-data-tx/issues/78)) ([d55ec20](https://github.com/varfish-org/mehari-data-tx/commit/d55ec205b48d2e8942685f8290c64a737edf4e4d))
+* fetch quarterly HGNC sets from the quarterly archive ([#80](https://github.com/varfish-org/mehari-data-tx/issues/80)) ([fe95df7](https://github.com/varfish-org/mehari-data-tx/commit/fe95df718473f922b13105636aa4cc0a1e78e4f6))
+* run the fetch of missing sequences with Python 3.12 ([#86](https://github.com/varfish-org/mehari-data-tx/issues/86)) ([84df754](https://github.com/varfish-org/mehari-data-tx/commit/84df75422bd69e4236e9ea67162d39d7f7529162))
+
 ## [0.13.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.12.0...v0.13.0) (2026-04-20)
 
 
