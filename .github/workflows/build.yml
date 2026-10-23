@@ -44,11 +44,11 @@ jobs:
       build: ${{ steps.aliases.outputs.build }}
       merge: ${{ steps.aliases.outputs.merge }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - &cache-conda
         name: Cache conda
-        uses: actions/cache@v3
+        uses: actions/cache@v6
         env:
           # Increase this value to reset cache if etc/example-environment.yml has not changed
           CACHE_NUMBER: 0
@@ -59,7 +59,7 @@ jobs:
 
       - &setup-snakemake
         name: Setup Miniconda and snakemake
-        uses: conda-incubator/setup-miniconda@v3.1.0
+        uses: conda-incubator/setup-miniconda@v4.1.0
         with:
           auto-update-conda: true
           conda-solver: "libmamba"
@@ -71,8 +71,8 @@ jobs:
         id: aliases
         run: |
           snakemake --workflow-profile none --configfile config/config.yaml --cores 1 results/aliases.json
-          echo "build=$(jq -c .build results/aliases.json)" >> $GITHUB_OUTPUT
-          echo "merge=$(jq -c .merge results/aliases.json)" >> $GITHUB_OUTPUT
+          echo "build=$(jq -c .build results/aliases.json)" >> "$GITHUB_OUTPUT"
+          echo "merge=$(jq -c .merge results/aliases.json)" >> "$GITHUB_OUTPUT"
 
       - name: Prepare shared inputs
         run: |
@@ -84,7 +84,7 @@ jobs:
             results/human-phenotype-ontology/genes_to_disease_with_hgnc_id.tsv
 
       - name: Keep shared inputs for the build jobs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: shared-inputs
           path: |
@@ -101,7 +101,7 @@ jobs:
       matrix:
         alias: ${{ fromJSON(needs.prepare.outputs.build) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - &setup-apptainer
         name: Setup apptainer
@@ -120,7 +120,7 @@ jobs:
 
       - name: Cache snakemake cache directory
         id: cache-snakemake
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/snakemake_cache
@@ -134,7 +134,7 @@ jobs:
       - *setup-snakemake
 
       - name: Download shared inputs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: shared-inputs
           path: results
@@ -158,7 +158,7 @@ jobs:
           tree -f ~/work/mehari-data-tx/mehari-data-tx
 
       - name: Keep database for the merge job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: db-${{ matrix.alias }}
           path: results/${{ matrix.alias }}/mehari/seqrepo/
@@ -173,12 +173,12 @@ jobs:
           dst_prefix=~/mehari-data-txs-${{ matrix.alias }}-${{ inputs.version }}.bin
           exts=".zst .zst.sha256"
           # merged databases have no report
-          if [ -e $src_prefix.zst.report.jsonl ]; then
+          if [ -e "$src_prefix.zst.report.jsonl" ]; then
             exts="$exts .zst.report.jsonl .zst.report.jsonl.sha256"
           fi
           for ext in $exts; do
-            cp $src_prefix$ext $dst_prefix$ext
-            gh release upload ${{ inputs.tag_name }} $dst_prefix$ext
+            cp "$src_prefix$ext" "$dst_prefix$ext"
+            gh release upload ${{ inputs.tag_name }} "$dst_prefix$ext"
           done
         env:
           # GitHub provides this variable in the CI env. You don't
@@ -192,7 +192,7 @@ jobs:
       matrix:
         include: ${{ fromJSON(needs.prepare.outputs.merge) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - *setup-apptainer
 
@@ -203,13 +203,13 @@ jobs:
       - *setup-snakemake
 
       - name: Download Ensembl database
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: db-${{ matrix.ensembl }}
           path: results/${{ matrix.ensembl }}/mehari/seqrepo
 
       - name: Download RefSeq database
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: db-${{ matrix.refseq }}
           path: results/${{ matrix.refseq }}/mehari/seqrepo
