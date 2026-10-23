@@ -238,6 +238,9 @@ jobs:
           PREPARE: ${{ needs.prepare.result }}
           BUILD: ${{ needs.build_data_release.result }}
           MERGE: ${{ needs.merge_data_release.result }}
+        # Not the default login shell: there, `exit 0` runs ~/.bash_logout, which fails on the
+        # runner and turns the exit code into 1.
+        shell: bash
         run: |
           echo "prepare: $PREPARE, build: $BUILD, merge: $MERGE"
           # prepare is skipped on purpose for release-please pull requests and commits
