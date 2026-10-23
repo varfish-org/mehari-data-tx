@@ -2,4 +2,12 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - snakemake =9.19.0
+  # pinned, so that a new upstream release cannot break CI unnoticed
+  - snakemake =9.27.1
+  - snakemake-minimal =9.27.1
+  - snakemake-interface-common =1.23.1
+  - snakemake-interface-executor-plugins =9.4.0
+  - snakemake-interface-logger-plugins =2.1.0
+  - snakemake-interface-report-plugins =1.3.0
+  - snakemake-interface-scheduler-plugins =2.0.2
+  - snakemake-interface-storage-plugins =4.4.1

@@ -17,12 +17,10 @@ jobs:
       minor: ${{ steps.release.outputs.minor }}
       patch: ${{ steps.release.outputs.patch }}
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3
+      # options in release-please-config.json, version in .release-please-manifest.json
+      - uses: googleapis/release-please-action@v5
         id: release
         with:
-          release-type: simple
-          # breaking changes bump the minor version until 1.0.0
-          bump-minor-pre-major: true
           token: ${{ secrets.BOT_TOKEN }}
 
   Build-Release-Assets:

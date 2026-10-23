@@ -11,7 +11,7 @@ jobs:
     if: github.repository_owner == 'varfish-org'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Check for a new cdot data release
         run: python3 .github/scripts/check_updates.py --summary "$RUNNER_TEMP/summary.md"
