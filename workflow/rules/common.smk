@@ -134,14 +134,29 @@ def get_hgnc_complete_set_download_url(_wildcards: Wildcards) -> str:
     return url
 
 
+def mane_release(wildcards: Wildcards) -> str | None:
+    """The MANE release whose summary sets the MANE tags of the source, if any."""
+    key = get_source_config_key(wildcards)
+    return config["sources"][key].get("mane", {}).get("release")
+
+
+def get_mane_summary(wildcards: Wildcards) -> dict[str, str]:
+    release = mane_release(wildcards)
+    return {
+        "summary": f"results/mane/{release}/MANE.GRCh38.v{release}.summary.txt.gz",
+        "versions": f"results/mane/{release}/README_versions.txt",
+    }
+
+
 def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     alias = get_alias(wildcards)
     if len(transcripts_to_fix_with_nuccore(wildcards)) > 0:
         cds = ".cds"
     else:
         cds = ""
+    mane = ".mane" if mane_release(wildcards) else ""
     cdot_files = {
-        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc{cds}.json.gz",
+        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc{cds}{mane}.json.gz",
     }
     if source_kind(wildcards) == "refseq":
         cdot_files.update(

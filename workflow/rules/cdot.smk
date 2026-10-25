@@ -57,6 +57,22 @@ rule update_from_hgnc_complete_set:
         "../scripts/cdot/update_from_hgnc.py"
 
 
+rule add_mane_tags:
+    input:
+        unpack(get_mane_summary),
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.{stage}.json.gz",
+    output:
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.{stage}.mane.json.gz",
+    params:
+        refseq_release=source_release,
+    log:
+        "logs/{assembly}-{source}/cdot/add_mane_tags.{stage}.log",
+    conda:
+        "../envs/base.yaml"
+    script:
+        "../scripts/cdot/add_mane_tags.py"
+
+
 rule extract_chrMT:
     input:
         cdot=ensembl_cdot,
