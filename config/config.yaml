@@ -43,6 +43,13 @@ sources:
     cdot:
       release: 0.2.36
       custom: Homo_sapiens_GRCh38_RefSeq_{refseq_release}.gff
+    # MANE release whose summary sets the MANE Select and MANE Plus Clinical tags, as cdot lacks
+    # some, e.g. on non-coding MANE transcripts and on those that differ from the genome.
+    # It must belong to the RefSeq release, so bump both together. Only one RefSeq release can be
+    # paired with it: the build fails if more are listed and the MANE release belongs to another;
+    # check README_versions.txt in https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_{release}/
+    mane:
+      release: "1.5"
     known_issues:
       - id_type: hgnc_id
         id: "HGNC:58422"

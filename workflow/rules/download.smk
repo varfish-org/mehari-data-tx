@@ -76,6 +76,24 @@ rule get_hgnc_complete_set:
         """(wget -O -  {params.url} | jq '.' > {output}) 2> {log}"""
 
 
+rule get_mane_summary:
+    output:
+        summary="results/mane/{mane_release}/MANE.GRCh38.v{mane_release}.summary.txt.gz",
+        versions="results/mane/{mane_release}/README_versions.txt",
+    params:
+        url=lambda wildcards: f"https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_{wildcards.mane_release}",
+    conda:
+        "../envs/base.yaml"
+    cache: "omit-software"
+    log:
+        "logs/mane/{mane_release}/get_mane_summary.log",
+    shell:
+        """(
+        curl --fail --silent --show-error -o {output.summary} "{params.url}/MANE.GRCh38.v{wildcards.mane_release}.summary.txt.gz"
+        curl --fail --silent --show-error -o {output.versions} "{params.url}/README_versions.txt"
+        ) >{log} 2>&1"""
+
+
 rule get_genes_to_disease:
     output:
         "results/human-phenotype-ontology/genes_to_disease.tsv",

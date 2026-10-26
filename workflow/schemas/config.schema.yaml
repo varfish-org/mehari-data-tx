@@ -81,6 +81,15 @@ definitions:
               - custom
           - required:
               - source
+      mane:
+        type: object
+        additionalProperties: false
+        properties:
+          release:
+            type: string
+            pattern: "^[0-9]+(\\.[0-9]+)*$"
+        required:
+          - release
       known_issues:
         type: array
         items:
