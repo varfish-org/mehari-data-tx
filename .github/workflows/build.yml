@@ -25,7 +25,7 @@ defaults:
     shell: bash -el {0}
 
 env:
-  MEHARI_VERSION: "0.47.0"
+  MEHARI_VERSION: "0.48.0"
   MINIFORGE_VERSION: "26.7.2-1"
   SNAKEMAKE_OUTPUT_CACHE: "${{ github.workspace }}/snakemake_cache"
 
