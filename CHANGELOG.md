@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.14.1](https://github.com/varfish-org/mehari-data-tx/compare/v0.14.0...v0.14.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* bump mehari to 0.48.0 ([#90](https://github.com/varfish-org/mehari-data-tx/issues/90)) ([55abcfd](https://github.com/varfish-org/mehari-data-tx/commit/55abcfd8d271db2920946dd4dd9c70eb62071c0c))
+* graft only listed Ensembl transcripts ([#93](https://github.com/varfish-org/mehari-data-tx/issues/93)) ([d21d504](https://github.com/varfish-org/mehari-data-tx/commit/d21d504f7da720c1d6231efa3c83561f36a871ee))
+* take MANE tags from the MANE summary ([#91](https://github.com/varfish-org/mehari-data-tx/issues/91)) ([31dacc1](https://github.com/varfish-org/mehari-data-tx/commit/31dacc1afeaae92f3ef7657f65f67340b64d9347))
+* take RefSeq chrMT from the Ensembl graft only ([#92](https://github.com/varfish-org/mehari-data-tx/issues/92)) ([c223a24](https://github.com/varfish-org/mehari-data-tx/commit/c223a243cab0683a0dfdd827d9c77978e76b9a65))
+
 ## [0.14.0](https://github.com/varfish-org/mehari-data-tx/compare/v0.13.0...v0.14.0) (2026-10-23)
 
 
