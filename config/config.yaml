@@ -298,5 +298,5 @@ clinvar-data-jsonl:
 
 # mehari version to use (currently ignored)
 mehari:
-  version: 0.47.0
-  docker: "docker://ghcr.io/varfish-org/mehari:0.47.0"
+  version: 0.48.0
+  docker: "docker://ghcr.io/varfish-org/mehari:0.48.0"
