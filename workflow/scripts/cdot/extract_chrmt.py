@@ -2,7 +2,7 @@
 """Helper script to alignments to chrMT from CDOT JSON.
 
 This is used to graft ENSEMBL chrMT transcripts to the RefSeq transcripts
-database.
+database. Their genes are keyed by NCBI Gene ID, like the other RefSeq genes.
 """
 
 import gzip
@@ -15,7 +15,28 @@ from contextlib import redirect_stderr
 CHRMT_CONTIG = "NC_012920.1"
 
 
-def main(json_path: str, file=sys.stdout):
+def key_genes_by_ncbi_gene_id(json_data: dict, hgnc_path: str):
+    """Key the genes by the NCBI Gene ID that HGNC names for their HGNC ID."""
+    with open(hgnc_path, "rt") as inputf:
+        docs = json.load(inputf)["response"]["docs"]
+    ncbi_gene_ids = {doc["hgnc_id"].removeprefix("HGNC:"): doc.get("entrez_id") for doc in docs}
+    new_gene_ids = {}
+    for gene_id, gene in json_data["genes"].items():
+        ncbi_gene_id = ncbi_gene_ids.get(gene.get("hgnc"))
+        if not ncbi_gene_id:
+            raise ValueError(
+                f"HGNC names no NCBI Gene ID for {gene_id} ({gene.get('gene_symbol')}, HGNC:{gene.get('hgnc')})"
+            )
+        if ncbi_gene_id in new_gene_ids.values():
+            raise ValueError(f"HGNC names the NCBI Gene ID {ncbi_gene_id} of another grafted gene for {gene_id}")
+        print(f"Keyed gene {gene_id} ({gene.get('gene_symbol')}) by NCBI Gene ID {ncbi_gene_id}", file=sys.stderr)
+        new_gene_ids[gene_id] = ncbi_gene_id
+    json_data["genes"] = {new_gene_ids[gene_id]: gene for gene_id, gene in json_data["genes"].items()}
+    for tx in json_data["transcripts"].values():
+        tx["gene_version"] = new_gene_ids[tx["gene_version"]]
+
+
+def main(json_path: str, hgnc_path: str, file=sys.stdout):
     #: Transcript IDs (with version) to keep.
     tx_ids: set[str] = set()
     #: Gene IDs (with version) tok eep.
@@ -61,10 +82,12 @@ def main(json_path: str, file=sys.stdout):
                 print("Updated transcript {tx_id} tags to {tags}".format(tx_id=tx_id, tags=genome_build["tag"]), file=sys.stderr)
     print("... done reducing to chrMT", file=sys.stderr)
 
+    key_genes_by_ncbi_gene_id(json_data, hgnc_path)
+
     json.dump(json_data, file, indent=2)
     print(file=file, flush=True)
 
 
 with open(snakemake.log[0], "w") as log, redirect_stderr(log):
     with open(snakemake.output.cdot, "w") as out:
-        main(json_path=snakemake.input.cdot, file=out)
+        main(json_path=snakemake.input.cdot, hgnc_path=snakemake.input.hgnc, file=out)

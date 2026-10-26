@@ -76,6 +76,7 @@ rule add_mane_tags:
 rule extract_chrMT:
     input:
         cdot=ensembl_cdot,
+        hgnc="results/hgnc/hgnc_complete_set.json",
     output:
         cdot="results/{assembly}-{source}/cdot/{assembly}-{source}-from-ensembl.chrMT.json",
     log:
@@ -84,6 +85,21 @@ rule extract_chrMT:
         "../envs/base.yaml"
     script:
         "../scripts/cdot/extract_chrmt.py"
+
+
+# RefSeq takes chrMT from the Ensembl graft only
+rule remove_chrMT:
+    input:
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.{stage}.json.gz",
+        cdot_mt="results/{assembly}-{source}/cdot/{assembly}-{source}-from-ensembl.chrMT.json",
+    output:
+        cdot="results/{assembly}-{source}/cdot/{assembly}-{source}.cdot.{stage}.nochrMT.json.gz",
+    log:
+        "logs/{assembly}-{source}/cdot/remove_chrMT.{stage}.log",
+    conda:
+        "../envs/base.yaml"
+    script:
+        "../scripts/cdot/remove_chrmt.py"
 
 
 # RefSeq or MANE select transcripts

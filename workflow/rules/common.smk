@@ -155,8 +155,9 @@ def cdot_input_mapping(wildcards: Wildcards) -> dict[str, str]:
     else:
         cds = ""
     mane = ".mane" if mane_release(wildcards) else ""
+    mt = ".nochrMT" if source_kind(wildcards) == "refseq" else ""
     cdot_files = {
-        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc{cds}{mane}.json.gz",
+        "cdot": f"results/{alias}/cdot/{alias}.cdot.hgnc{cds}{mane}{mt}.json.gz",
     }
     if source_kind(wildcards) == "refseq":
         cdot_files.update(
